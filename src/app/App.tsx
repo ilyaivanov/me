@@ -2,7 +2,8 @@ import React from "react";
 import "./App.css";
 import { cn } from "./utils";
 import { connect } from "react-redux";
-import { allActions, AllActions } from "./state";
+import { allActions, AllActions, RootState } from "./state";
+import Sidebar from "./Sidebar";
 
 interface Props extends AllActions {
   isSidebarVisible: boolean;
@@ -16,7 +17,7 @@ const App = (props: Props) => (
         closed: !props.isSidebarVisible,
       })}
     >
-      SIDEBAR
+      <Sidebar />
     </aside>
     <div className="body-header">
       HEADER
@@ -28,10 +29,8 @@ const App = (props: Props) => (
   </div>
 );
 
-function mapState(state: any) {
-  return {
-    isSidebarVisible: state.isSidebarVisible,
-  };
-}
+const mapState = (state: RootState) => ({
+  isSidebarVisible: state.isSidebarVisible,
+});
 
 export default connect(mapState, allActions)(App);
