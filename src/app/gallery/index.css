@@ -4,6 +4,7 @@
   align-items: stretch;
   height: 100%;
   overflow-y: overlay;
+
 }
 
 .gallery-container::-webkit-scrollbar {
@@ -19,10 +20,13 @@
 
 .column {
   flex: 1;
-  margin-left: 20px;
+  margin-left: 20px; /*GAP constant*/
 }
 .column:last-of-type {
   margin-right: 20px;
+}
+.column .card:last-of-type{
+  margin-bottom: 20px;  /*GAP constant*/
 }
 
 .card {
