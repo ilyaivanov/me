@@ -1,0 +1,30 @@
+.page-container {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "body-header body-header"
+    "sidebar body";
+  overflow: hidden;
+}
+
+.navigation-sidebar {
+  background-color: lightgrey;
+  grid-area: sidebar;
+  overflow: hidden;
+  width: 200px;
+  transition: width 200ms;
+}
+.navigation-sidebar.closed{
+  width: 0;
+}
+
+.page-body {
+  grid-area: body;
+}
+
+.body-header {
+  grid-area: body-header;
+  background-color: lightblue;
+}
