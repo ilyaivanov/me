@@ -2,7 +2,7 @@ import { createStore } from "redux";
 
 const initialState = { isSidebarVisible: true };
 
-const reducer = (state = initialState, action: any) => {
+const reducer = (state = initialState, action: Action) => {
   if (action.type == "TOGGLE_SIDEBAR") {
     return {
       ...state,
@@ -17,4 +17,12 @@ export const createMediaExplorerStore = () => {
   return store;
 };
 
-export const toggleSidebar = () => ({ type: "TOGGLE_SIDEBAR" });
+export const toggleSidebar = () => ({ type: "TOGGLE_SIDEBAR" } as const);
+
+export const allActions = {
+  toggleSidebar,
+};
+
+export type AllActions = typeof allActions;
+
+export type Action = ReturnType<AllActions[keyof AllActions]>;

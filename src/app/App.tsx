@@ -2,9 +2,12 @@ import React from "react";
 import "./App.css";
 import { cn } from "./utils";
 import { connect } from "react-redux";
-import { toggleSidebar } from "./state";
+import { allActions, AllActions } from "./state";
 
-const App = (props: any) => (
+interface Props extends AllActions {
+  isSidebarVisible: boolean;
+}
+const App = (props: Props) => (
   <div className="page-container">
     <aside
       data-testid="sidebar"
@@ -31,4 +34,4 @@ function mapState(state: any) {
   };
 }
 
-export default connect(mapState, { toggleSidebar })(App);
+export default connect(mapState, allActions)(App);
