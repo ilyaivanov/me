@@ -1,33 +1,34 @@
 import React from "react";
 import "./App.css";
 import { cn } from "./utils";
+import { connect } from "react-redux";
+import { toggleSidebar } from "./state";
 
-class App extends React.Component {
-  state = {
-    isSidebarVisible: true,
+const App = (props: any) => (
+  <div className="page-container">
+    <aside
+      data-testid="sidebar"
+      className={cn({
+        "navigation-sidebar": true,
+        closed: !props.isSidebarVisible,
+      })}
+    >
+      SIDEBAR
+    </aside>
+    <div className="body-header">
+      HEADER
+      <button data-testid="toggle-sidebar" onClick={props.toggleSidebar}>
+        toggle
+      </button>
+    </div>
+    <div className="page-body">BODY</div>
+  </div>
+);
+
+function mapState(state: any) {
+  return {
+    isSidebarVisible: state.isSidebarVisible,
   };
-  toggle = () =>
-    this.setState({ isSidebarVisible: !this.state.isSidebarVisible });
-  render() {
-    return (
-      <div className="page-container">
-        <aside
-          data-testid="sidebar"
-          className={cn({
-            "navigation-sidebar": true,
-            closed: !this.state.isSidebarVisible,
-          })}
-        >
-          SIDEBAR
-        </aside>
-        <div className="body-header">
-          HEADER
-          <button data-testid="toggle-sidebar" onClick={this.toggle}>toggle</button>
-        </div>
-        <div className="page-body">BODY</div>
-      </div>
-    );
-  }
 }
 
-export default App;
+export default connect(mapState, { toggleSidebar })(App);
