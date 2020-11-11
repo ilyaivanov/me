@@ -1,9 +1,24 @@
 import React from "react";
-const Card = () => (
-  <div className="card">
-    <img src="https://i.ytimg.com/vi/vQFDW0_GB8Q/mqdefault.jpg" alt="" />
+import { Play, Pause } from "../icons";
+import { Item } from "../state";
+
+interface Props {
+  item: Item;
+  isPlaying?: boolean;
+}
+
+const Card = ({ item, isPlaying }: Props) => (
+  <div className="card" data-testid={"card-" + item.id}>
+    <img src={item.image} alt="" />
     <div className="overlay gradient" />
-    <div className="overlay text-container">Brian Crain - 143 Song Golden Collection ▶ [♫ 9 HOUR Piano Music Playlist for Studying ♫]</div>
+    <div className="overlay flex-center">
+      {isPlaying ? (
+        <Pause className="icon pause-icon" />
+      ) : (
+        <Play className="icon" />
+      )}
+    </div>
+    <div className="overlay text-container">{item.title}</div>
   </div>
 );
 

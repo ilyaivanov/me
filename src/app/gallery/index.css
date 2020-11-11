@@ -4,7 +4,6 @@
   align-items: stretch;
   height: 100%;
   overflow-y: overlay;
-
 }
 
 .gallery-container::-webkit-scrollbar {
@@ -25,8 +24,8 @@
 .column:last-of-type {
   margin-right: 20px;
 }
-.column .card:last-of-type{
-  margin-bottom: 20px;  /*GAP constant*/
+.column .card:last-of-type {
+  margin-bottom: 20px; /*GAP constant*/
 }
 
 .card {
@@ -52,14 +51,45 @@
   opacity: 0.6;
   transition: opacity 200ms;
 }
-.card .text-container {
 
+.icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  width: 60px;
+  height: 60px;
+  fill: rgba(255, 255, 255, 0);
+  transition: fill 100ms;
+}
+
+.card:hover .icon {
+  fill: rgba(255, 255, 255, 0.8);
+}
+
+.card .icon.pause-icon {
+  fill: rgba(255, 255, 255, 0.8);
+}
+
+.card .icon:hover {
+  fill: rgba(255, 255, 255, 1);
+}
+
+.card .icon:active,
+.card .icon.pause-icon:active {
+  fill: rgb(222, 222, 222);
+}
+
+.card .text-container {
   display: flex;
   justify-content: center;
   padding: 0.3em;
   align-items: flex-end;
   text-align: center;
   color: white;
+  pointer-events: none;
 }
 
 .card:hover .gradient {

@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import "./App.css";
 import { cn } from "./utils";
 import { connect } from "react-redux";
 import { allActions, AllActions, RootState } from "./state";
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebar";
 import Gallery from "./gallery";
 
 interface Props extends AllActions {

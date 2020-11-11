@@ -1,14 +1,15 @@
 import React from "react";
 import "./index.css";
 import Card from "./Card";
-import { interpolate } from "../utils";
+import { allActions, Item, RootState } from "../state";
+import { connect } from "react-redux";
 
 const GAP = 20;
 const minCardWidth = 240;
-const maxCardWidth = 500;
 
 interface Props {
   isSidebarVisible: boolean;
+  items: Item[];
 }
 
 class Gallery extends React.Component<Props> {
@@ -19,14 +20,14 @@ class Gallery extends React.Component<Props> {
   recalculateColumnsCountTimeout: ReturnType<typeof setTimeout> | undefined;
 
   getNumberOfColumns = () => {
-    return Math.floor(
+    return Math.max(Math.floor(
       ((this.ref?.scrollWidth || 0) - GAP) / (minCardWidth + GAP)
-    );
+    ), 1);
   };
 
   recalculateColumnsCount = () => {
     const newColumns = this.getNumberOfColumns();
-    if (newColumns != this.state.cols) this.setState({ cols: newColumns });
+    if (newColumns !== this.state.cols) this.setState({ cols: newColumns });
   };
 
   onRefReady = (element: HTMLDivElement) => {
@@ -62,21 +63,22 @@ class Gallery extends React.Component<Props> {
   render() {
     const { cols } = this.state;
     return (
-      <div
-        className="gallery-container"
-        ref={this.onRefReady}
-      >
-        {Array.from({ length: cols }).map((_, index) => (
+      <div className="gallery-container" ref={this.onRefReady}>
+        {createIntegers(cols).map((columnIndex) => (
           <div
-            key={index}
+            key={columnIndex}
             className="column"
-            data-testid={`gallery-column-${index + 1}`}
+            data-testid={`gallery-column-${columnIndex + 1}`}
           >
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
+            {this.props.items
+              .filter((_, i) => i % cols === columnIndex)
+              .map((item) => (
+                <Card
+                  key={item.id}
+                  isPlaying={false}
+                  item={this.props.items[0]}
+                />
+              ))}
           </div>
         ))}
       </div>
@@ -84,4 +86,14 @@ class Gallery extends React.Component<Props> {
   }
 }
 
-export default Gallery;
+function mapState(state: RootState) {
+  return {
+    items: state.items["HOME"].children.map((id) => state.items[id]),
+  };
+}
+
+export default connect(mapState, allActions)(Gallery);
+
+//creates integers starting from 0 up to upTo (exclusive)
+const createIntegers = (upTo: number) =>
+  Array.from(new Array(upTo)).map((_, i) => i);
