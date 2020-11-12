@@ -75,8 +75,8 @@ class Gallery extends React.Component<Props> {
               .map((item) => (
                 <Card
                   key={item.id}
+                  item={item}
                   isPlaying={false}
-                  item={this.props.items[0]}
                 />
               ))}
           </div>
@@ -88,7 +88,7 @@ class Gallery extends React.Component<Props> {
 
 function mapState(state: RootState) {
   return {
-    items: state.items["HOME"].children.map((id) => state.items[id]),
+    items: state.items[state.nodeFocusedId].children.map((id) => state.items[id]),
   };
 }
 

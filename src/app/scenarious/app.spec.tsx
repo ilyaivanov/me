@@ -34,3 +34,29 @@ it("playground1 should not have an open arrow since its children are only videos
   const row = screen.getByTestId("sidebar-row-playground1");
   expect(getByTestId(row, "row-arrow")).toHaveClass("hidden");
 });
+
+describe("having a sidebar when pressing on a Playground folder", () => {
+  it("Playground is set to focus", () => {
+    renderApp();
+    expect(screen.getByTestId("sidebar-row-playground1")).not.toHaveClass(
+      "focused"
+    );
+    fireEvent.click(screen.getByTestId("sidebar-row-playground1"));
+    expect(screen.getByTestId("sidebar-row-playground1")).toHaveClass(
+      "focused"
+    );
+  });
+  it("nodes of that folder are shown in a body", () => {
+    renderApp();
+    fireEvent.click(screen.getByTestId("sidebar-row-playground1"));
+    expect(screen.getByTestId("card-playground11")).toBeInTheDocument();
+    expect(screen.getByTestId("card-playground12")).toBeInTheDocument();
+  });
+
+  it("pressing home should set focus back to home with Playground1 card", () => {
+    renderApp();
+    fireEvent.click(screen.getByTestId("sidebar-row-playground1"));
+    fireEvent.click(screen.getByTestId("sidebar-row-HOME"));
+    expect(screen.getByTestId("card-playground1")).toBeInTheDocument();
+  });
+});

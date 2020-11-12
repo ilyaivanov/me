@@ -13,3 +13,5 @@ export function interpolate(domain: number[], range: number[], number: number) {
 }
 const minMax = (min: number, max: number, val: number) =>
   Math.max(min, Math.min(max, val));
+
+export { createId } from "./createId";

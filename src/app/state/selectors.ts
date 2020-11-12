@@ -24,3 +24,8 @@ export const hasAnySubfolders = (items: NodesContainer, itemId: string) =>
   items[itemId].children
     .map((id) => items[id].itemType !== "video")
     .reduce((acc, val) => acc || val, false);
+
+export const findParentId = (items: NodesContainer, childId: string) =>
+  Object.keys(items).find(
+    (parentKey) => items[parentKey].children.indexOf(childId) > -1
+  ) as string;
