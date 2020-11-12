@@ -1,9 +1,10 @@
 import React from "react";
 import "./index.css";
 import Card from "./Card";
-import {AllActions, allActions, Item, RootState} from "../state";
+import { AllActions, allActions, Item, RootState } from "../state";
 import { connect } from "react-redux";
 import { getPreviewItemsForFolder } from "../state/selectors";
+import { ids } from "./pageObject";
 
 const GAP = 20;
 const minCardWidth = 240;
@@ -77,21 +78,29 @@ class Gallery extends React.Component<Props> {
     );
   };
 
+  renderCards = () =>
+    createIntegers(this.state.cols).map((columnIndex) => (
+      <div
+        key={columnIndex}
+        className="column"
+        data-testid={`gallery-column-${columnIndex + 1}`}
+      >
+        {this.props.items
+          .filter((_, i) => i % this.state.cols === columnIndex)
+          .map(this.renderCard)}
+      </div>
+    ));
+
+  renderLoadingIndicator = () => (
+    <div data-testid={ids.loadingIndicator}>Loading</div>
+  );
+
   render() {
-    const { cols } = this.state;
     return (
       <div className="gallery-container" ref={this.onRefReady}>
-        {createIntegers(cols).map((columnIndex) => (
-          <div
-            key={columnIndex}
-            className="column"
-            data-testid={`gallery-column-${columnIndex + 1}`}
-          >
-            {this.props.items
-              .filter((_, i) => i % cols === columnIndex)
-              .map(this.renderCard)}
-          </div>
-        ))}
+        {this.props.searchState === "loading"
+          ? this.renderLoadingIndicator()
+          : this.renderCards()}
       </div>
     );
   }
@@ -103,6 +112,7 @@ function mapState(state: RootState) {
       (id) => state.items[id]
     ),
     allItems: state.items,
+    searchState: state.searchState,
   };
 }
 

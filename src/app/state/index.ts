@@ -16,10 +16,13 @@ export type NodesContainer = {
   [key: string]: Item;
 };
 
+type SearchState = "loading" | "done";
+
 export const initialState = {
   isSidebarVisible: true,
   nodeFocusedId: "HOME",
   itemIdBeingPlayed: undefined as string | undefined,
+  searchState: "done" as SearchState,
   items: {
     HOME: {
       id: "HOME",
@@ -173,6 +176,13 @@ const reducer = (state = initialState, action: Action): RootState => {
         };
     }
   }
+
+  if (action.type === "SET_SEARCH_STATE") {
+    return {
+      ...state,
+      searchState: action.state,
+    };
+  }
   return state;
 };
 
@@ -197,6 +207,9 @@ const playItem = (itemId: string) => ({ type: "PLAY_ITEM", itemId } as const);
 
 const onVideoEnd = () => ({ type: "VIDEO_ENDED" } as const);
 
+const setSearchState = (state: SearchState) =>
+  ({ type: "SET_SEARCH_STATE", state } as const);
+
 export const allActions = {
   toggleSidebar,
   focusNode,
@@ -205,6 +218,7 @@ export const allActions = {
   changeNode,
   playItem,
   onVideoEnd,
+  setSearchState,
 };
 
 export type AllActions = typeof allActions;
