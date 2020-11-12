@@ -73,7 +73,6 @@ class Gallery extends React.Component<Props> {
         item={item}
         isPlaying={false}
         folderFirstItems={previewImages}
-        onPlay={this.props.playItem}
       />
     );
   };

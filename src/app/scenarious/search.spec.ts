@@ -7,7 +7,7 @@ jest.mock("../api/youtubeRequest", () => ({
   findYoutubeVideos: jest.fn(),
 }));
 
-fit("When entering some term in the input field", async () => {
+it("When entering some term in the input field", async () => {
   const sampleYoutubeResponse = {
     items: [
       {

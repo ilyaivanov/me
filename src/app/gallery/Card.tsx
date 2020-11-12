@@ -1,12 +1,12 @@
 import React from "react";
 import { Play, Pause } from "../icons";
-import { Item } from "../state";
+import { allActions, Item, AllActions } from "../state";
+import { connect } from "react-redux";
 
-interface Props {
+interface Props extends AllActions {
   item: Item;
   folderFirstItems: Item[];
   isPlaying?: boolean;
-  onPlay: (itemId: string) => void;
 }
 
 class Card extends React.Component<Props> {
@@ -36,14 +36,26 @@ class Card extends React.Component<Props> {
 
   onPlayClick = () => {
     const { item } = this.props;
-    if (item.itemType === "video") this.props.onPlay(item.id);
-    else this.props.onPlay(this.props.folderFirstItems[0].id);
+    if (item.itemType === "video") this.props.playItem(item.id);
+    else this.props.playItem(this.props.folderFirstItems[0].id);
+  };
+
+  onMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    console.log(
+      e.currentTarget.getBoundingClientRect().left,
+      e.currentTarget.getBoundingClientRect().top
+    );
+    this.props.onMouseDownForCard(this.props.item.id);
   };
 
   render() {
     let { item, isPlaying } = this.props;
     return (
-      <div className="card" data-testid={"card-" + item.id}>
+      <div
+        className="card"
+        data-testid={"card-" + item.id}
+        onMouseDown={this.onMouseDown}
+      >
         {item.itemType === "folder" ? (
           this.renderFolderPreview()
         ) : (
@@ -67,4 +79,4 @@ class Card extends React.Component<Props> {
   }
 }
 
-export default Card;
+export default connect(undefined, allActions)(Card);

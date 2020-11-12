@@ -18,11 +18,18 @@ export type NodesContainer = {
 
 type SearchState = "loading" | "done";
 
+type DragStateType = "no_drag" | "mouse_down" | "dragging";
+
 export const initialState = {
   isSidebarVisible: true,
   nodeFocusedId: "HOME",
   itemIdBeingPlayed: undefined as string | undefined,
   searchState: "done" as SearchState,
+  dragState: {
+    // type: "no_drag" as DragStateType,
+    // distanceTraveled: 0,
+    cardDraggedId: "",
+  },
   items: {
     HOME: {
       id: "HOME",
@@ -205,6 +212,22 @@ const reducer = (state = initialState, action: Action): RootState => {
       items,
     };
   }
+  if (action.type === "MOUSE_DOWN") {
+    return {
+      ...state,
+      dragState: {
+        cardDraggedId: action.itemId,
+      },
+    };
+  }
+  if (action.type === "MOUSE_UP") {
+    return {
+      ...state,
+      dragState: {
+        cardDraggedId: "",
+      },
+    };
+  }
   return state;
 };
 
@@ -235,6 +258,11 @@ const setSearchState = (state: SearchState) =>
 const itemsLoadedFromSearch = (items: Item[]) =>
   ({ type: "ITEMS_LOADED_FROM_SEARCH", items } as const);
 
+const onMouseDownForCard = (itemId: string) =>
+  ({ type: "MOUSE_DOWN", itemId } as const);
+
+const onMouseUp = () => ({ type: "MOUSE_UP" } as const);
+
 export const allActions = {
   toggleSidebar,
   focusNode,
@@ -245,6 +273,8 @@ export const allActions = {
   onVideoEnd,
   setSearchState,
   itemsLoadedFromSearch,
+  onMouseDownForCard,
+  onMouseUp,
 };
 
 export type AllActions = typeof allActions;

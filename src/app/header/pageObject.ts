@@ -19,6 +19,7 @@ const header = {
   clickSearch() {
     fireEvent.click(screen.getByTestId(ids.searchButton));
   },
+
 };
 
 export default header;
