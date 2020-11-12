@@ -1,6 +1,6 @@
 import { createStore } from "redux";
 import { findParentId } from "./selectors";
-import {createId} from "../utils";
+import { createId } from "../utils";
 
 export interface Item {
   id: string;
@@ -16,7 +16,7 @@ export type NodesContainer = {
   [key: string]: Item;
 };
 
-const initialState = {
+export const initialState = {
   isSidebarVisible: true,
   nodeFocusedId: "HOME",
   items: {
@@ -24,7 +24,7 @@ const initialState = {
       id: "HOME",
       itemType: "folder",
       title: "Home",
-      children: ["playground1"],
+      children: ["playground1", "nestedRoot", "playground12"],
     },
     playground1: {
       id: "playground1",
@@ -46,6 +46,54 @@ const initialState = {
       title: "Something Something",
       image: "https://i.ytimg.com/vi/_WGJ83wSibc/mqdefault.jpg",
       videoId: "_WGJ83wSibc",
+      children: [],
+    },
+    nestedRoot: {
+      id: "nestedRoot",
+      itemType: "folder",
+      title: "Nested Root",
+      children: ["nested1", "nested2", "nested3"],
+    },
+    nested1: {
+      id: "nested1",
+      itemType: "folder",
+      title: "Nested 1",
+      children: ["nested1Video"],
+    },
+    nested2: {
+      id: "nested2",
+      itemType: "folder",
+      title: "Nested 2",
+      children: ["nested2Video"],
+    },
+    nested3: {
+      id: "nested3",
+      itemType: "folder",
+      title: "Nested 3",
+      children: ["nested3Video"],
+    },
+    nested1Video: {
+      id: "nested1Video",
+      itemType: "video",
+      title: "Something Something",
+      image: "https://i.ytimg.com/vi/_WGJ83wSibc/mqdefault.jpg",
+      videoId: "_WGJ83wSibc",
+      children: [],
+    },
+    nested2Video: {
+      id: "nested2Video",
+      itemType: "video",
+      title: "Something Something",
+      image: "https://i.ytimg.com/vi/_WGJ83wSibc/mqdefault.jpg",
+      videoId: "_WGJ83wSibc",
+      children: [],
+    },
+    nested3Video: {
+      id: "nested3Video",
+      itemType: "video",
+      title: "Joe Rogan Experience #1562 - Dave Smith",
+      image: "https://i.ytimg.com/vi/5PrLGhJnO7I/mqdefault.jpg",
+      videoId: "5PrLGhJnO7I",
       children: [],
     },
   } as NodesContainer,

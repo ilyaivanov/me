@@ -48,12 +48,25 @@ describe("Having a single folder in a sidebar", () => {
     sidebarPageObject.loseFocusOnInput("playground1");
     expect(sidebarPageObject.getFolderTitle("playground1")).toBe("New Name");
   });
+
+  it("when nested node is opened its children are visible", function () {
+    renderSidebar();
+    expect(
+      sidebarPageObject.querySidebarRow("nested1")
+    ).not.toBeInTheDocument();
+    sidebarPageObject.clickRowArrow("nestedRoot");
+    expect(sidebarPageObject.querySidebarArrow("nestedRoot")).toHaveClass("row-arrow-open");
+    expect(sidebarPageObject.querySidebarRow("nested1")).toBeInTheDocument();
+  });
 });
 
 // prettier-ignore
 const sidebarPageObject = {
   querySidebarRow: (id: string) =>
     screen.queryByTestId(`sidebar-row-${id}`),
+
+  querySidebarArrow: (id: string) =>
+    screen.queryByTestId(`row-arrow-${id}`),
 
   clickAddFolder: () =>
     fireEvent.click(screen.getByTestId("folder-add")),
@@ -63,6 +76,9 @@ const sidebarPageObject = {
 
   clickRenameFolder: (folderId: string) =>
     fireEvent.click(screen.getByTestId(`folder-rename-${folderId}`)),
+
+  clickRowArrow: (folderId: string) =>
+    fireEvent.click(screen.getByTestId(`row-arrow-${folderId}`)),
 
   enterTextIntoFolderInputField: (folderId: string, nextText: string) =>
     fireEvent.change(screen.getByTestId(`folder-input-${folderId}`), { target: { value: nextText } }),

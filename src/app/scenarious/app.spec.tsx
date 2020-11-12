@@ -32,7 +32,7 @@ it("should have a playground1 in the sidebar", function () {
 it("playground1 should not have an open arrow since its children are only videos", function () {
   renderApp();
   const row = screen.getByTestId("sidebar-row-playground1");
-  expect(getByTestId(row, "row-arrow")).toHaveClass("hidden");
+  expect(getByTestId(row, "row-arrow-playground1")).toHaveClass("hidden");
 });
 
 describe("having a sidebar when pressing on a Playground folder", () => {

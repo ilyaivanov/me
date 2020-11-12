@@ -54,7 +54,12 @@ class Sidebar extends React.Component<SidebarProps> {
     });
   };
 
-  renderRow = (item: Item, level: number) => {
+  arrowClicked = (item: Item) =>
+    this.props.changeNode(item.id, {
+      isOpenFromSidebar: !item.isOpenFromSidebar,
+    });
+
+  renderRow = ({ item, level }: { item: Item; level: number }) => {
     return (
       <div
         key={item.id}
@@ -67,14 +72,16 @@ class Sidebar extends React.Component<SidebarProps> {
         onClick={() => this.props.focusNode(item.id)}
         data-testid={`sidebar-row-${item.id}`}
       >
-        <Chevron
-          data-testid="row-arrow"
-          className={cn({
-            "row-arrow": true,
-            hidden: !hasAnySubfolders(this.props.items, item.id),
-            "row-arrow-open": item.isOpenFromSidebar,
-          })}
-        />
+        <div onClick={() => this.arrowClicked(item)}>
+          <Chevron
+            data-testid={"row-arrow-" + item.id}
+            className={cn({
+              "row-arrow": true,
+              hidden: !hasAnySubfolders(this.props.items, item.id),
+              "row-arrow-open": item.isOpenFromSidebar,
+            })}
+          />
+        </div>
         <div className="circle" />
         {this.renderText(item)}
         <button
@@ -101,7 +108,12 @@ class Sidebar extends React.Component<SidebarProps> {
   render() {
     //TODO: consider extract this heavy-duty operations into selectors
     // and maybe try to see if using reselect has any benefits
-    const rows = traverseOpenNodes(this.props.items, "HOME", this.renderRow);
+    const rows = traverseOpenNodes(this.props.items, "HOME", (item, level) => ({
+      item,
+      level,
+    }))
+      .filter(({ item }) => item.itemType === "folder")
+      .map(this.renderRow);
     return (
       <div className="sidebar-content">
         <div

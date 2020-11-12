@@ -34,6 +34,12 @@
   color: #232325;
   font-weight: lighter;
   position: relative;
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+}
+
+.card:hover {
+  box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.4);
 }
 .card .text {
   bottom: 0;
@@ -96,14 +102,60 @@
   opacity: 1;
 }
 
-.card:hover img {
-  box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.4);
-}
-
 .card img {
   transition: box-shadow 150ms;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   width: 100%;
   display: block;
+}
+
+.card-preview-dimensions {
+  height: 0;
+  padding-bottom: 56.25%; /*ratio for 320x180 youtube image*/
+  position: relative;
+}
+
+.folder-preview-container {
+  display: flex;
+  align-items: stretch;
+}
+
+.folder-preview-container img {
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.folder-preview-container > .left {
+  flex: 3;
+}
+
+.folder-preview-container > .right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #232325;
+}
+
+.folder-preview-container > .left > img {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  height: 100%;
+}
+
+.folder-preview-container > .right > img {
+  height: 25%;
+}
+.folder-preview-container > .right > img:first-of-type {
+  border-top-right-radius: 4px;
+}
+.folder-preview-container > .right > img:nth-child(4) {
+  border-bottom-right-radius: 4px;
+}
+
+.empty-folder {
+  border-radius: 4px;
+  font-size: 36px;
+  font-weight: bolder;
+  color: #808080;
+  background-color: #232325;
 }

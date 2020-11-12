@@ -3,13 +3,13 @@ import "./index.css";
 import Card from "./Card";
 import { allActions, Item, RootState } from "../state";
 import { connect } from "react-redux";
+import { getPreviewImagesForFolder } from "../state/selectors";
 
 const GAP = 20;
 const minCardWidth = 240;
 
-interface Props {
+interface Props extends ReturnType<typeof mapState> {
   isSidebarVisible: boolean;
-  items: Item[];
 }
 
 class Gallery extends React.Component<Props> {
@@ -20,9 +20,10 @@ class Gallery extends React.Component<Props> {
   recalculateColumnsCountTimeout: ReturnType<typeof setTimeout> | undefined;
 
   getNumberOfColumns = () => {
-    return Math.max(Math.floor(
-      ((this.ref?.scrollWidth || 0) - GAP) / (minCardWidth + GAP)
-    ), 1);
+    return Math.max(
+      Math.floor(((this.ref?.scrollWidth || 0) - GAP) / (minCardWidth + GAP)),
+      1
+    );
   };
 
   recalculateColumnsCount = () => {
@@ -60,6 +61,21 @@ class Gallery extends React.Component<Props> {
     window.removeEventListener("resize", this.recalculateColumnsCount);
   }
 
+  renderCard = (item: Item) => {
+    const previewImages =
+      item.itemType === "folder"
+        ? getPreviewImagesForFolder(this.props.allItems, item.id)
+        : [];
+    return (
+      <Card
+        key={item.id}
+        item={item}
+        isPlaying={false}
+        previewImages={previewImages}
+      />
+    );
+  };
+
   render() {
     const { cols } = this.state;
     return (
@@ -72,13 +88,7 @@ class Gallery extends React.Component<Props> {
           >
             {this.props.items
               .filter((_, i) => i % cols === columnIndex)
-              .map((item) => (
-                <Card
-                  key={item.id}
-                  item={item}
-                  isPlaying={false}
-                />
-              ))}
+              .map(this.renderCard)}
           </div>
         ))}
       </div>
@@ -88,7 +98,10 @@ class Gallery extends React.Component<Props> {
 
 function mapState(state: RootState) {
   return {
-    items: state.items[state.nodeFocusedId].children.map((id) => state.items[id]),
+    items: state.items[state.nodeFocusedId].children.map(
+      (id) => state.items[id]
+    ),
+    allItems: state.items,
   };
 }
 
