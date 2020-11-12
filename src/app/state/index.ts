@@ -111,11 +111,6 @@ const reducer = (state = initialState, action: Action): RootState => {
       ...state,
       nodeFocusedId: action.itemId,
     };
-  }  if (action.type === "PLAY_ITEM") {
-    return {
-      ...state,
-      itemIdBeingPlayed: action.itemId
-    };
   }
   if (action.type === "CHANGE_NODE") {
     return {
@@ -142,7 +137,7 @@ const reducer = (state = initialState, action: Action): RootState => {
     };
   }
   if (action.type === "CREATE_NEW_FOLDER") {
-    const chil = state.items["HOME"].children.concat([action.id]); //?
+    const chil = state.items["HOME"].children.concat([action.id]);
     return {
       ...state,
       items: {
@@ -159,6 +154,24 @@ const reducer = (state = initialState, action: Action): RootState => {
         },
       },
     };
+  }
+  if (action.type === "PLAY_ITEM") {
+    return {
+      ...state,
+      itemIdBeingPlayed: action.itemId,
+    };
+  }
+  if (action.type === "VIDEO_ENDED") {
+    if (state.itemIdBeingPlayed) {
+      const parent = findParentId(state.items, state.itemIdBeingPlayed);
+      const context = state.items[parent];
+      const nextIndex = context.children.indexOf(state.itemIdBeingPlayed) + 1;
+      if (nextIndex < context.children.length)
+        return {
+          ...state,
+          itemIdBeingPlayed: context.children[nextIndex],
+        };
+    }
   }
   return state;
 };
@@ -182,6 +195,8 @@ const removeItem = (itemId: string) =>
 
 const playItem = (itemId: string) => ({ type: "PLAY_ITEM", itemId } as const);
 
+const onVideoEnd = () => ({ type: "VIDEO_ENDED" } as const);
+
 export const allActions = {
   toggleSidebar,
   focusNode,
@@ -189,6 +204,7 @@ export const allActions = {
   removeItem,
   changeNode,
   playItem,
+  onVideoEnd,
 };
 
 export type AllActions = typeof allActions;

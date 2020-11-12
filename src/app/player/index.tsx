@@ -1,15 +1,15 @@
 import React from "react";
 import YoutubePlayer from "./youtubePlayer";
-import { allActions, RootState } from "../state";
+import {AllActions, allActions, RootState} from "../state";
 import { connect } from "react-redux";
 
-type Props = ReturnType<typeof mapState>;
+type Props = ReturnType<typeof mapState> & AllActions;
 
-const Player = ({ videoId }: Props) => {
+const Player = (props : Props) => {
   return (
     <div>
       <div className="youtube-player">
-        {videoId && <YoutubePlayer videoId={videoId} />}
+        {props.videoId && <YoutubePlayer videoId={props.videoId} onVideoEn={props.onVideoEnd} />}
       </div>
     </div>
   );

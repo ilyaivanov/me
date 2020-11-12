@@ -1,14 +1,13 @@
 import React from "react";
 import YouTube from "react-youtube";
 
-const YoutubePlayer = ({ videoId }: { videoId: string }) => (
-  <YouTube
-    videoId={videoId}
-    opts={playerOpts}
-    onEnd={() => {
-      console.log("on end");
-    }}
-  />
+interface Props {
+  videoId: string;
+  onVideoEn: () => void;
+}
+
+const YoutubePlayer = ({ videoId, onVideoEn }: Props) => (
+  <YouTube videoId={videoId} opts={playerOpts} onEnd={onVideoEn} />
 );
 
 const playerOpts: any = {

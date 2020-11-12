@@ -11,6 +11,7 @@ const renderTestApp = () => {
       <App />
     </Provider>
   );
+  return store;
 };
 
 export default renderTestApp;
