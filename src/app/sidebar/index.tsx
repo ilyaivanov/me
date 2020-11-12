@@ -72,7 +72,12 @@ class Sidebar extends React.Component<SidebarProps> {
         onClick={() => this.props.focusNode(item.id)}
         data-testid={`sidebar-row-${item.id}`}
       >
-        <div onClick={() => this.arrowClicked(item)}>
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            this.arrowClicked(item);
+          }}
+        >
           <Chevron
             data-testid={"row-arrow-" + item.id}
             className={cn({

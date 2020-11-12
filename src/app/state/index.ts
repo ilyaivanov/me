@@ -126,7 +126,6 @@ const reducer = (state = initialState, action: Action): RootState => {
   if (action.type === "REMOVE_ITEM") {
     const parent = findParentId(state.items, action.itemId);
     const copy = { ...state.items };
-    delete copy[action.itemId];
     copy[parent] = {
       ...copy[parent],
       children: copy[parent].children.filter((id) => id !== action.itemId),
