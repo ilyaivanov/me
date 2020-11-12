@@ -1,8 +1,9 @@
 import { createMediaExplorerStore } from "../state";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import React from "react";
 import Sidebar from "./index";
+import sidebar from "./pageObject";
 
 jest.mock("../utils/createId", () => ({
   createId: () => "MyID",
@@ -20,74 +21,36 @@ const renderSidebar = () => {
 describe("Having a single folder in a sidebar", () => {
   it("when adding a new folder it appears at the end of the root", () => {
     renderSidebar();
-    expect(sidebarPageObject.querySidebarRow("MyID")).not.toBeInTheDocument();
-    sidebarPageObject.clickAddFolder();
-    expect(sidebarPageObject.querySidebarRow("MyID")).toBeInTheDocument();
+    expect(sidebar.querySidebarRow("MyID")).not.toBeInTheDocument();
+    sidebar.clickAddFolder();
+    expect(sidebar.querySidebarRow("MyID")).toBeInTheDocument();
   });
 
   it("Removing Playground folder", () => {
     renderSidebar();
-    expect(
-      sidebarPageObject.querySidebarRow("playground1")
-    ).toBeInTheDocument();
-    sidebarPageObject.clickRemoveFolder("playground1");
-    sidebarPageObject.clickAddFolder();
-    expect(
-      sidebarPageObject.querySidebarRow("playground1")
-    ).not.toBeInTheDocument();
+    expect(sidebar.querySidebarRow("playground1")).toBeInTheDocument();
+    sidebar.clickRemoveFolder("playground1");
+    sidebar.clickAddFolder();
+    expect(sidebar.querySidebarRow("playground1")).not.toBeInTheDocument();
   });
 
   it("Renaming Playground folder", () => {
     renderSidebar();
-    expect(
-      sidebarPageObject.querySidebarRow("playground1")
-    ).toBeInTheDocument();
-    sidebarPageObject.clickRenameFolder("playground1");
-    sidebarPageObject.enterTextIntoFolderInputField("playground1", "New Name");
+    expect(sidebar.querySidebarRow("playground1")).toBeInTheDocument();
+    sidebar.clickRenameFolder("playground1");
+    sidebar.enterTextIntoFolderInputField("playground1", "New Name");
 
-    sidebarPageObject.loseFocusOnInput("playground1");
-    expect(sidebarPageObject.getFolderTitle("playground1")).toBe("New Name");
+    sidebar.loseFocusOnInput("playground1");
+    expect(sidebar.getFolderTitle("playground1")).toBe("New Name");
   });
 
   it("when nested node is opened its children are visible", function () {
     renderSidebar();
-    expect(
-      sidebarPageObject.querySidebarRow("nested1")
-    ).not.toBeInTheDocument();
-    sidebarPageObject.clickRowArrow("nestedRoot");
-    expect(sidebarPageObject.querySidebarArrow("nestedRoot")).toHaveClass("row-arrow-open");
-    expect(sidebarPageObject.querySidebarRow("nested1")).toBeInTheDocument();
+    expect(sidebar.querySidebarRow("nested1")).not.toBeInTheDocument();
+    sidebar.clickRowArrow("nestedRoot");
+    expect(sidebar.querySidebarArrow("nestedRoot")).toHaveClass(
+      "row-arrow-open"
+    );
+    expect(sidebar.querySidebarRow("nested1")).toBeInTheDocument();
   });
 });
-
-// prettier-ignore
-const sidebarPageObject = {
-  querySidebarRow: (id: string) =>
-    screen.queryByTestId(`sidebar-row-${id}`),
-
-  querySidebarArrow: (id: string) =>
-    screen.queryByTestId(`row-arrow-${id}`),
-
-  clickAddFolder: () =>
-    fireEvent.click(screen.getByTestId("folder-add")),
-
-  clickRemoveFolder: (folderId: string) =>
-    fireEvent.click(screen.getByTestId(`folder-remove-${folderId}`)),
-
-  clickRenameFolder: (folderId: string) =>
-    fireEvent.click(screen.getByTestId(`folder-rename-${folderId}`)),
-
-  clickRowArrow: (folderId: string) =>
-    fireEvent.click(screen.getByTestId(`row-arrow-${folderId}`)),
-
-  enterTextIntoFolderInputField: (folderId: string, nextText: string) =>
-    fireEvent.change(screen.getByTestId(`folder-input-${folderId}`), { target: { value: nextText } }),
-
-  loseFocusOnInput: (folderId: string) =>
-    fireEvent.blur(screen.getByTestId(`folder-input-${folderId}`)),
-
-  getFolderTitle: (folderId: string) =>
-    screen.queryByTestId(`folder-title-${folderId}`)?.innerHTML
-};
-
-//TODO: rename, remove

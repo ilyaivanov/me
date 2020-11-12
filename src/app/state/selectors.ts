@@ -42,13 +42,12 @@ export const traverseAllNodes = <T>(
 
 
 //TODO: optimization, no need to traverse ALL nodes, just find first 5
-export const getPreviewImagesForFolder = (
+export const getPreviewItemsForFolder = (
   items: NodesContainer,
   itemId: string
-): string[] =>
+): Item[] =>
   traverseAllNodes(items, itemId, (item) => item)
     .filter((item) => item.itemType === "video")
-    .map((item) => item.image || ""); //this || "" shit is a pure TS redundancy, improve my Items interface
 
 export const hasAnySubfolders = (items: NodesContainer, itemId: string) =>
   items[itemId].children

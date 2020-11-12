@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { allActions, AllActions, RootState } from "./state";
 import Sidebar from "./sidebar";
 import Gallery from "./gallery";
+import Player from "./player";
 
 interface Props extends AllActions {
   isSidebarVisible: boolean;
@@ -30,6 +31,7 @@ const App = (props: Props) => {
       <div className="page-body">
         <Gallery isSidebarVisible={props.isSidebarVisible} />
       </div>
+      <Player />
     </div>
   );
 };

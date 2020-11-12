@@ -19,6 +19,7 @@ export type NodesContainer = {
 export const initialState = {
   isSidebarVisible: true,
   nodeFocusedId: "HOME",
+  itemIdBeingPlayed: undefined as string | undefined,
   items: {
     HOME: {
       id: "HOME",
@@ -110,6 +111,11 @@ const reducer = (state = initialState, action: Action): RootState => {
       ...state,
       nodeFocusedId: action.itemId,
     };
+  }  if (action.type === "PLAY_ITEM") {
+    return {
+      ...state,
+      itemIdBeingPlayed: action.itemId
+    };
   }
   if (action.type === "CHANGE_NODE") {
     return {
@@ -162,14 +168,19 @@ export const createMediaExplorerStore = () => {
 };
 
 const toggleSidebar = () => ({ type: "TOGGLE_SIDEBAR" } as const);
+
 const createNewFolder = () =>
   ({ type: "CREATE_NEW_FOLDER", id: createId() } as const);
+
 const focusNode = (itemId: string) => ({ type: "FOCUS_NODE", itemId } as const);
+
 const changeNode = (itemId: string, item: Partial<Item>) =>
   ({ type: "CHANGE_NODE", itemId, item } as const);
 
 const removeItem = (itemId: string) =>
   ({ type: "REMOVE_ITEM", itemId } as const);
+
+const playItem = (itemId: string) => ({ type: "PLAY_ITEM", itemId } as const);
 
 export const allActions = {
   toggleSidebar,
@@ -177,6 +188,7 @@ export const allActions = {
   createNewFolder,
   removeItem,
   changeNode,
+  playItem,
 };
 
 export type AllActions = typeof allActions;

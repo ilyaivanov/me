@@ -1,14 +1,14 @@
 import React from "react";
 import "./index.css";
 import Card from "./Card";
-import { allActions, Item, RootState } from "../state";
+import {AllActions, allActions, Item, RootState} from "../state";
 import { connect } from "react-redux";
-import { getPreviewImagesForFolder } from "../state/selectors";
+import { getPreviewItemsForFolder } from "../state/selectors";
 
 const GAP = 20;
 const minCardWidth = 240;
 
-interface Props extends ReturnType<typeof mapState> {
+interface Props extends ReturnType<typeof mapState>, AllActions {
   isSidebarVisible: boolean;
 }
 
@@ -64,14 +64,15 @@ class Gallery extends React.Component<Props> {
   renderCard = (item: Item) => {
     const previewImages =
       item.itemType === "folder"
-        ? getPreviewImagesForFolder(this.props.allItems, item.id)
+        ? getPreviewItemsForFolder(this.props.allItems, item.id)
         : [];
     return (
       <Card
         key={item.id}
         item={item}
         isPlaying={false}
-        previewImages={previewImages}
+        folderFirstItems={previewImages}
+        onPlay={this.props.playItem}
       />
     );
   };

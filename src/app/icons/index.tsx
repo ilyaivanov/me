@@ -1,8 +1,9 @@
 import React from "react";
 
-interface Props {
+type Props = {
   className?: string;
-}
+  onClick?: any;
+};
 
 export const Pause = (props: Props) => (
   <svg {...props} viewBox="0 0 448 512">
