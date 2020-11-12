@@ -30,6 +30,12 @@ export const initialState = {
       title: "Home",
       children: ["playground1", "nestedRoot", "playground12"],
     },
+    SEARCH: {
+      id: "SEARCH",
+      itemType: "folder",
+      title: "Search",
+      children: [],
+    },
     playground1: {
       id: "playground1",
       itemType: "folder",
@@ -183,6 +189,22 @@ const reducer = (state = initialState, action: Action): RootState => {
       searchState: action.state,
     };
   }
+  if (action.type === "ITEMS_LOADED_FROM_SEARCH") {
+    const items = {
+      ...state.items,
+    };
+    action.items.forEach((item) => {
+      items[item.id] = item;
+    });
+    items["SEARCH"] = {
+      ...items["SEARCH"],
+      children: action.items.map((i) => i.id),
+    };
+    return {
+      ...state,
+      items,
+    };
+  }
   return state;
 };
 
@@ -210,6 +232,9 @@ const onVideoEnd = () => ({ type: "VIDEO_ENDED" } as const);
 const setSearchState = (state: SearchState) =>
   ({ type: "SET_SEARCH_STATE", state } as const);
 
+const itemsLoadedFromSearch = (items: Item[]) =>
+  ({ type: "ITEMS_LOADED_FROM_SEARCH", items } as const);
+
 export const allActions = {
   toggleSidebar,
   focusNode,
@@ -219,6 +244,7 @@ export const allActions = {
   playItem,
   onVideoEnd,
   setSearchState,
+  itemsLoadedFromSearch,
 };
 
 export type AllActions = typeof allActions;
