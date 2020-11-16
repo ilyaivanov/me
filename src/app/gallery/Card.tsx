@@ -1,13 +1,16 @@
 import React from "react";
 import { Play, Pause } from "../icons";
-import { allActions, Item, AllActions } from "../state";
+import { allActions, Item, AllActions, RootState } from "../state";
 import { connect } from "react-redux";
+import { getPreviewItemsForFolder } from "../state/selectors";
+import { cn } from "../utils";
+import {ids} from "./pageObject";
 
-interface Props extends AllActions {
+interface OuterProps {
   item: Item;
-  folderFirstItems: Item[];
   isPlaying?: boolean;
 }
+type Props = OuterProps & AllActions & ReturnType<typeof mapState>;
 
 class Card extends React.Component<Props> {
   renderFolderPreview = () => {
@@ -15,14 +18,18 @@ class Card extends React.Component<Props> {
     else return this.renderFolderImage();
   };
   renderFolderImage = () => (
-    <div className="card-preview-dimensions">
+    <div className="card-preview-dimensions" data-testid={ids.folderPreview}>
       <div className="overlay folder-preview-container">
         <div className="left">
-          <img src={this.props.folderFirstItems[0].image} alt="" />
+          <img
+            src={this.props.folderFirstItems[0].image}
+            alt="preview-image"
+            draggable={false}
+          />
         </div>
         <div className="right">
-          {this.props.folderFirstItems.slice(1).map((item) => (
-            <img key={item.id} src={item.image} alt="" />
+          {this.props.folderFirstItems.slice(1, 5).map((item) => (
+            <img key={item.id} src={item.image} alt="preview-image" draggable={false} />
           ))}
         </div>
       </div>
@@ -41,25 +48,46 @@ class Card extends React.Component<Props> {
   };
 
   onMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    console.log(
-      e.currentTarget.getBoundingClientRect().left,
-      e.currentTarget.getBoundingClientRect().top
-    );
-    this.props.onMouseDownForCard(this.props.item.id);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const itemOffsets = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    this.props.onMouseDownForCard(this.props.item.id, rect, itemOffsets);
+  };
+
+  onMouseEnter = () => {
+    if (
+      this.props.dragState.cardDraggedId &&
+      this.props.item.id !== this.props.dragState.cardDraggedId
+    ) {
+      this.props.setCardDestination(this.props.item.id, "gallery");
+    }
+  };
+  onMouseLeave = () => {
+    if (
+      this.props.dragState.cardDraggedId &&
+      this.props.item.id !== this.props.dragState.cardDraggedId
+    ) {
+      this.props.setCardDestination("", undefined);
+    }
   };
 
   render() {
-    let { item, isPlaying } = this.props;
+    let { item, isPlaying, dragState } = this.props;
     return (
       <div
-        className="card"
-        data-testid={"card-" + item.id}
+        className={cn({
+          card: true,
+          "card-drag-destination": dragState.dragArea === 'gallery' && item.id == dragState.cardUnderId,
+          "card-being-dragged": item.id ==  dragState.cardDraggedId,
+        })}
+        data-testid={ids.card(item.id)}
         onMouseDown={this.onMouseDown}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
       >
         {item.itemType === "folder" ? (
           this.renderFolderPreview()
         ) : (
-          <img src={item.image} alt="" />
+          <img src={item.image} alt="" draggable={false} />
         )}
         <div className="overlay gradient" />
         <div className="overlay flex-center">
@@ -67,16 +95,25 @@ class Card extends React.Component<Props> {
             <Pause className="icon pause-icon" />
           ) : (
             <Play
-              data-testid={`play-icon-${item.id}`}
+              data-testid={ids.playIcon}
               onClick={this.onPlayClick}
               className="icon"
             />
           )}
         </div>
-        <div className="overlay text-container">{item.title}</div>
+        <div data-testid={ids.cardTitle} className="overlay text-container">{item.title}</div>
       </div>
     );
   }
 }
-
-export default connect(undefined, allActions)(Card);
+const mapState = (state: RootState, props: OuterProps) => {
+  const folderFirstItems =
+    props.item.itemType === "folder"
+      ? getPreviewItemsForFolder(state.items, props.item.id)
+      : [];
+  return {
+    folderFirstItems,
+    dragState: state.dragState,
+  };
+};
+export default connect(mapState, allActions)(Card);

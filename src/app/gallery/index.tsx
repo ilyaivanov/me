@@ -1,9 +1,9 @@
 import React from "react";
 import "./index.css";
+import "./dnd.css";
 import Card from "./Card";
 import { AllActions, allActions, Item, RootState } from "../state";
 import { connect } from "react-redux";
-import { getPreviewItemsForFolder } from "../state/selectors";
 import { ids } from "./pageObject";
 
 const GAP = 20;
@@ -63,16 +63,11 @@ class Gallery extends React.Component<Props> {
   }
 
   renderCard = (item: Item) => {
-    const previewImages =
-      item.itemType === "folder"
-        ? getPreviewItemsForFolder(this.props.allItems, item.id)
-        : [];
     return (
       <Card
         key={item.id}
         item={item}
         isPlaying={false}
-        folderFirstItems={previewImages}
       />
     );
   };
@@ -96,7 +91,7 @@ class Gallery extends React.Component<Props> {
 
   render() {
     return (
-      <div className="gallery-container" ref={this.onRefReady}>
+      <div className="gallery-container" ref={this.onRefReady} data-testid={'gallery'}>
         {this.props.searchState === "loading"
           ? this.renderLoadingIndicator()
           : this.renderCards()}

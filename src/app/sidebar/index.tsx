@@ -2,20 +2,11 @@ import React from "react";
 import "./index.css";
 import { cn } from "../utils";
 import { Chevron } from "../icons";
-import {
-  AllActions,
-  allActions,
-  Item,
-  NodesContainer,
-  RootState,
-} from "../state";
+import { AllActions, allActions, Item, RootState } from "../state";
 import { connect } from "react-redux";
 import { hasAnySubfolders, traverseOpenNodes } from "../state/selectors";
 
-interface SidebarProps extends AllActions {
-  items: NodesContainer;
-  nodeFocusedId: string;
-}
+type SidebarProps = ReturnType<typeof mapState> & AllActions;
 
 class Sidebar extends React.Component<SidebarProps> {
   state = {
@@ -60,17 +51,26 @@ class Sidebar extends React.Component<SidebarProps> {
     });
 
   renderRow = ({ item, level }: { item: Item; level: number }) => {
+    const { dragState } = this.props;
     return (
       <div
         key={item.id}
         className={cn({
           row: true,
           focused: item.id === this.props.nodeFocusedId,
+          "row-mouse-over-during-drag":
+            dragState.dragArea === "sidebar" &&
+            item.id === dragState.cardUnderId,
         })}
         title={item.title}
         style={{ paddingLeft: level * 20 }}
         onClick={() => this.props.focusNode(item.id)}
         data-testid={`sidebar-row-${item.id}`}
+        onMouseEnter={() => {
+          if (this.props.dragState.cardDraggedId) {
+            this.props.setCardDestination(item.id, "sidebar");
+          }
+        }}
       >
         <div
           onClick={(e) => {
@@ -140,6 +140,7 @@ class Sidebar extends React.Component<SidebarProps> {
 const mapState = (state: RootState) => ({
   items: state.items,
   nodeFocusedId: state.nodeFocusedId,
+  dragState: state.dragState,
 });
 
 export default connect(mapState, allActions)(Sidebar);

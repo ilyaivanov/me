@@ -9,6 +9,7 @@ export const searchVideos = (term: string): Promise<Item[]> => {
       image: `https://i.ytimg.com/vi/${item.itemId}/mqdefault.jpg`,
       title: item.name,
       videoId: item.itemId,
+      children: []
     }))
   );
 };

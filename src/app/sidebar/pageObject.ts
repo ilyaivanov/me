@@ -35,6 +35,11 @@ class Sidebar {
       throw new Error("Test error: Can't find folder with id: " + folderId);
     else fireEvent.click(elem);
   };
+
+  mouseEnterSidebarRow(itemId: string) {
+    fireEvent.mouseEnter(screen.getByTestId(`sidebar-row-${itemId}`));
+  }
+
 }
 
 export default new Sidebar();

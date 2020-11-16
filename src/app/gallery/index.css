@@ -38,6 +38,7 @@
   border-radius: 4px;
 }
 
+
 .card:hover {
   box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.4);
 }
@@ -98,10 +99,6 @@
   pointer-events: none;
 }
 
-.card:hover .gradient {
-  opacity: 1;
-}
-
 .card img {
   transition: box-shadow 150ms;
   border-radius: 4px;
@@ -117,6 +114,8 @@
 
 .folder-preview-container {
   display: flex;
+  border-radius: 4px;
+  background-color: #232325;
   align-items: stretch;
 }
 
@@ -133,6 +132,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  margin-left: 2px;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
   background-color: #232325;
@@ -145,9 +145,11 @@
 }
 
 .folder-preview-container > .right > img {
-  height: 25%;
+  margin-top: 2px;
+  height: calc(25% - 2px);
 }
 .folder-preview-container > .right > img:first-of-type {
+  margin-top: 0;
   border-top-right-radius: 4px;
 }
 .folder-preview-container > .right > img:nth-child(4) {
