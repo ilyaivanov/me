@@ -1,7 +1,8 @@
-import { createStore } from "redux";
+import { applyMiddleware, compose, createStore } from "redux";
 import { findParentId } from "./selectors";
 import { createId } from "../utils";
 import { drop, setItemOnPlaceOf } from "./dndHelpers";
+import syncingMiddleware from "./syncingMiddleware";
 
 export interface Item {
   id: string;
@@ -277,14 +278,24 @@ const reducer = (state = initialState, action: Action): RootState => {
       },
     };
   }
+  if (action.type === "SET_ITEMS") {
+    return {
+      ...state,
+      items: action.items,
+    };
+  }
   return state;
 };
+
+const composeEnhancers: typeof compose =
+  // @ts-ignore
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export const createMediaExplorerStore = () => {
   return createStore(
     reducer,
     // @ts-ignore
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    composeEnhancers(applyMiddleware(syncingMiddleware))
   );
 };
 
@@ -322,6 +333,9 @@ const onMouseUp = () => ({ type: "MOUSE_UP" } as const);
 const setCardDestination = (itemId: string, dragArea: DragArea | undefined) =>
   ({ type: "SET_CARD_DESTINATION", itemId, dragArea } as const);
 
+const setItems = (items: NodesContainer) =>
+  ({ type: "SET_ITEMS", items } as const);
+
 export const allActions = {
   toggleSidebar,
   focusNode,
@@ -335,6 +349,7 @@ export const allActions = {
   onMouseDownForCard,
   onMouseUp,
   setCardDestination,
+  setItems,
 };
 
 export type AllActions = typeof allActions;
