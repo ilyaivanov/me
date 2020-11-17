@@ -9,12 +9,13 @@ export default function middleware({ getState }: Store<RootState>) {
     const returnValue = next(action);
     const itemsAfter = getState().items;
     if (itemsAfter !== itemsBefore) {
-      saveStateDebounced(itemsAfter);
+      const host = document.location.hostname;
+      //avoid syncing state during development
+      if (host !== "localhost") saveStateDebounced(itemsAfter);
     }
     return returnValue;
   };
 }
-
 const saveStateDebounced = debounce(
   (items: NodesContainer) => firebaseApi.save(items),
   500
