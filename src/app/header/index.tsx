@@ -41,6 +41,7 @@ class Header extends React.Component<AllActions> {
             onChange={(e) =>
               this.setState({ searchValue: e.currentTarget.value })
             }
+            onKeyUp={e => e.key === 'Enter' && this.onSearchRequest()}
             placeholder="Search"
             type="text"
             data-testid={ids.searchInput}
