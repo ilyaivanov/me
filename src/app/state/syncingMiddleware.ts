@@ -1,7 +1,7 @@
 import { Store } from "redux";
 import { Action, NodesContainer, RootState } from "./index";
-import firebase from "firebase";
-const { debounce } = require("lodash");
+import firebaseApi from "../api/firebase";
+import debounce from "lodash/debounce";
 
 export default function middleware({ getState }: Store<RootState>) {
   return (next: any) => (action: Action) => {
@@ -15,16 +15,7 @@ export default function middleware({ getState }: Store<RootState>) {
   };
 }
 
-const saveStateDebounced = debounce((items: NodesContainer) => {
-  return firebase
-    .firestore()
-    .collection("boards")
-    .doc("ilyaivanov")
-    .set(items)
-    .then(() => {
-      console.log('state on the backend updated')
-    })
-    .catch((e) => {
-      console.error("Error while saving board", e, items);
-    });
-}, 500);
+const saveStateDebounced = debounce(
+  (items: NodesContainer) => firebaseApi.save(items),
+  500
+);

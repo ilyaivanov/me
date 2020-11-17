@@ -4,10 +4,7 @@ import { Provider } from "react-redux";
 import React from "react";
 import Sidebar from "./index";
 import sidebar from "./pageObject";
-
-jest.mock("../utils/createId", () => ({
-  createId: () => "MyID",
-}));
+import { createId } from "../utils";
 
 const renderSidebar = () => {
   const store = createMediaExplorerStore();
@@ -20,6 +17,7 @@ const renderSidebar = () => {
 
 describe("Having a single folder in a sidebar", () => {
   it("when adding a new folder it appears at the end of the root", () => {
+    (createId as jest.Mock).mockReturnValue("MyID");
     renderSidebar();
     expect(sidebar.querySidebarRow("MyID")).not.toBeInTheDocument();
     sidebar.clickAddFolder();

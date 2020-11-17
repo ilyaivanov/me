@@ -8,3 +8,18 @@ import React from "react";
 jest.mock("./app/player/youtubePlayer", () => ({ videoId }: any) => (
   <div data-testid={"media-explorer-player"}>{videoId}</div>
 ));
+
+jest.mock("./app/api/youtubeRequest", () => ({
+  findYoutubeVideos: jest.fn(),
+}));
+
+jest.mock("./app/api/firebase", () => ({
+  save: jest.fn(),
+  load: jest.fn(),
+  auth: jest.fn(),
+}));
+
+
+jest.mock("./app/utils/createId", () => ({
+  createId: jest.fn(),
+}));

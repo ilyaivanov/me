@@ -20,6 +20,10 @@ const header = {
     fireEvent.click(screen.getByTestId(ids.searchButton));
   },
 
+  async waitForPageRender(){
+    await screen.findByTestId("sidebar")
+  }
+
 };
 
 export default header;
