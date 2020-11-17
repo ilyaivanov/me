@@ -3,6 +3,8 @@ import { allActions, AllActions } from "../state";
 import { connect } from "react-redux";
 import { ids } from "./pageObject";
 import { searchVideos } from "../api/searchVideos";
+import { Bars, Search } from "../icons";
+import "./styles.css";
 
 class Header extends React.Component<AllActions> {
   state = {
@@ -25,25 +27,40 @@ class Header extends React.Component<AllActions> {
 
   render() {
     return (
-      <div>
-        HEADER
-        <button
+      <div className="header">
+        <div
+          className="bars-icon"
           data-testid={ids.toggleSidebarButton}
           onClick={this.props.toggleSidebar}
         >
-          toggle
-        </button>
-        <input
-          value={this.state.searchValue}
-          onChange={(e) =>
-            this.setState({ searchValue: e.currentTarget.value })
-          }
-          type="text"
-          data-testid={ids.searchInput}
-        />
-        <button onClick={this.onSearchRequest} data-testid={ids.searchButton}>
-          search
-        </button>
+          <Bars />
+        </div>
+        <div className="search-container">
+          <input
+            value={this.state.searchValue}
+            onChange={(e) =>
+              this.setState({ searchValue: e.currentTarget.value })
+            }
+            placeholder="Search"
+            type="text"
+            data-testid={ids.searchInput}
+          />
+          <div
+            className="search-button flex-center"
+            onClick={this.onSearchRequest}
+            data-testid={ids.searchButton}
+          >
+            <Search />
+          </div>
+        </div>
+        <div className="user-image">
+          <img
+            src={
+              "https://lh3.googleusercontent.com/a-/AOh14GhCqz7P0RtxsLFOA5y-ExVLSivm4wTSXhJWPI9-Zg=s88-c-k-c0x00ffffff-no-rj-mo"
+            }
+            alt=""
+          />
+        </div>
       </div>
     );
   }

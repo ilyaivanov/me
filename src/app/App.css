@@ -1,7 +1,7 @@
 .page-container {
   height: 100vh;
   display: grid;
-  grid-template-rows: 60px 1fr;
+  grid-template-rows: 56px 1fr;
   grid-template-columns: auto 1fr;
   grid-template-areas:
     "body-header body-header"
@@ -31,8 +31,8 @@
 }
 
 .body-header {
+  background-color: #232325;
   grid-area: body-header;
-  background-color: lightblue;
 }
 
 
