@@ -2,7 +2,8 @@ import React from "react";
 
 type Props = {
   className?: string;
-  onClick?: any;
+  onClick?: (e: React.MouseEvent) => void;
+  title?: string;
 };
 
 export const Pause = (props: Props) => (

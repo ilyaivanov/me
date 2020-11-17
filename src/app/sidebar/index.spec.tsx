@@ -28,7 +28,6 @@ describe("Having a single folder in a sidebar", () => {
     renderSidebar();
     expect(sidebar.querySidebarRow("playground1")).toBeInTheDocument();
     sidebar.clickRemoveFolder("playground1");
-    sidebar.clickAddFolder();
     expect(sidebar.querySidebarRow("playground1")).not.toBeInTheDocument();
   });
 

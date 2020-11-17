@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.css";
 import { cn } from "../utils";
-import { Chevron } from "../icons";
+import { Chevron, Edit, Plus, Times } from "../icons";
 import { AllActions, allActions, Item, RootState } from "../state";
 import { connect } from "react-redux";
 import { hasAnySubfolders, traverseOpenNodes } from "../state/selectors";
@@ -21,6 +21,8 @@ class Sidebar extends React.Component<SidebarProps> {
         data-testid={"folder-input-" + item.id}
         onBlur={this.stopRenameMode}
         type="text"
+        onClick={e => e.stopPropagation()}
+        onKeyUp={e => e.key === 'Enter' && this.stopRenameMode()}
         onChange={(e) => this.setState({ newNodeName: e.currentTarget.value })}
         value={this.state.newNodeName}
       />
@@ -89,24 +91,24 @@ class Sidebar extends React.Component<SidebarProps> {
         </div>
         <div className="circle" />
         {this.renderText(item)}
-        <button
-          onClick={(e) => {
-            this.props.removeItem(item.id);
-            e.stopPropagation();
-          }}
-          data-testid={`folder-remove-${item.id}`}
-        >
-          X
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            this.enterRenameMode(item);
-          }}
-          data-testid={`folder-rename-${item.id}`}
-        >
-          e
-        </button>
+        <div className="row-buttons">
+          <Edit
+            onClick={(e) => {
+              e.stopPropagation();
+              this.enterRenameMode(item);
+            }}
+            data-testid={`folder-rename-${item.id}`}
+            className={"row-buttons-icon"}
+          />
+          <Times
+            onClick={(e) => {
+              this.props.removeItem(item.id);
+              e.stopPropagation();
+            }}
+            data-testid={`folder-remove-${item.id}`}
+            className={"row-buttons-icon delete-icon"}
+          />
+        </div>
       </div>
     );
   };
@@ -129,9 +131,13 @@ class Sidebar extends React.Component<SidebarProps> {
           Home
         </div>
         {rows}
-        <button onClick={this.props.createNewFolder} data-testid="folder-add">
-          add
-        </button>
+        <div
+          className="plus-icon"
+          onClick={this.props.createNewFolder}
+          data-testid="folder-add"
+        >
+          <Plus />
+        </div>
       </div>
     );
   }
