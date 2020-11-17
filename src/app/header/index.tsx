@@ -9,10 +9,16 @@ class Header extends React.Component<AllActions> {
     searchValue: "",
   };
   onSearchRequest = () => {
-    this.props.setSearchState("loading");
+    this.props.setSearchState({
+      stateType: "loading",
+      term: this.state.searchValue,
+    });
     this.props.focusNode("SEARCH");
     searchVideos(this.state.searchValue).then((items) => {
-      this.props.setSearchState("done");
+      this.props.setSearchState({
+        stateType: "done",
+        term: this.state.searchValue,
+      });
       this.props.itemsLoadedFromSearch(items);
     });
   };

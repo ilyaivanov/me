@@ -18,7 +18,7 @@ export type NodesContainer = {
   [key: string]: Item;
 };
 
-type SearchState = "loading" | "done";
+type SearchState = { stateType: "loading" | "done", term: string};
 
 type DragArea = "sidebar" | "gallery";
 
@@ -26,7 +26,7 @@ export const initialState = {
   isSidebarVisible: true,
   nodeFocusedId: "HOME",
   itemIdBeingPlayed: undefined as string | undefined,
-  searchState: "done" as SearchState,
+  searchState: {stateType: "done", term: ""} as SearchState,
   dragState: {
     // type: "no_drag" as DragStateType,
     // distanceTraveled: 0,

@@ -16,10 +16,7 @@ const App = (props: Props) => {
   const [isLoading, setIsLoading] = React.useState(true);
   useEffect(() => {
     firebaseApi.load().then((board) => {
-      if (!board) {
-        // @ts-ignore
-        save(props.items);
-      } else {
+      if (board) {
         props.setItems(board);
       }
 
@@ -27,7 +24,16 @@ const App = (props: Props) => {
     });
   }, []);
 
-  if (isLoading) return <div>Loading</div>;
+  if (isLoading)
+    return (
+      <div className="overlay flex-center">
+        <div className="lds-ripple">
+          <div></div>
+          <div></div>
+        </div>
+        Loading app...
+      </div>
+    );
   return (
     <div className="page-container">
       <aside

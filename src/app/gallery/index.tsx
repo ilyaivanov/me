@@ -1,6 +1,7 @@
 import React from "react";
 import "./index.css";
 import "./dnd.css";
+
 import Card from "./Card";
 import { AllActions, allActions, Item, RootState } from "../state";
 import { connect } from "react-redux";
@@ -86,13 +87,19 @@ class Gallery extends React.Component<Props> {
     ));
 
   renderLoadingIndicator = () => (
-    <div data-testid={ids.loadingIndicator}>Loading</div>
+    <div className="overlay flex-center" data-testid={ids.loadingIndicator}>
+      <div className="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+      Searching for '{this.props.searchState.term}'...
+    </div>
   );
 
   render() {
     return (
       <div className="gallery-container" ref={this.onRefReady} data-testid={'gallery'}>
-        {this.props.searchState === "loading"
+        {this.props.searchState.stateType === "loading"
           ? this.renderLoadingIndicator()
           : this.renderCards()}
       </div>
