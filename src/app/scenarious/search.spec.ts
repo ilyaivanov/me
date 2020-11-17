@@ -4,67 +4,29 @@ import sidebar from "../sidebar/pageObject";
 import renderTestApp from "./renderTestApp";
 import { findYoutubeVideos } from "../api/youtubeRequest";
 import firebaseApi from "../api/firebase";
-import { NodesContainer } from "../state";
+import { createEmptyItems, createItemsBasedOnStructure } from "./itemsBuilder";
 
 const sampleYoutubeResponse = {
   items: [
     {
       id: "ITEM_FROM_BACKEND_1",
-      image: "https://i.ytimg.com/vi/5z6IKnYXqFM/default.jpg",
-      itemId: "5z6IKnYXqFM",
-      name: "Sync24 - Comfortable Void [Full Album]",
+      image: "video1 image",
+      itemId: "backend video1",
+      name: "backend video1 title",
       itemType: "video",
     },
     {
-      id: "BACKEND_ITEM_ID_2",
-      image: "https://i.ytimg.com/vi/8ONz3_vjJIY/default.jpg",
-      itemId: "8ONz3_vjJIY",
-      name: "Sync24 - Omnious [Full Album]",
+      id: "ITEM_FROM_BACKEND_2",
+      image: "video2 image",
+      itemId: "backend video2",
+      name: "backend video2 title",
       itemType: "video",
     },
   ],
 };
 
-const testData: NodesContainer = {
-  HOME: {
-    id: "HOME",
-    itemType: "folder",
-    title: "Home",
-    children: ["playground1"],
-  },
-  SEARCH: {
-    id: "SEARCH",
-    itemType: "folder",
-    title: "Search",
-    children: [],
-  },
-  playground1: {
-    id: "playground1",
-    itemType: "folder",
-    title: "Playground",
-    children: ["playground11", "playground12"],
-  },
-  playground11: {
-    id: "playground11",
-    itemType: "video",
-    title: "Sync24 - DOT",
-    image: "https://i.ytimg.com/vi/vQFDW0_GB8Q/mqdefault.jpg",
-    videoId: "vQFDW0_GB8Q",
-    children: [],
-  },
-  playground12: {
-    id: "playground12",
-    itemType: "video",
-    title: "Something Something",
-    image: "https://i.ytimg.com/vi/_WGJ83wSibc/mqdefault.jpg",
-    videoId: "_WGJ83wSibc",
-    children: [],
-  },
-};
-
-
-it("When entering some term in the input field", async () => {
-  (firebaseApi.load as jest.Mock).mockResolvedValue(testData);
+it("When entering some term in the input field hitting search button items from the backend should be shown", async () => {
+  (firebaseApi.load as jest.Mock).mockResolvedValue(createEmptyItems());
   renderTestApp();
   await header.waitForPageRender();
   const searchPromise = Promise.resolve(sampleYoutubeResponse);
@@ -76,13 +38,18 @@ it("When entering some term in the input field", async () => {
 
   const card = await gallery.findCard("ITEM_FROM_BACKEND_1");
   expect(card).toBeInTheDocument();
-  const card1 = await gallery.findCard("BACKEND_ITEM_ID_2");
+  const card1 = await gallery.findCard("ITEM_FROM_BACKEND_2");
   expect(card1).toBeInTheDocument();
 });
 
-
 it("Saving an items from search in a folder and vieweing that folder should show that item", async () => {
-  (firebaseApi.load as jest.Mock).mockResolvedValue(testData);
+  (firebaseApi.load as jest.Mock).mockResolvedValue(
+    createItemsBasedOnStructure(`
+      folder1
+        video1.1
+        video1.2
+    `)
+  );
   renderTestApp();
   const searchPromise = Promise.resolve(sampleYoutubeResponse);
   (findYoutubeVideos as jest.Mock).mockReturnValue(searchPromise);
@@ -93,13 +60,17 @@ it("Saving an items from search in a folder and vieweing that folder should show
 
   gallery.mouseDownOnCard("ITEM_FROM_BACKEND_1");
   gallery.moveMouse({ movementX: 10, movementY: 10 });
-  sidebar.mouseEnterSidebarRow("playground1");
+  sidebar.mouseEnterSidebarRow("folder1");
   gallery.mouseUp();
-  sidebar.focusOnItem("playground1");
-  expect(gallery.queryCard("ITEM_FROM_BACKEND_1")).toBeInTheDocument();
-  expect(gallery.queryCard("playground11")).toBeInTheDocument();
+  sidebar.focusOnItem("folder1");
+
+  expect(gallery.getAllCardTitles()).toEqual([
+    "backend video1 title",
+    "video1.1 title",
+    "video1.2 title",
+  ]);
 
   //focusing on Home should not yield any errors and show thus many preview items
   sidebar.focusOnItem("HOME");
-  expect(gallery.getPrieviewImagesCount("playground1")).toBe(3);
+  expect(gallery.getPrieviewImagesCount("folder1")).toBe(3);
 });
