@@ -32,32 +32,20 @@
 .card {
   margin-top: 20px; /*GAP constant*/
   cursor: pointer;
-  color: #232325;
   font-weight: lighter;
   position: relative;
-  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
   border-radius: 4px;
+  overflow: hidden;
+  background-color: #212121;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: box-shadow 200ms;
+  /*https://getcssscan.com/css-box-shadow-examples*/
+  box-shadow:
+    rgba(255, 255, 255, 0.2) 0px 3px 7px -3px;
 }
-
 
 .card:hover {
-  box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.4);
-}
-.card .text {
-  bottom: 0;
-  margin-top: 5px;
-}
-
-.card .gradient {
-  border-radius: 4px;
-  background: rgb(0, 0, 0);
-  background: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0) 60%
-  );
-  opacity: 0.6;
-  transition: opacity 200ms;
+  box-shadow: rgba(255, 255, 255, 0.25) 0px 6px 12px -2px;
 }
 
 .icon-container {
@@ -91,18 +79,15 @@
 }
 
 .card .text-container {
-  display: flex;
-  justify-content: center;
-  padding: 0.3em;
-  align-items: flex-end;
-  text-align: center;
   color: white;
   pointer-events: none;
+  padding: 11px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .card img {
   transition: box-shadow 150ms;
-  border-radius: 4px;
   width: 100%;
   display: block;
 }
@@ -115,13 +100,10 @@
 
 .folder-preview-container {
   display: flex;
-  border-radius: 4px;
-  background-color: #232325;
   align-items: stretch;
 }
 
 .folder-preview-container img {
-  border-radius: 0;
   object-fit: cover;
 }
 
@@ -134,14 +116,9 @@
   display: flex;
   flex-direction: column;
   margin-left: 2px;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  background-color: #232325;
 }
 
 .folder-preview-container > .left > img {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
   height: 100%;
 }
 
@@ -151,16 +128,12 @@
 }
 .folder-preview-container > .right > img:first-of-type {
   margin-top: 0;
-  border-top-right-radius: 4px;
 }
 .folder-preview-container > .right > img:nth-child(4) {
-  border-bottom-right-radius: 4px;
 }
 
 .empty-folder {
-  border-radius: 4px;
   font-size: 36px;
   font-weight: bolder;
   color: #808080;
-  background-color: #232325;
 }

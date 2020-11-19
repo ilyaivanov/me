@@ -26,7 +26,8 @@
 .page-body {
   grid-area: body;
   overflow: hidden;
-  background-color: #e9e9e9;
+  /*background-color: #e9e9e9;*/
+  background-color: #181818;
   user-select: none;
 }
 

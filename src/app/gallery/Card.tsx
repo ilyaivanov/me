@@ -4,7 +4,7 @@ import { allActions, Item, AllActions, RootState } from "../state";
 import { connect } from "react-redux";
 import { getPreviewItemsForFolder } from "../state/selectors";
 import { cn } from "../utils";
-import {ids} from "./pageObject";
+import { ids } from "./pageObject";
 
 interface OuterProps {
   item: Item;
@@ -13,25 +13,47 @@ interface OuterProps {
 type Props = OuterProps & AllActions & ReturnType<typeof mapState>;
 
 class Card extends React.Component<Props> {
-  renderFolderPreview = () => {
-    if (this.props.folderFirstItems.length === 0) return this.renderEmpty();
+  renderItemPreview = () => {
+    if (this.props.folderFirstItems.length === 0 && this.props.item.itemType === 'folder') return this.renderEmpty();
     else return this.renderFolderImage();
   };
   renderFolderImage = () => (
     <div className="card-preview-dimensions" data-testid={ids.folderPreview}>
       <div className="overlay folder-preview-container">
-        <div className="left">
-          <img
-            src={this.props.folderFirstItems[0].image}
-            alt="preview-image"
-            draggable={false}
+        {this.props.item.itemType === "folder" ? (
+          <>
+            <div className="left">
+              <img
+                src={this.props.folderFirstItems[0].image}
+                alt="preview-image"
+                draggable={false}
+              />
+            </div>
+            <div className="right">
+              {this.props.folderFirstItems.slice(1, 5).map((item) => (
+                <img
+                  key={item.id}
+                  src={item.image}
+                  alt="preview-image"
+                  draggable={false}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <img src={this.props.item.image} alt="" draggable={false} />
+        )}
+      </div>
+      <div className="overlay flex-center">
+        {this.props.isPlaying ? (
+          <Pause className="icon pause-icon" />
+        ) : (
+          <Play
+            data-testid={ids.playIcon}
+            onClick={this.onPlayClick}
+            className="icon"
           />
-        </div>
-        <div className="right">
-          {this.props.folderFirstItems.slice(1, 5).map((item) => (
-            <img key={item.id} src={item.image} alt="preview-image" draggable={false} />
-          ))}
-        </div>
+        )}
       </div>
     </div>
   );
@@ -76,32 +98,22 @@ class Card extends React.Component<Props> {
       <div
         className={cn({
           card: true,
-          "card-drag-destination": dragState.dragArea === 'gallery' && item.id == dragState.cardUnderId,
-          "card-being-dragged": dragState.isDragging && item.id ==  dragState.cardDraggedId,
+          "card-drag-destination":
+            dragState.dragArea === "gallery" &&
+            item.id == dragState.cardUnderId,
+          "card-being-dragged":
+            dragState.isDragging && item.id == dragState.cardDraggedId,
         })}
         data-testid={ids.card(item.id)}
         onMouseDown={this.onMouseDown}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >
-        {item.itemType === "folder" ? (
-          this.renderFolderPreview()
-        ) : (
-          <img src={item.image} alt="" draggable={false} />
-        )}
-        <div className="overlay gradient" />
-        <div className="overlay flex-center">
-          {isPlaying ? (
-            <Pause className="icon pause-icon" />
-          ) : (
-            <Play
-              data-testid={ids.playIcon}
-              onClick={this.onPlayClick}
-              className="icon"
-            />
-          )}
+        {this.renderItemPreview()}
+
+        <div data-testid={ids.cardTitle} className="text-container">
+          {item.title}
         </div>
-        <div data-testid={ids.cardTitle} className="overlay text-container">{item.title}</div>
       </div>
     );
   }
