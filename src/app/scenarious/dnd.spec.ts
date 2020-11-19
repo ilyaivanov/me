@@ -61,7 +61,7 @@ describe("foo", () => {
 
     const style = gallery.getDragAvatar()?.style;
     if (!style) {
-      throw new Error("No styles present on the avatar");
+      throw new Error("Found no drag avatar");
     }
     expect(style.width).toBe("120px");
     expect(style.height).toBe("200px");
@@ -222,5 +222,15 @@ describe("foo", () => {
       "video playground12 title",
     ];
     expect(gallery.getAllCardTitles()).toEqual(expectedCardsForPlayground);
+  });
+
+  it("when pressing on at item and not dragging card should not be highlighted as draged", function () {
+    expect(gallery.queryCard("playground1")).not.toHaveClass(
+      "card-being-dragged"
+    );
+    gallery.mouseDownOnCard("playground1");
+    expect(gallery.queryCard("playground1")).not.toHaveClass(
+      "card-being-dragged"
+    );
   });
 });

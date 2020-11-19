@@ -18,19 +18,21 @@ export type NodesContainer = {
   [key: string]: Item;
 };
 
-type SearchState = { stateType: "loading" | "done", term: string};
+type SearchState = { stateType: "loading" | "done"; term: string };
 
 type DragArea = "sidebar" | "gallery";
+type DragStateType = "no_drag" | "dragging";
 
 export const initialState = {
   isSidebarVisible: true,
   nodeFocusedId: "HOME",
   itemIdBeingPlayed: undefined as string | undefined,
-  searchState: {stateType: "done", term: ""} as SearchState,
+  searchState: { stateType: "done", term: "" } as SearchState,
   dragState: {
     // type: "no_drag" as DragStateType,
     // distanceTraveled: 0,
     cardDraggedId: "",
+    isDragging: false,
     cardUnderId: "",
     dragArea: undefined as DragArea | undefined,
     itemDraggedRect: undefined as DOMRect | undefined,
@@ -227,8 +229,18 @@ const reducer = (state = initialState, action: Action): RootState => {
         cardDraggedId: action.itemId,
         itemDraggedRect: action.elementRect,
         itemOffsets: action.itemOffsets,
+        isDragging: false,
         dragArea: undefined,
         cardUnderId: "",
+      },
+    };
+  }
+  if (action.type === "START_DRAGGING") {
+    return {
+      ...state,
+      dragState: {
+        ...state.dragState,
+        isDragging: true,
       },
     };
   }
@@ -265,6 +277,7 @@ const reducer = (state = initialState, action: Action): RootState => {
         dragArea: undefined,
         itemDraggedRect: undefined,
         itemOffsets: undefined,
+        isDragging: false,
       },
     };
   }
@@ -336,6 +349,8 @@ const setCardDestination = (itemId: string, dragArea: DragArea | undefined) =>
 const setItems = (items: NodesContainer) =>
   ({ type: "SET_ITEMS", items } as const);
 
+const startDragging = () => ({ type: "START_DRAGGING" } as const);
+
 export const allActions = {
   toggleSidebar,
   focusNode,
@@ -350,6 +365,7 @@ export const allActions = {
   onMouseUp,
   setCardDestination,
   setItems,
+  startDragging,
 };
 
 export type AllActions = typeof allActions;

@@ -77,7 +77,7 @@ class Card extends React.Component<Props> {
         className={cn({
           card: true,
           "card-drag-destination": dragState.dragArea === 'gallery' && item.id == dragState.cardUnderId,
-          "card-being-dragged": item.id ==  dragState.cardDraggedId,
+          "card-being-dragged": dragState.isDragging && item.id ==  dragState.cardDraggedId,
         })}
         data-testid={ids.card(item.id)}
         onMouseDown={this.onMouseDown}
