@@ -21,8 +21,8 @@ class Sidebar extends React.Component<SidebarProps> {
         data-testid={"folder-input-" + item.id}
         onBlur={this.stopRenameMode}
         type="text"
-        onClick={e => e.stopPropagation()}
-        onKeyUp={e => e.key === 'Enter' && this.stopRenameMode()}
+        onClick={(e) => e.stopPropagation()}
+        onKeyUp={(e) => e.key === "Enter" && this.stopRenameMode()}
         onChange={(e) => this.setState({ newNodeName: e.currentTarget.value })}
         value={this.state.newNodeName}
       />
@@ -71,6 +71,11 @@ class Sidebar extends React.Component<SidebarProps> {
         onMouseEnter={() => {
           if (this.props.dragState.cardDraggedId) {
             this.props.setCardDestination(item.id, "sidebar");
+          }
+        }}
+        onMouseLeave={() => {
+          if (this.props.dragState.cardDraggedId) {
+            this.props.setCardDestination("", undefined);
           }
         }}
       >
@@ -124,9 +129,24 @@ class Sidebar extends React.Component<SidebarProps> {
     return (
       <div className="sidebar-content">
         <div
-          className="row"
+          className={cn({
+            "row": true,
+            "row-mouse-over-during-drag":
+              this.props.dragState.dragArea === "sidebar" &&
+              "HOME" === this.props.dragState.cardUnderId,
+          })}
           data-testid={"sidebar-row-HOME"}
           onClick={() => this.props.focusNode("HOME")}
+          onMouseEnter={() => {
+            if (this.props.dragState.cardDraggedId) {
+              this.props.setCardDestination("HOME", "sidebar");
+            }
+          }}
+          onMouseLeave={() => {
+            if (this.props.dragState.cardDraggedId) {
+              this.props.setCardDestination("", undefined);
+            }
+          }}
         >
           Home
         </div>

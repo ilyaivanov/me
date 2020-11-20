@@ -66,25 +66,15 @@ class Gallery extends React.Component<Props> {
   renderCard = (item: Item) => {
     return (
       <Card
+        width={`calc(${100 / this.state.cols}% - 20px - (20px / ${
+          this.state.cols
+        }))`}
         key={item.id}
         item={item}
         isPlaying={false}
       />
     );
   };
-
-  renderCards = () =>
-    createIntegers(this.state.cols).map((columnIndex) => (
-      <div
-        key={columnIndex}
-        className="column"
-        data-testid={`gallery-column-${columnIndex + 1}`}
-      >
-        {this.props.items
-          .filter((_, i) => i % this.state.cols === columnIndex)
-          .map(this.renderCard)}
-      </div>
-    ));
 
   renderLoadingIndicator = () => (
     <div className="overlay flex-center" data-testid={ids.loadingIndicator}>
@@ -98,10 +88,14 @@ class Gallery extends React.Component<Props> {
 
   render() {
     return (
-      <div className="gallery-container" ref={this.onRefReady} data-testid={'gallery'}>
+      <div
+        className="gallery-container"
+        ref={this.onRefReady}
+        data-testid={"gallery"}
+      >
         {this.props.searchState.stateType === "loading"
           ? this.renderLoadingIndicator()
-          : this.renderCards()}
+          : this.props.items.map(this.renderCard)}
       </div>
     );
   }
@@ -118,7 +112,3 @@ function mapState(state: RootState) {
 }
 
 export default connect(mapState, allActions)(Gallery);
-
-//creates integers starting from 0 up to upTo (exclusive)
-const createIntegers = (upTo: number) =>
-  Array.from(new Array(upTo)).map((_, i) => i);
