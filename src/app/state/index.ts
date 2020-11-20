@@ -1,5 +1,5 @@
 import { applyMiddleware, compose, createStore } from "redux";
-import { findParentId } from "./selectors";
+import { findParentId, getPreviewItemsForFolder } from "./selectors";
 import { createId } from "../utils";
 import { drop, setItemOnPlaceOf } from "./dndHelpers";
 import syncingMiddleware from "./syncingMiddleware";
@@ -13,6 +13,7 @@ export interface Item {
   videoId?: string;
   image?: string;
   isOpenFromSidebar?: boolean;
+  isOpenInGallery?: boolean;
 }
 export type NodesContainer = {
   [key: string]: Item;
@@ -182,9 +183,19 @@ const reducer = (state = initialState, action: Action): RootState => {
     };
   }
   if (action.type === "PLAY_ITEM") {
+    let id;
+
+    if (state.items[action.itemId].itemType == "folder") {
+      const subitems = getPreviewItemsForFolder(state.items, action.itemId);
+      if (subitems.length > 0) {
+        id = subitems[0].id;
+      }
+    } else {
+      id = action.itemId;
+    }
     return {
       ...state,
-      itemIdBeingPlayed: action.itemId,
+      itemIdBeingPlayed: id,
     };
   }
   if (action.type === "VIDEO_ENDED") {

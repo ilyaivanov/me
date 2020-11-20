@@ -2,7 +2,7 @@ import React, { CSSProperties } from "react";
 import { Play, Pause, Chevron } from "../icons";
 import { allActions, Item, AllActions, RootState } from "../state";
 import { connect } from "react-redux";
-import { getPreviewItemsForFolder } from "../state/selectors";
+import { getPreviewItemsForFolder, traverseAllNodes } from "../state/selectors";
 import { cn } from "../utils";
 import { ids } from "./pageObject";
 
@@ -59,7 +59,6 @@ class Card extends React.Component<Props> {
             className="icon"
           />
         )}
-        <Chevron className="icon expand-icon" />
       </div>
     </div>
   );
@@ -71,8 +70,7 @@ class Card extends React.Component<Props> {
 
   onPlayClick = () => {
     const { item } = this.props;
-    if (item.itemType === "video") this.props.playItem(item.id);
-    else this.props.playItem(this.props.folderFirstItems[0].id);
+    this.props.playItem(item.id);
   };
 
   onMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -98,12 +96,44 @@ class Card extends React.Component<Props> {
     }
   };
 
+  renderChildTrack = (item: Item) => {
+    let image;
+    let videoCount;
+    if (item.itemType === "folder") {
+      const allSubvideos = traverseAllNodes(
+        this.props.items,
+        item.id,
+        (item) => item
+      ).filter((item) => item.itemType === "video");
+      videoCount = allSubvideos.length;
+      if (allSubvideos.length > 0) {
+        image = allSubvideos[0].image;
+      }
+    } else {
+      image = item.image;
+    }
+    return (
+      <div className={"subtrack"}>
+        <Play
+          onClick={() => this.props.playItem(item.id)}
+          className="subtrack-play-icon"
+        />
+        <img src={image} alt="" />
+        {item.title}
+        {item.itemType == "folder" && (
+          <div className="stubtrack-items-count">{videoCount}</div>
+        )}
+      </div>
+    );
+  };
+
   render() {
     let { item, dragState } = this.props;
     return (
       <div
         className={cn({
           card: true,
+          "open-card": this.props.item.isOpenInGallery,
           "card-drag-destination":
             dragState.dragArea === "gallery" &&
             item.id == dragState.cardUnderId,
@@ -123,6 +153,27 @@ class Card extends React.Component<Props> {
         <div data-testid={ids.cardTitle} className="text-container">
           {item.title}
         </div>
+
+        <div
+          className={cn({
+            "subtracks-container": true,
+            "subtracks-container-closed": !this.props.item.isOpenInGallery,
+          })}
+        >
+          {this.props.childItems.map(this.renderChildTrack)}
+        </div>
+
+        <Chevron
+          onClick={() => {
+            this.props.changeNode(this.props.item.id, {
+              isOpenInGallery: !this.props.item.isOpenInGallery,
+            });
+          }}
+          className={cn({
+            "icon expand-icon": true,
+            rotated: this.props.item.isOpenInGallery,
+          })}
+        />
       </div>
     );
   }
@@ -135,6 +186,8 @@ const mapState = (state: RootState, props: OuterProps) => {
   return {
     folderFirstItems,
     dragState: state.dragState,
+    childItems: props.item.children.map((id) => state.items[id]),
+    items: state.items,
   };
 };
 export default connect(mapState, allActions)(Card);

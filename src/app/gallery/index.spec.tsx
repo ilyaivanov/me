@@ -26,9 +26,9 @@ const renderGallery = () => {
 
 xit("min two columns test", function () {
   setWindowWidth(20 + 240 + 20 + 240 + 20);
-  var gallery = renderGallery();
+  renderGallery();
 
-  expectGalleryHasColumnsCount(gallery, 2);
+  expectGalleryHasColumnsCount(2);
 });
 
 xit("three columns test", function () {
