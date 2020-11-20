@@ -1,6 +1,6 @@
 .drag-avatar > .card {
-  margin-top: 0;
-  box-shadow: none;
+  margin: 0;
+  box-shadow: rgba(77, 47, 128, 1) 0px 6px 12px -2px;
 }
 .drag-avatar {
   pointer-events: none;

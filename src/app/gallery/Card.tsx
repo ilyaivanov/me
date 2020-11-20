@@ -1,5 +1,5 @@
-import React from "react";
-import { Play, Pause } from "../icons";
+import React, { CSSProperties } from "react";
+import { Play, Pause, Chevron } from "../icons";
 import { allActions, Item, AllActions, RootState } from "../state";
 import { connect } from "react-redux";
 import { getPreviewItemsForFolder } from "../state/selectors";
@@ -9,12 +9,17 @@ import { ids } from "./pageObject";
 interface OuterProps {
   item: Item;
   isPlaying?: boolean;
+  width?: string;
 }
 type Props = OuterProps & AllActions & ReturnType<typeof mapState>;
 
 class Card extends React.Component<Props> {
   renderItemPreview = () => {
-    if (this.props.folderFirstItems.length === 0 && this.props.item.itemType === 'folder') return this.renderEmpty();
+    if (
+      this.props.folderFirstItems.length === 0 &&
+      this.props.item.itemType === "folder"
+    )
+      return this.renderEmpty();
     else return this.renderFolderImage();
   };
   renderFolderImage = () => (
@@ -54,6 +59,7 @@ class Card extends React.Component<Props> {
             className="icon"
           />
         )}
+        <Chevron className="icon expand-icon" />
       </div>
     </div>
   );
@@ -93,7 +99,7 @@ class Card extends React.Component<Props> {
   };
 
   render() {
-    let { item, isPlaying, dragState } = this.props;
+    let { item, dragState } = this.props;
     return (
       <div
         className={cn({
@@ -108,6 +114,9 @@ class Card extends React.Component<Props> {
         onMouseDown={this.onMouseDown}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
+        style={{
+          width: this.props.width,
+        }}
       >
         {this.renderItemPreview()}
 

@@ -2,9 +2,12 @@
   position: relative;
   display: flex;
   flex-direction: row;
-  align-items: stretch;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
   height: 100%;
   overflow-y: overlay;
+  padding-bottom: 20px;
 }
 
 .gallery-container::-webkit-scrollbar {
@@ -18,19 +21,9 @@
   width: 8px;
 }
 
-.column {
-  flex: 1;
-  margin-left: 20px; /*GAP constant*/
-}
-.column:last-of-type {
-  margin-right: 20px;
-}
-.column .card:last-of-type {
-  margin-bottom: 20px; /*GAP constant*/
-}
-
 .card {
   margin-top: 20px; /*GAP constant*/
+  margin-left: 20px; /*GAP constant*/
   cursor: pointer;
   font-weight: lighter;
   position: relative;
@@ -45,7 +38,7 @@
 }
 
 .card:hover {
-  box-shadow: rgba(255, 255, 255, 0.25) 0px 6px 12px -2px;
+  box-shadow: rgba(77, 47, 128, 1) 0px 6px 12px -2px;
 }
 
 .icon-container {
@@ -77,6 +70,13 @@
 .card .icon.pause-icon:active {
   fill: rgb(222, 222, 222);
 }
+
+.expand-icon{
+  position: absolute;
+  bottom: -10px;
+  transform: rotateZ(90deg);
+}
+
 
 .card .text-container {
   color: white;
