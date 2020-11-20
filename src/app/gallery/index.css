@@ -78,12 +78,19 @@
   height: 32px;
   width: 32px;
   top: 0;
-  right: 0;
+  right: 35px;
   transition: transform 200ms;
   transform: rotateZ(90deg);
 }
 .rotated {
   transform: rotateZ(-90deg);
+}
+.card-arrow-icon{
+  position: absolute;
+  height: 26px;
+  width: 26px;
+  top: 5px;
+  right: 5px;
 }
 
 .card .text-container {
@@ -152,6 +159,7 @@
   font-weight: bolder;
   color: #808080;
 }
+
 .subtracks-container {
   max-height: 300px;
   overflow-y: overlay;
@@ -199,8 +207,12 @@
   border-radius: 4px;
   padding: 4px;
 }
-.subtrack:hover .subtrack-play-icon {
+.subtrack:hover .subtrack-play-icon,
+.subtrack:hover .subtrack-arrow-icon {
   opacity: 1;
+}
+.subtrack:hover .stubtrack-items-count{
+  opacity: 0;
 }
 .subtrack-play-icon:hover path {
   fill: white;
@@ -212,7 +224,19 @@
   fill: rgba(255, 255, 255, 0.8);
 }
 
+.subtrack-arrow-icon{
+  opacity: 0;
+  transition: opacity 200ms;
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  top: calc(50% - 9px);
+  right: 5px;
+}
+
 .stubtrack-items-count {
+  opacity: 1;
+  transition: opacity 200ms;
   margin-left: auto;
   color: grey;
 }

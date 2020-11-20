@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import { Play, Pause, Chevron } from "../icons";
+import { Play, Pause, Chevron, Arrow } from "../icons";
 import { allActions, Item, AllActions, RootState } from "../state";
 import { connect } from "react-redux";
 import { getPreviewItemsForFolder, traverseAllNodes } from "../state/selectors";
@@ -123,6 +123,13 @@ class Card extends React.Component<Props> {
         {item.itemType == "folder" && (
           <div className="stubtrack-items-count">{videoCount}</div>
         )}
+        {item.itemType === "folder" && (
+          <Arrow
+            title={"Fooo"}
+            onClick={() => this.props.focusNode(item.id)}
+            className={"icon subtrack-arrow-icon"}
+          />
+        )}
       </div>
     );
   };
@@ -163,17 +170,25 @@ class Card extends React.Component<Props> {
           {this.props.childItems.map(this.renderChildTrack)}
         </div>
 
-        <Chevron
-          onClick={() => {
-            this.props.changeNode(this.props.item.id, {
-              isOpenInGallery: !this.props.item.isOpenInGallery,
-            });
-          }}
-          className={cn({
-            "icon expand-icon": true,
-            rotated: this.props.item.isOpenInGallery,
-          })}
-        />
+        {item.itemType === "folder" && (
+          <Chevron
+            onClick={() => {
+              this.props.changeNode(this.props.item.id, {
+                isOpenInGallery: !this.props.item.isOpenInGallery,
+              });
+            }}
+            className={cn({
+              "icon expand-icon": true,
+              rotated: this.props.item.isOpenInGallery,
+            })}
+          />
+        )}
+        {item.itemType === "folder" && (
+          <Arrow
+            onClick={() => this.props.focusNode(this.props.item.id)}
+            className={"icon card-arrow-icon"}
+          />
+        )}
       </div>
     );
   }
