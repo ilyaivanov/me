@@ -2,7 +2,7 @@ import gallery from "../gallery/pageObject";
 import header from "../header/pageObject";
 import sidebar from "../sidebar/pageObject";
 import renderTestApp from "./renderTestApp";
-import { findYoutubeVideos } from "../api/youtubeRequest";
+import { fetchPlaylistVideos, findYoutubeVideos } from "../api/youtubeRequest";
 import firebaseApi from "../api/firebase";
 import { createEmptyItems, createItemsBasedOnStructure } from "./itemsBuilder";
 
@@ -21,6 +21,13 @@ const sampleYoutubeResponse = {
       itemId: "backend video2",
       name: "backend video2 title",
       itemType: "video",
+    },
+    {
+      id: "PLAYLIST_SEARCH_ITEM",
+      image: "playlist_image",
+      itemId: "playlist_id",
+      name: "playlist_name",
+      itemType: "playlist",
     },
   ],
 };
@@ -73,4 +80,56 @@ it("Saving an items from search in a folder and vieweing that folder should show
   //focusing on Home should not yield any errors and show thus many preview items
   sidebar.focusOnItem("HOME");
   expect(gallery.getPrieviewImagesCount("folder1")).toBe(3);
+});
+
+//when search result is a playlist
+//card should have it's image
+
+it("having a playlisy item in a search query", async () => {
+  (firebaseApi.load as jest.Mock).mockResolvedValue(
+    createItemsBasedOnStructure(`
+      folder1
+    `)
+  );
+  renderTestApp();
+  const searchPromise = Promise.resolve(sampleYoutubeResponse);
+  (findYoutubeVideos as jest.Mock).mockReturnValue(searchPromise);
+  (fetchPlaylistVideos as jest.Mock).mockResolvedValue({
+    items: [
+      {
+        id: "PLAYLIST_SUBITEM_1",
+        image: "subitem_video1 image",
+        itemId: "backend video1",
+        name: "subitem_video1_title",
+        itemType: "video",
+      },
+      {
+        id: "PLAYLIST_SUBITEM_2",
+        image: "subitem_video2 image",
+        itemId: "backend video2",
+        name: "backend video2 title",
+        itemType: "video",
+      },
+    ],
+  });
+  await header.waitForPageRender();
+  header.clickSearch();
+
+  await gallery.findCard("PLAYLIST_SEARCH_ITEM");
+
+  gallery.clickOnExpandCard("PLAYLIST_SEARCH_ITEM");
+
+  expect(
+    gallery.queryLoadingIndicatorForCard("PLAYLIST_SEARCH_ITEM")
+  ).toBeInTheDocument();
+
+  await gallery.findSubtrack("PLAYLIST_SUBITEM_1");
+
+  expect(
+    gallery.queryLoadingIndicatorForCard("PLAYLIST_SEARCH_ITEM")
+  ).not.toBeInTheDocument();
+
+  expect(gallery.getSubtrackLabel('PLAYLIST_SUBITEM_1')).toBe("subitem_video1_title");
+
+  
 });

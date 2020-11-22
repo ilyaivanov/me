@@ -21,7 +21,7 @@ class Header extends React.Component<AllActions> {
         stateType: "done",
         term: this.state.searchValue,
       });
-      this.props.itemsLoadedFromSearch(items);
+      this.props.setItemChildren("SEARCH", items);
     });
   };
 

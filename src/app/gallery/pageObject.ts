@@ -9,14 +9,30 @@ import {
 
 export const ids = {
   loadingIndicator: "loading-indicator",
-  card: (cardId: string) => `card-${cardId}`,
+  card: (itemId: string) => `card-${itemId}`,
+  subtrack: (itemId: string) => `subtrack-${itemId}`,
   dragAvatar: "drag-avatar",
   cardTitle: "card-title",
   playIcon: `play-icon`,
   folderPreview: `folder-preview`,
+  expandCard: "expand-card",
+  subtrackText: "subtrack-label",
+  cardLoadingIndicator: "card-loading-indicator",
 };
 // prettier-ignore
 class Gallery {
+  getSubtrackLabel(itemId: string): string {
+    const subtrack = screen.getByTestId(ids.subtrack(itemId));
+    return getByTestId(subtrack, ids.subtrackText).innerHTML;
+  }
+  
+  queryLoadingIndicatorForCard(itemId: string): any {
+    return queryByTestId(this.queryCard(itemId), ids.cardLoadingIndicator);
+  }
+  clickOnExpandCard(itemId: string) {
+    const expand = getByTestId(this.queryCard(itemId), ids.expandCard);
+    fireEvent.click(expand);
+  }
   
   queryCard(itemId: string): any {
       return queryByTestId(screen.getByTestId("gallery"), ids.card(itemId))
@@ -25,7 +41,7 @@ class Gallery {
   getPrieviewImagesCount(itemId: string): any {
     const card = this.queryCard(itemId);
     const folder = getByTestId(card, ids.folderPreview);
-    return getAllByAltText(folder, "preview-image").length;
+    return getAllByAltText(folder, "preview").length;
   }
 
   getAllCardTitles(): any {
@@ -36,6 +52,9 @@ class Gallery {
       return screen.findByTestId(ids.card(itemId), undefined, {timeout: 200})
   }
 
+  findSubtrack(itemId: string): Promise<any> {
+    return screen.findByTestId(ids.subtrack(itemId), undefined, {timeout: 200});
+  }
   playItem (itemId: string) {
     fireEvent.click(getByTestId(this.queryCard(itemId), "play-icon"))
   }

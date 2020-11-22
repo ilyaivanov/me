@@ -1,10 +1,11 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import { Play, Pause, Chevron, Arrow } from "../icons";
 import { allActions, Item, AllActions, RootState } from "../state";
 import { connect } from "react-redux";
 import { getPreviewItemsForFolder, traverseAllNodes } from "../state/selectors";
 import { cn } from "../utils";
 import { ids } from "./pageObject";
+import { loadPlaylistVideos } from "../api/searchVideos";
 
 interface OuterProps {
   item: Item;
@@ -17,7 +18,8 @@ class Card extends React.Component<Props> {
   renderItemPreview = () => {
     if (
       this.props.folderFirstItems.length === 0 &&
-      this.props.item.itemType === "folder"
+      this.props.item.itemType === "folder" && 
+      !this.props.item.youtubePlaylistId
     )
       return this.renderEmpty();
     else return this.renderFolderImage();
@@ -29,8 +31,8 @@ class Card extends React.Component<Props> {
           <>
             <div className="left">
               <img
-                src={this.props.folderFirstItems[0].image}
-                alt="preview-image"
+                src={this.props.item.youtubePlaylistId ? this.props.item.image : this.props.folderFirstItems[0].image}
+                alt="preview"
                 draggable={false}
               />
             </div>
@@ -39,7 +41,7 @@ class Card extends React.Component<Props> {
                 <img
                   key={item.id}
                   src={item.image}
-                  alt="preview-image"
+                  alt="preview"
                   draggable={false}
                 />
               ))}
@@ -113,14 +115,14 @@ class Card extends React.Component<Props> {
       image = item.image;
     }
     return (
-      <div className={"subtrack"}>
+      <div className={"subtrack"} data-testid={ids.subtrack(item.id)}>
         <Play
           onClick={() => this.props.playItem(item.id)}
           className="subtrack-play-icon"
         />
         <img src={image} alt="" />
-        {item.title}
-        {item.itemType == "folder" && (
+        <span data-testid={ids.subtrackText}>{item.title}</span>
+        {item.itemType === "folder" && (
           <div className="stubtrack-items-count">{videoCount}</div>
         )}
         {item.itemType === "folder" && (
@@ -143,9 +145,9 @@ class Card extends React.Component<Props> {
           "open-card": this.props.item.isOpenInGallery,
           "card-drag-destination":
             dragState.dragArea === "gallery" &&
-            item.id == dragState.cardUnderId,
+            item.id === dragState.cardUnderId,
           "card-being-dragged":
-            dragState.isDragging && item.id == dragState.cardDraggedId,
+            dragState.isDragging && item.id === dragState.cardDraggedId,
         })}
         data-testid={ids.card(item.id)}
         onMouseDown={this.onMouseDown}
@@ -167,15 +169,36 @@ class Card extends React.Component<Props> {
             "subtracks-container-closed": !this.props.item.isOpenInGallery,
           })}
         >
-          {this.props.childItems.map(this.renderChildTrack)}
+          {item.isLoadingYoutubePlaylist
+            ? this.renderSubtracksLoadingIndicator()
+            : this.props.childItems.map(this.renderChildTrack)}
         </div>
 
         {item.itemType === "folder" && (
           <Chevron
+            data-testid={ids.expandCard}
             onClick={() => {
-              this.props.changeNode(this.props.item.id, {
-                isOpenInGallery: !this.props.item.isOpenInGallery,
+              this.props.changeNode(item.id, {
+                isOpenInGallery: !item.isOpenInGallery,
               });
+
+              if (
+                item.youtubePlaylistId &&
+                !item.isLoadingYoutubePlaylist &&
+                item.children.length === 0
+              ) {
+                this.props.changeNode(item.id, {
+                  isLoadingYoutubePlaylist: true,
+                });
+
+                loadPlaylistVideos(item.youtubePlaylistId).then((items) => {
+                  this.props.changeNode(item.id, {
+                    isLoadingYoutubePlaylist: false,
+                  });
+
+                  this.props.setItemChildren(item.id, items);
+                });
+              }
             }}
             className={cn({
               "icon expand-icon": true,
@@ -189,6 +212,19 @@ class Card extends React.Component<Props> {
             className={"icon card-arrow-icon"}
           />
         )}
+      </div>
+    );
+  }
+  renderSubtracksLoadingIndicator(): React.ReactNode {
+    return (
+      <div
+        className="subtracks-loading-container overlay flex-center"
+        data-testid={ids.cardLoadingIndicator}
+      >
+        <div className="lds-ripple">
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
   }

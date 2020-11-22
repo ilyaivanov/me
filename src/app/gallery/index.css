@@ -53,7 +53,7 @@
   width: 60px;
   height: 60px;
   fill: rgba(255, 255, 255, 0);
-  transition: fill 100ms;
+  transition: fill 200ms;
 }
 
 .card:hover .icon {
@@ -85,7 +85,7 @@
 .rotated {
   transform: rotateZ(-90deg);
 }
-.card-arrow-icon{
+.card-arrow-icon {
   position: absolute;
   height: 26px;
   width: 26px;
@@ -151,8 +151,6 @@
 .folder-preview-container > .right > img:first-of-type {
   margin-top: 0;
 }
-.folder-preview-container > .right > img:nth-child(4) {
-}
 
 .empty-folder {
   font-size: 36px;
@@ -192,6 +190,11 @@
   border-radius: 4px;
   margin-right: 6px;
 }
+
+.subtrack span{
+  word-break: break-word;
+}
+
 .subtrack:last-of-type {
   border: none;
 }
@@ -211,7 +214,7 @@
 .subtrack:hover .subtrack-arrow-icon {
   opacity: 1;
 }
-.subtrack:hover .stubtrack-items-count{
+.subtrack:hover .stubtrack-items-count {
   opacity: 0;
 }
 .subtrack-play-icon:hover path {
@@ -224,7 +227,7 @@
   fill: rgba(255, 255, 255, 0.8);
 }
 
-.subtrack-arrow-icon{
+.subtrack-arrow-icon {
   opacity: 0;
   transition: opacity 200ms;
   position: absolute;
@@ -239,4 +242,9 @@
   transition: opacity 200ms;
   margin-left: auto;
   color: grey;
+}
+
+.subtracks-loading-container {
+  position: relative;
+  height: 100px;
 }

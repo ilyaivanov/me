@@ -11,6 +11,7 @@ jest.mock("./app/player/youtubePlayer", () => ({ videoId }: any) => (
 
 jest.mock("./app/api/youtubeRequest", () => ({
   findYoutubeVideos: jest.fn(),
+  fetchPlaylistVideos: jest.fn(),
 }));
 
 jest.mock("./app/api/firebase", () => ({

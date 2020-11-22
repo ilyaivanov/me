@@ -1,7 +1,6 @@
 import { prepareLoadedTestApp } from "./renderTestApp";
 import gallery from "../gallery/pageObject";
 import sidebar from "../sidebar/pageObject";
-import { NodesContainer } from "../state";
 import { createItemsBasedOnStructure } from "./itemsBuilder";
 
 const testData1 = createItemsBasedOnStructure(`

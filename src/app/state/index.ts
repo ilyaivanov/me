@@ -14,6 +14,9 @@ export interface Item {
   image?: string;
   isOpenFromSidebar?: boolean;
   isOpenInGallery?: boolean;
+
+  youtubePlaylistId?: string;
+  isLoadingYoutubePlaylist?: boolean;
 }
 export type NodesContainer = {
   [key: string]: Item;
@@ -22,7 +25,6 @@ export type NodesContainer = {
 type SearchState = { stateType: "loading" | "done"; term: string };
 
 type DragArea = "sidebar" | "gallery";
-type DragStateType = "no_drag" | "dragging";
 
 export const initialState = {
   isSidebarVisible: true,
@@ -185,7 +187,7 @@ const reducer = (state = initialState, action: Action): RootState => {
   if (action.type === "PLAY_ITEM") {
     let id;
 
-    if (state.items[action.itemId].itemType == "folder") {
+    if (state.items[action.itemId].itemType === "folder") {
       const subitems = getPreviewItemsForFolder(state.items, action.itemId);
       if (subitems.length > 0) {
         id = subitems[0].id;
@@ -217,15 +219,15 @@ const reducer = (state = initialState, action: Action): RootState => {
       searchState: action.state,
     };
   }
-  if (action.type === "ITEMS_LOADED_FROM_SEARCH") {
+  if (action.type === "SET_ITEM_CHILDREN") {
     const items = {
       ...state.items,
     };
     action.items.forEach((item) => {
       items[item.id] = item;
     });
-    items["SEARCH"] = {
-      ...items["SEARCH"],
+    items[action.parentId] = {
+      ...items[action.parentId],
       children: action.items.map((i) => i.id),
     };
     return {
@@ -233,6 +235,7 @@ const reducer = (state = initialState, action: Action): RootState => {
       items,
     };
   }
+
   if (action.type === "MOUSE_DOWN") {
     return {
       ...state,
@@ -318,7 +321,7 @@ const composeEnhancers: typeof compose =
 export const createMediaExplorerStore = () => {
   return createStore(
     reducer,
-    // @ts-ignore
+    //@ts-expect-error
     composeEnhancers(applyMiddleware(syncingMiddleware))
   );
 };
@@ -342,9 +345,10 @@ const onVideoEnd = () => ({ type: "VIDEO_ENDED" } as const);
 
 const setSearchState = (state: SearchState) =>
   ({ type: "SET_SEARCH_STATE", state } as const);
+  
+const setItemChildren = (parentId: string, items: Item[]) =>
+({ type: "SET_ITEM_CHILDREN", parentId, items } as const);
 
-const itemsLoadedFromSearch = (items: Item[]) =>
-  ({ type: "ITEMS_LOADED_FROM_SEARCH", items } as const);
 
 const onMouseDownForCard = (
   itemId: string,
@@ -371,11 +375,11 @@ export const allActions = {
   playItem,
   onVideoEnd,
   setSearchState,
-  itemsLoadedFromSearch,
   onMouseDownForCard,
   onMouseUp,
   setCardDestination,
   setItems,
+  setItemChildren,
   startDragging,
 };
 
