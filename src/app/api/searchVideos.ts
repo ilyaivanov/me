@@ -9,7 +9,7 @@ export const searchVideos = (term: string): Promise<Item[]> => {
       image: item.image,
       title: item.name,
       videoId: item.itemId,
-      youtubePlaylistId: item.itemType === "playlist" ? item.itemId : undefined,
+      youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
       children: [],
     }))
   );
@@ -24,7 +24,7 @@ export const loadPlaylistVideos = (playlistId: string) : Promise<Item[]> => {
       image: item.image,
       title: item.name,
       videoId: item.itemId,
-      youtubePlaylistId: item.itemType === "playlist" ? item.itemId : undefined,
+      youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
       children: [],
     }))
   );
