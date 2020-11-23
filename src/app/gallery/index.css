@@ -8,6 +8,7 @@
   height: 100%;
   overflow-y: overlay;
   padding-bottom: 20px;
+  margin-top: -20px; /*GAP constant*/
 }
 
 .gallery-container::-webkit-scrollbar,

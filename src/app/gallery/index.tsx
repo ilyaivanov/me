@@ -6,6 +6,7 @@ import Card from "./Card";
 import { AllActions, allActions, Item, RootState } from "../state";
 import { connect } from "react-redux";
 import { ids } from "./pageObject";
+import Breadcrumps from "./Breadcrumps";
 
 const GAP = 20;
 const minCardWidth = 240;
@@ -88,14 +89,17 @@ class Gallery extends React.Component<Props> {
 
   render() {
     return (
-      <div
-        className="gallery-container"
-        ref={this.onRefReady}
-        data-testid={"gallery"}
-      >
-        {this.props.searchState.stateType === "loading"
-          ? this.renderLoadingIndicator()
-          : this.props.items.map(this.renderCard)}
+      <div>
+        <Breadcrumps />
+        <div
+          className="gallery-container"
+          ref={this.onRefReady}
+          data-testid={"gallery"}
+        >
+          {this.props.searchState.stateType === "loading"
+            ? this.renderLoadingIndicator()
+            : this.props.items.map(this.renderCard)}
+        </div>
       </div>
     );
   }
