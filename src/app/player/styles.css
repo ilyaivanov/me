@@ -1,0 +1,175 @@
+.player__container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.player__track__container {
+  position: absolute;
+  top: -15px;
+  height: 30px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+.player__track {
+  height: 2px;
+  flex: 1;
+  background-color: rgba(79, 79, 81, 1);
+}
+
+.player__track__container:hover .player__track {
+  height: 4px;
+}
+.player__track__container:hover .player__track__bulp {
+  height: 16px;
+  width: 16px;
+  right: -8px;
+  top: calc(50% - 8px);
+}
+
+.player__track__progress {
+  position: relative;
+  height: 100%;
+  background-color: red;
+}
+
+.player__track__bulp {
+  position: absolute;
+  height: 0;
+  width: 0;
+  right: 0;
+  transition: height 200ms, width 200ms, right 200ms, top 200ms;
+  border-radius: 50%;
+  top: calc(50%);
+  background-color: red;
+}
+
+.player__buttons__container {
+  display: flex;
+  align-items: center;
+}
+
+.forward-icon,
+.backward-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.backward-icon {
+  transform: rotateZ(180deg);
+}
+
+.play-icon,
+.pause-icon {
+  margin: 0 1.5em;
+  width: 50px;
+  height: 50px;
+}
+
+.forward-icon path,
+.backward-icon path,
+.play-icon path,
+.pause-icon path {
+  fill: white;
+}
+
+.player__trackInfo__container {
+  display: flex;
+  overflow: hidden;
+  flex: 1;
+}
+
+.player__trackInfo__container img {
+  height: 100%;
+}
+
+.trackInfo_text {
+  flex: 1;
+  padding: 12px 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+}
+
+.gradient-after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #232323 100%);
+}
+
+.gradient-before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 10px;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, #232323 100%);
+}
+
+.trackInfo__title {
+  white-space: nowrap;
+}
+
+.trackInfo__title__animation {
+  animation: rotateTrackTitle 10000ms linear infinite 2000ms;
+}
+
+@keyframes rotateTrackTitle {
+  0% {
+    margin-left: 0;
+  }
+  20% {
+    margin-left: var(--my-height);
+  }
+  50% {
+    margin-left: var(--my-height);
+  }
+  70% {
+    margin-left: 0;
+  }
+}
+
+.trackInfo__playlist__title {
+  color: rgb(185, 185, 185);
+}
+
+.player__rightPart__container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.volume-icon {
+  width: 28px;
+  height: 28px;
+  margin: 0 1em;
+}
+.volume-icon path {
+  fill: white;
+}
+
+.player__track__time {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  font-size: 14px;
+  color: rgb(161, 161, 161);
+}
+.youtube-player {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+}

@@ -12,16 +12,19 @@
 }
 
 .gallery-container::-webkit-scrollbar,
-.subtracks-container::-webkit-scrollbar {
+.subtracks-container::-webkit-scrollbar,
+.page-body::-webkit-scrollbar {
   width: 0;
 }
 .gallery-container::-webkit-scrollbar-thumb,
-.subtracks-container::-webkit-scrollbar-thumb {
+.subtracks-container::-webkit-scrollbar-thumb,
+.page-body::-webkit-scrollbar-thumb {
   background-color: darkgrey;
 }
 
 .gallery-container:hover::-webkit-scrollbar,
-.subtracks-container:hover::-webkit-scrollbar {
+.subtracks-container:hover::-webkit-scrollbar,
+.page-body:hover::-webkit-scrollbar {
   width: 8px;
 }
 

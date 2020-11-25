@@ -1,11 +1,12 @@
 .page-container {
   height: 100vh;
   display: grid;
-  grid-template-rows: 56px 1fr;
+  grid-template-rows: 56px 1fr 70px;
   grid-template-columns: auto 1fr;
   grid-template-areas:
     "body-header body-header"
-    "sidebar body";
+    "sidebar body"
+    "player player";
   overflow: hidden;
 }
 
@@ -26,7 +27,7 @@
 .page-body {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   grid-area: body;
-  overflow: hidden;
+  overflow: overlay;
   /*background-color: #e9e9e9;*/
   background-color: #181818;
   user-select: none;
@@ -37,13 +38,12 @@
   grid-area: body-header;
 }
 
+.page-player {
+  grid-area: player;
+}
+
 .hidden {
   visibility: hidden;
   pointer-events: none;
 }
 
-.youtube-player {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-}
