@@ -168,8 +168,17 @@
   font-size: 14px;
   color: rgb(161, 161, 161);
 }
-.youtube-player {
+.youtube__player {
   position: fixed;
   bottom: 80px;
   right: 20px;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: transform 400ms, opacity 400ms;
+}
+
+.youtube__player--hidden {
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
 }

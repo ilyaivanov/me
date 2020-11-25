@@ -1,9 +1,12 @@
 import React from "react";
-import YoutubePlayer, { PlayerState, YoutubePlayerInstance } from "./youtubePlayer";
+import YoutubePlayer, {
+  PlayerState,
+  YoutubePlayerInstance,
+} from "./youtubePlayer";
 import { AllActions, allActions, RootState } from "../state";
 import { connect } from "react-redux";
 import "./styles.css";
-import { Play, Forward, VolumeMax, Pause } from "../icons";
+import { Play, Forward, VolumeMax, Pause, Youtube } from "../icons";
 import { cn } from "../utils";
 import { formatVideoTime } from "./utils";
 
@@ -15,6 +18,7 @@ class Player extends React.Component<Props> {
   state = {
     duration: 0,
     currentTime: 0,
+    isVideoShown: true,
   };
   player: YoutubePlayerInstance | undefined;
 
@@ -53,7 +57,12 @@ class Player extends React.Component<Props> {
             </div>
           </div>
         </div>
-        <div className="youtube-player">
+        <div
+          className={cn({
+            youtube__player: true,
+            "youtube__player--hidden": !this.state.isVideoShown,
+          })}
+        >
           {itemBeingPlayed && itemBeingPlayed.videoId && (
             <YoutubePlayer
               videoId={itemBeingPlayed.videoId}
@@ -72,7 +81,8 @@ class Player extends React.Component<Props> {
         </div>
         <div className="player__buttons__container">
           <Forward className="backward-icon" />
-          {itemBeingPlayed && this.player?.getPlayerState() === PlayerState.playing ? (
+          {itemBeingPlayed &&
+          this.player?.getPlayerState() === PlayerState.playing ? (
             <Pause
               className="play-icon"
               onClick={() => {
@@ -90,6 +100,12 @@ class Player extends React.Component<Props> {
           <Forward className="forward-icon" />
         </div>
         <div className="player__rightPart__container">
+          <Youtube
+            className="volume-icon"
+            onClick={() =>
+              this.setState({ isVideoShown: !this.state.isVideoShown })
+            }
+          />
           <VolumeMax className="volume-icon" />
           <input type="range" />
           <div className="player__track__time">
