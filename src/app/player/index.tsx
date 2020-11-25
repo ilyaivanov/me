@@ -6,7 +6,16 @@ import YoutubePlayer, {
 import { AllActions, allActions, RootState } from "../state";
 import { connect } from "react-redux";
 import "./styles.css";
-import { Play, Forward, VolumeMax, Pause, Youtube } from "../icons";
+import {
+  Play,
+  Forward,
+  VolumeMax,
+  Pause,
+  Youtube,
+  VolumeMiddle,
+  VolumeLow,
+  VolumeMute,
+} from "../icons";
 import { cn } from "../utils";
 import { formatVideoTime } from "./utils";
 
@@ -19,6 +28,8 @@ class Player extends React.Component<Props> {
     duration: 0,
     currentTime: 0,
     isVideoShown: true,
+    volume: 50,
+    isMuted: false,
   };
   player: YoutubePlayerInstance | undefined;
 
@@ -37,6 +48,39 @@ class Player extends React.Component<Props> {
         duration: this.player.getDuration(),
       });
     }
+  };
+
+  onVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const volume = e.currentTarget.value;
+    this.setState({ volume });
+    if (this.player) {
+      this.player.setVolume(+volume);
+      if (+volume == 0) this.mute();
+      else this.unmute();
+    }
+  };
+
+  renderVolumeIcon = () => {
+    if (this.state.isMuted)
+      return <VolumeMute onClick={this.unmute} className="volume-icon" />;
+
+    if (this.state.volume > 66)
+      return <VolumeMax onClick={this.mute} className="volume-icon" />;
+    else if (this.state.volume > 33)
+      return <VolumeMiddle onClick={this.mute} className="volume-icon" />;
+    else if (this.state.volume > 0)
+      return <VolumeLow onClick={this.mute} className="volume-icon" />;
+    else return <VolumeMute onClick={this.unmute} className="volume-icon" />;
+  };
+
+  mute = () => {
+    if (this.player) this.player.mute();
+    this.setState({ isMuted: true });
+  };
+
+  unmute = () => {
+    if (this.player) this.player.unMute();
+    this.setState({ isMuted: false });
   };
 
   render() {
@@ -106,8 +150,14 @@ class Player extends React.Component<Props> {
               this.setState({ isVideoShown: !this.state.isVideoShown })
             }
           />
-          <VolumeMax className="volume-icon" />
-          <input type="range" />
+          {this.renderVolumeIcon()}
+          <input
+            type="range"
+            value={this.state.isMuted ? 0 : this.state.volume}
+            onChange={this.onVolumeChange}
+            min={0}
+            max={100}
+          />
           <div className="player__track__time">
             {formatVideoTime(this.state.currentTime, this.state.duration)}
           </div>
