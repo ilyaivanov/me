@@ -91,7 +91,15 @@ class Player extends React.Component<Props> {
     else trackWidth = 0;
     return (
       <div className="page-player player__container">
-        <div className="player__track__container">
+        <div
+          className="player__track__container"
+          onMouseDown={(e) => {
+            const ratio = e.clientX / window.innerWidth;
+            if (this.player) {
+              this.player.seekTo(ratio * this.state.duration);
+            }
+          }}
+        >
           <div className="player__track">
             <div
               className="player__track__progress"

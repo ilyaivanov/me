@@ -39,6 +39,8 @@ export interface YoutubePlayerInstance {
   // Returns an integer between 0 and 100. 
   // Note that getVolume() will return the volume even if the player is muted.
   getVolume(): number;
+
+  seekTo(duration: number): void;
 }
 
 export enum PlayerState {
