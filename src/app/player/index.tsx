@@ -55,7 +55,7 @@ class Player extends React.Component<Props> {
     this.setState({ volume });
     if (this.player) {
       this.player.setVolume(+volume);
-      if (+volume == 0) this.mute();
+      if (+volume === 0) this.mute();
       else this.unmute();
     }
   };
@@ -84,7 +84,7 @@ class Player extends React.Component<Props> {
   };
 
   render() {
-    const { itemBeingPlayed, onVideoEnd } = this.props;
+    const { itemBeingPlayed, playNextTrack, playPreviousTrack } = this.props;
     let trackWidth;
     if (this.state.duration)
       trackWidth = (this.state.currentTime / this.state.duration) * 100;
@@ -110,7 +110,7 @@ class Player extends React.Component<Props> {
           {itemBeingPlayed && itemBeingPlayed.videoId && (
             <YoutubePlayer
               videoId={itemBeingPlayed.videoId}
-              onVideoEn={onVideoEnd}
+              onVideoEn={playNextTrack}
               onPlayerReady={(player) => (this.player = player)}
             />
           )}
@@ -124,7 +124,7 @@ class Player extends React.Component<Props> {
           )}
         </div>
         <div className="player__buttons__container">
-          <Forward className="backward-icon" />
+          <Forward className="backward-icon" onClick={playPreviousTrack} />
           {itemBeingPlayed &&
           this.player?.getPlayerState() === PlayerState.playing ? (
             <Pause
@@ -141,7 +141,7 @@ class Player extends React.Component<Props> {
               }}
             />
           )}
-          <Forward className="forward-icon" />
+          <Forward className="forward-icon" onClick={playNextTrack} />
         </div>
         <div className="player__rightPart__container">
           <Youtube

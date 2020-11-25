@@ -58,8 +58,8 @@
 
 .forward-icon,
 .backward-icon {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
 
 .backward-icon {
@@ -69,8 +69,8 @@
 .play-icon,
 .pause-icon {
   margin: 0 1.5em;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 }
 
 .forward-icon path,

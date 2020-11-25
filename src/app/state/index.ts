@@ -200,12 +200,24 @@ const reducer = (state = initialState, action: Action): RootState => {
       itemIdBeingPlayed: id,
     };
   }
-  if (action.type === "VIDEO_ENDED") {
+  if (action.type === "PLAY_NEXT_TRACK") {
     if (state.itemIdBeingPlayed) {
       const parent = findParentId(state.items, state.itemIdBeingPlayed);
       const context = state.items[parent];
       const nextIndex = context.children.indexOf(state.itemIdBeingPlayed) + 1;
       if (nextIndex < context.children.length)
+        return {
+          ...state,
+          itemIdBeingPlayed: context.children[nextIndex],
+        };
+    }
+  }
+  if (action.type === "PLAY_PREVIOUS_TRACK") {
+    if (state.itemIdBeingPlayed) {
+      const parent = findParentId(state.items, state.itemIdBeingPlayed);
+      const context = state.items[parent];
+      const nextIndex = context.children.indexOf(state.itemIdBeingPlayed) - 1;
+      if (nextIndex >= 0)
         return {
           ...state,
           itemIdBeingPlayed: context.children[nextIndex],
@@ -341,14 +353,15 @@ const removeItem = (itemId: string) =>
 
 const playItem = (itemId: string) => ({ type: "PLAY_ITEM", itemId } as const);
 
-const onVideoEnd = () => ({ type: "VIDEO_ENDED" } as const);
+const playNextTrack = () => ({ type: "PLAY_NEXT_TRACK" } as const);
+
+const playPreviousTrack = () => ({ type: "PLAY_PREVIOUS_TRACK" } as const);
 
 const setSearchState = (state: SearchState) =>
   ({ type: "SET_SEARCH_STATE", state } as const);
-  
-const setItemChildren = (parentId: string, items: Item[]) =>
-({ type: "SET_ITEM_CHILDREN", parentId, items } as const);
 
+const setItemChildren = (parentId: string, items: Item[]) =>
+  ({ type: "SET_ITEM_CHILDREN", parentId, items } as const);
 
 const onMouseDownForCard = (
   itemId: string,
@@ -373,7 +386,8 @@ export const allActions = {
   removeItem,
   changeNode,
   playItem,
-  onVideoEnd,
+  playNextTrack,
+  playPreviousTrack,
   setSearchState,
   onMouseDownForCard,
   onMouseUp,
