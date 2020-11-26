@@ -67,3 +67,15 @@
   width: 30px;
   height: 30px;
 }
+
+.logo {
+  margin: 1em;
+  height: 40px;
+  filter: invert(31%) sepia(0%) saturate(313%) hue-rotate(158deg)
+    brightness(96%) contrast(78%);
+}
+
+.dark-colors .logo {
+  filter: invert(100%) sepia(0%) saturate(7500%) hue-rotate(116deg)
+    brightness(109%) contrast(109%);
+}

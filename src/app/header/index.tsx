@@ -5,6 +5,7 @@ import { header as ids } from "../testId";
 import { searchVideos } from "../api/searchVideos";
 import { Bars, Fill, Search } from "../icons";
 import "./styles.css";
+import logo from "./logo.png";
 
 type Props = ReturnType<typeof mapState> & AllActions;
 class Header extends React.Component<Props> {
@@ -37,6 +38,7 @@ class Header extends React.Component<Props> {
           data-testid={ids.toggleSidebarButton}
           onClick={this.props.toggleSidebar}
         />
+        <img className="logo" src={logo} alt="" />
         <div className="search-container">
           <input
             value={this.state.searchValue}
