@@ -135,31 +135,33 @@ class Player {
 export const player = new Player();
 
 class Sidebar {
-  querySidebarRow = (id: string) => screen.queryByTestId(`sidebar-row-${id}`);
+  querySidebarRow = (id: string) => screen.queryByTestId(ids.sidebar.row(id));
 
-  querySidebarArrow = (id: string) => screen.queryByTestId(`row-arrow-${id}`);
+  querySidebarArrow = (id: string) =>
+    screen.queryByTestId(ids.sidebar.rowArrow(id));
 
-  clickAddFolder = () => fireEvent.click(screen.getByTestId("folder-add"));
+  clickAddFolder = () =>
+    fireEvent.click(screen.getByTestId(ids.sidebar.addFolder));
 
   clickRemoveFolder = (folderId: string) =>
-    fireEvent.click(screen.getByTestId(`folder-remove-${folderId}`));
+    fireEvent.click(screen.getByTestId(ids.sidebar.removeFolder(folderId)));
 
   clickRenameFolder = (folderId: string) =>
-    fireEvent.click(screen.getByTestId(`folder-rename-${folderId}`));
+    fireEvent.click(screen.getByTestId(ids.sidebar.renameFolder(folderId)));
 
   clickRowArrow = (folderId: string) =>
-    fireEvent.click(screen.getByTestId(`row-arrow-${folderId}`));
+    fireEvent.click(screen.getByTestId(ids.sidebar.rowArrow(folderId)));
 
   enterTextIntoFolderInputField = (folderId: string, nextText: string) =>
-    fireEvent.change(screen.getByTestId(`folder-input-${folderId}`), {
+    fireEvent.change(screen.getByTestId(ids.sidebar.folderInput(folderId)), {
       target: { value: nextText },
     });
 
   loseFocusOnInput = (folderId: string) =>
-    fireEvent.blur(screen.getByTestId(`folder-input-${folderId}`));
+    fireEvent.blur(screen.getByTestId(ids.sidebar.folderInput(folderId)));
 
   getFolderTitle = (folderId: string) =>
-    screen.queryByTestId(`folder-title-${folderId}`)?.innerHTML;
+    screen.queryByTestId(ids.sidebar.folderTitle(folderId))?.innerHTML;
 
   focusOnItem = (folderId: string) => {
     const elem = this.querySidebarRow(folderId);
@@ -169,7 +171,7 @@ class Sidebar {
   };
 
   mouseEnterSidebarRow(itemId: string) {
-    fireEvent.mouseEnter(screen.getByTestId(`sidebar-row-${itemId}`));
+    fireEvent.mouseEnter(screen.getByTestId(ids.sidebar.row(itemId)));
   }
 }
 

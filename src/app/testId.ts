@@ -21,3 +21,13 @@ export const player = {
   //used as a constant in setupTests.tsx, because jest.Mock can't reference external variables
   mockedYoutubePlayer: "mocked-youtube-player",
 };
+
+export const sidebar = {
+  folderInput: (itemId: string) => `folder-input-${itemId}`,
+  folderTitle: (itemId: string) => `folder-title-${itemId}`,
+  row: (itemId: string) => `sidebar-row-${itemId}`,
+  rowArrow: (itemId: string) => `row-arrow-${itemId}`,
+  removeFolder: (itemId: string) => `folder-remove-${itemId}`,
+  renameFolder: (itemId: string) => `folder-rename-${itemId}`,
+  addFolder: "folder-add",
+};

@@ -1,10 +1,11 @@
 import React from "react";
-import "./index.css";
+import "./styles.css";
 import { cn } from "../utils";
 import { Chevron, Edit, Plus, Times } from "../icons";
 import { AllActions, allActions, Item, RootState } from "../state";
 import { connect } from "react-redux";
 import { hasAnySubfolders, traverseOpenNodes } from "../state/selectors";
+import { sidebar as ids } from "../testId";
 
 type SidebarProps = ReturnType<typeof mapState> & AllActions;
 
@@ -18,7 +19,7 @@ class Sidebar extends React.Component<SidebarProps> {
     item.id === this.state.nodeBeingRenamed ? (
       <input
         ref={(ref) => ref?.focus()}
-        data-testid={"folder-input-" + item.id}
+        data-testid={ids.folderInput(item.id)}
         onBlur={this.stopRenameMode}
         type="text"
         onClick={(e) => e.stopPropagation()}
@@ -27,7 +28,7 @@ class Sidebar extends React.Component<SidebarProps> {
         value={this.state.newNodeName}
       />
     ) : (
-      <span data-testid={"folder-title-" + item.id}>{item.title}</span>
+      <span data-testid={ids.folderTitle(item.id)}>{item.title}</span>
     );
 
   stopRenameMode = () => {
@@ -67,7 +68,7 @@ class Sidebar extends React.Component<SidebarProps> {
         title={item.title}
         style={{ paddingLeft: level * 20 }}
         onClick={() => this.props.focusNode(item.id)}
-        data-testid={`sidebar-row-${item.id}`}
+        data-testid={ids.row(item.id)}
         onMouseEnter={() => {
           if (this.props.dragState.cardDraggedId) {
             this.props.setCardDestination(item.id, "sidebar");
@@ -86,7 +87,7 @@ class Sidebar extends React.Component<SidebarProps> {
           }}
         >
           <Chevron
-            data-testid={"row-arrow-" + item.id}
+            data-testid={ids.rowArrow(item.id)}
             className={cn({
               "icon row-arrow": true,
               hidden: !hasAnySubfolders(this.props.items, item.id),
@@ -102,7 +103,7 @@ class Sidebar extends React.Component<SidebarProps> {
               e.stopPropagation();
               this.enterRenameMode(item);
             }}
-            data-testid={`folder-rename-${item.id}`}
+            data-testid={ids.renameFolder(item.id)}
             className={"icon row-buttons-icon"}
           />
           <Times
@@ -110,7 +111,7 @@ class Sidebar extends React.Component<SidebarProps> {
               this.props.removeItem(item.id);
               e.stopPropagation();
             }}
-            data-testid={`folder-remove-${item.id}`}
+            data-testid={ids.removeFolder(item.id)}
             className={"icon icon-danger row-buttons-icon"}
           />
         </div>
@@ -135,7 +136,7 @@ class Sidebar extends React.Component<SidebarProps> {
               this.props.dragState.dragArea === "sidebar" &&
               "HOME" === this.props.dragState.cardUnderId,
           })}
-          data-testid={"sidebar-row-HOME"}
+          data-testid={ids.row("HOME")}
           onClick={() => this.props.focusNode("HOME")}
           onMouseEnter={() => {
             if (this.props.dragState.cardDraggedId) {
@@ -154,7 +155,7 @@ class Sidebar extends React.Component<SidebarProps> {
         <Plus
           className="icon plus-icon"
           onClick={this.props.createNewFolder}
-          data-testid="folder-add"
+          data-testid={ids.addFolder}
         />
       </div>
     );
