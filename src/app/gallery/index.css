@@ -11,23 +11,6 @@
   margin-top: -20px; /*GAP constant*/
 }
 
-.gallery-container::-webkit-scrollbar,
-.subtracks-container::-webkit-scrollbar,
-.page-body::-webkit-scrollbar {
-  width: 0;
-}
-.gallery-container::-webkit-scrollbar-thumb,
-.subtracks-container::-webkit-scrollbar-thumb,
-.page-body::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
-}
-
-.gallery-container:hover::-webkit-scrollbar,
-.subtracks-container:hover::-webkit-scrollbar,
-.page-body:hover::-webkit-scrollbar {
-  width: 8px;
-}
-
 .card {
   margin-top: 20px; /*GAP constant*/
   margin-left: 20px; /*GAP constant*/
@@ -36,15 +19,15 @@
   position: relative;
   border-radius: 4px;
   overflow: hidden;
-  background-color: #212121;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--menu-color);
+  border: 1px solid var(--primary-border);
   transition: box-shadow 200ms;
   /*https://getcssscan.com/css-box-shadow-examples*/
-  box-shadow: rgba(255, 255, 255, 0.2) 0px 3px 7px -3px;
+  box-shadow: var(--regular-shadow) 0px 3px 7px -3px;
 }
 
 .card:hover {
-  box-shadow: rgba(77, 47, 128, 1) 0px 6px 12px -2px;
+  box-shadow: var(--focus-shadow) 0px 6px 12px -2px;
 }
 
 .icon-container {
@@ -53,28 +36,14 @@
   align-items: center;
 }
 
-.icon {
-  width: 60px;
-  height: 60px;
-  fill: rgba(255, 255, 255, 0);
-  transition: fill 200ms;
+.card:hover .play-card-icon {
+  opacity: 1;
 }
 
-.card:hover .icon {
-  fill: rgba(255, 255, 255, 0.8);
-}
-
-.card .icon.pause-icon {
-  fill: rgba(255, 255, 255, 0.8);
-}
-
-.card .icon:hover {
-  fill: rgba(255, 255, 255, 1);
-}
-
-.card .icon:active,
-.card .icon.pause-icon:active {
-  fill: rgb(222, 222, 222);
+.play-card-icon {
+  opacity: 0;
+  width: 40px;
+  height: 40px;
 }
 
 .expand-icon {
@@ -98,7 +67,6 @@
 }
 
 .card .text-container {
-  color: white;
   pointer-events: none;
   padding: 11px;
   font-size: 16px;
@@ -150,8 +118,10 @@
 
 .folder-preview-container > .right > img {
   margin-top: 2px;
-  height: calc(25% - 2px);
+  /* 1.5 pixels because I have only three spaces between four images */
+    height: calc(25% - 1.5px);
 }
+
 .folder-preview-container > .right > img:first-of-type {
   margin-top: 0;
 }
@@ -159,7 +129,7 @@
 .empty-folder {
   font-size: 36px;
   font-weight: bolder;
-  color: #808080;
+  color: var(--faded-text-color);
 }
 
 .subtracks-container {
@@ -178,12 +148,12 @@
   padding: 5px 11px;
   font-size: 13px;
   font-weight: normal;
-  border-bottom: 1px solid #544d4d;
+  border-bottom: 1px solid var(--primary-border);
   display: flex;
   align-items: center;
 }
 .subtrack:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--hover-color);
 }
 
 .subtrack img {
@@ -195,7 +165,7 @@
   margin-right: 6px;
 }
 
-.subtrack span{
+.subtrack span {
   word-break: break-word;
 }
 
@@ -210,9 +180,6 @@
   left: 16px;
   width: 24px;
   height: 24px;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
-  padding: 4px;
 }
 .subtrack:hover .subtrack-play-icon,
 .subtrack:hover .subtrack-arrow-icon {
@@ -220,15 +187,6 @@
 }
 .subtrack:hover .stubtrack-items-count {
   opacity: 0;
-}
-.subtrack-play-icon:hover path {
-  fill: white;
-}
-.subtrack-play-icon:active path {
-  fill: lightgrey;
-}
-.subtrack-play-icon path {
-  fill: rgba(255, 255, 255, 0.8);
 }
 
 .subtrack-arrow-icon {
@@ -245,7 +203,7 @@
   opacity: 1;
   transition: opacity 200ms;
   margin-left: auto;
-  color: grey;
+  color: var(--faded-text-color);
 }
 
 .subtracks-loading-container {

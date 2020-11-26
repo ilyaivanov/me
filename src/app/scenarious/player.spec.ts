@@ -28,7 +28,7 @@ it("when a video ends next video in that folder should be played", async () => {
   const store = await prepareLoadedTestApp(testData);
   sidebar.focusOnItem("playground1");
   gallery.playItem("video playground11");
-  store.dispatch(allActions.onVideoEnd());
+  store.dispatch(allActions.playNextTrack());
   expect(player.getVideoIdBeingPlayed()).toBe("video playground12 videoId");
 });
 
@@ -36,6 +36,6 @@ it("when the last video in a folder ends no new video should be played", async (
   const store = await prepareLoadedTestApp(testData);
   sidebar.focusOnItem("playground1");
   gallery.playItem("video playground12");
-  store.dispatch(allActions.onVideoEnd());
+  store.dispatch(allActions.playNextTrack());
   expect(player.getVideoIdBeingPlayed()).toBe("video playground12 videoId");
 });

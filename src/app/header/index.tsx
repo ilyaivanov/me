@@ -1,12 +1,13 @@
 import React from "react";
-import { allActions, AllActions } from "../state";
+import { allActions, AllActions, RootState } from "../state";
 import { connect } from "react-redux";
 import { ids } from "./pageObject";
 import { searchVideos } from "../api/searchVideos";
-import { Bars, Search } from "../icons";
+import { Bars, Fill, Search } from "../icons";
 import "./styles.css";
 
-class Header extends React.Component<AllActions> {
+type Props = ReturnType<typeof mapState> & AllActions;
+class Header extends React.Component<Props> {
   state = {
     searchValue: "",
   };
@@ -25,35 +26,37 @@ class Header extends React.Component<AllActions> {
     });
   };
 
+  toggleColorScheme = () => {
+    this.props.setColorScheme(this.props.scheme === "dark" ? "light" : "dark");
+  };
   render() {
     return (
       <div className="header">
-        <div
-          className="bars-icon"
+        <Bars
+          className="icon bars-icon"
           data-testid={ids.toggleSidebarButton}
           onClick={this.props.toggleSidebar}
-        >
-          <Bars />
-        </div>
+        />
         <div className="search-container">
           <input
             value={this.state.searchValue}
             onChange={(e) =>
               this.setState({ searchValue: e.currentTarget.value })
             }
-            onKeyUp={e => e.key === 'Enter' && this.onSearchRequest()}
+            onKeyUp={(e) => e.key === "Enter" && this.onSearchRequest()}
             placeholder="Search"
             type="text"
             data-testid={ids.searchInput}
           />
           <div
-            className="search-button flex-center"
+            className="search-button icon-hover-container"
             onClick={this.onSearchRequest}
             data-testid={ids.searchButton}
           >
-            <Search />
+            <Search className="icon search-icon" />
           </div>
         </div>
+        <Fill className="icon fill-icon" onClick={this.toggleColorScheme} />
         <div className="user-image">
           <img
             src={
@@ -67,4 +70,8 @@ class Header extends React.Component<AllActions> {
   }
 }
 
-export default connect(undefined, allActions)(Header);
+const mapState = (state: RootState) => ({
+  scheme: state.colorScheme,
+});
+
+export default connect(mapState, allActions)(Header);

@@ -25,9 +25,10 @@ export type NodesContainer = {
 type SearchState = { stateType: "loading" | "done"; term: string };
 
 type DragArea = "sidebar" | "gallery";
-
+type ColorScheme = "dark" | "light";
 export const initialState = {
   isSidebarVisible: true,
+  colorScheme: "dark" as ColorScheme,
   nodeFocusedId: "HOME",
   itemIdBeingPlayed: undefined as string | undefined,
   searchState: { stateType: "done", term: "" } as SearchState,
@@ -323,6 +324,12 @@ const reducer = (state = initialState, action: Action): RootState => {
       items: action.items,
     };
   }
+  if (action.type === "SET_COLOR_SCHEME") {
+    return {
+      ...state,
+      colorScheme: action.scheme,
+    };
+  }
   return state;
 };
 
@@ -379,6 +386,9 @@ const setItems = (items: NodesContainer) =>
 
 const startDragging = () => ({ type: "START_DRAGGING" } as const);
 
+const setColorScheme = (scheme: ColorScheme) =>
+  ({ type: "SET_COLOR_SCHEME", scheme } as const);
+
 export const allActions = {
   toggleSidebar,
   focusNode,
@@ -395,6 +405,7 @@ export const allActions = {
   setItems,
   setItemChildren,
   startDragging,
+  setColorScheme,
 };
 
 export type AllActions = typeof allActions;

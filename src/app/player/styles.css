@@ -21,7 +21,7 @@
 .player__track {
   height: 2px;
   flex: 1;
-  background-color: rgba(79, 79, 81, 1);
+  background-color: var(--player-track-color);
 }
 
 .player__track__container:hover .player__track {
@@ -37,7 +37,7 @@
 .player__track__progress {
   position: relative;
   height: 100%;
-  background-color: red;
+  background-color: var(--player-track-progress-color);
 }
 
 .player__track__bulp {
@@ -48,7 +48,7 @@
   transition: height 200ms, width 200ms, right 200ms, top 200ms;
   border-radius: 50%;
   top: calc(50%);
-  background-color: red;
+  background-color: var(--player-track-progress-color);
 }
 
 .player__buttons__container {
@@ -60,24 +60,18 @@
 .backward-icon {
   width: 30px;
   height: 30px;
+  cursor: pointer;
 }
 
 .backward-icon {
   transform: rotateZ(180deg);
 }
 
-.play-icon,
-.pause-icon {
+.play-icon {
   margin: 0 1.5em;
   width: 40px;
   height: 40px;
-}
-
-.forward-icon path,
-.backward-icon path,
-.play-icon path,
-.pause-icon path {
-  fill: white;
+  cursor: pointer;
 }
 
 .player__trackInfo__container {
@@ -107,7 +101,7 @@
   right: 0;
   bottom: 0;
   width: 10px;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #232323 100%);
+  background: linear-gradient(to right, transparent 0%, var(--menu-color) 100%);
 }
 
 .gradient-before {
@@ -116,7 +110,7 @@
   left: 0;
   bottom: 0;
   width: 10px;
-  background: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, #232323 100%);
+  background: linear-gradient(to left, transparent 0%, var(--menu-color) 100%);
 }
 
 .trackInfo__title {
@@ -143,7 +137,7 @@
 }
 
 .trackInfo__playlist__title {
-  color: rgb(185, 185, 185);
+  color: var(--faded-text-color);
 }
 
 .player__rightPart__container {
@@ -152,13 +146,12 @@
   justify-content: center;
   align-items: center;
 }
+
 .volume-icon {
+  cursor: pointer;
   width: 28px;
   height: 28px;
   margin: 0 1em;
-}
-.volume-icon path {
-  fill: white;
 }
 
 .player__track__time {
@@ -166,8 +159,9 @@
   top: 0.5em;
   right: 0.5em;
   font-size: 14px;
-  color: rgb(161, 161, 161);
+  color: var(--faded-text-color);
 }
+
 .youtube__player {
   position: fixed;
   bottom: 80px;

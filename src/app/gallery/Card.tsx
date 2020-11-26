@@ -53,12 +53,12 @@ class Card extends React.Component<Props> {
       </div>
       <div className="overlay flex-center">
         {this.props.isPlaying ? (
-          <Pause className="icon pause-icon" />
+          <Pause className="icon play-card-icon" />
         ) : (
           <Play
             data-testid={ids.playIcon}
             onClick={this.onPlayClick}
-            className="icon"
+            className="icon play-card-icon"
           />
         )}
       </div>
@@ -118,7 +118,7 @@ class Card extends React.Component<Props> {
       <div className={"subtrack"} data-testid={ids.subtrack(item.id)} key={item.id}>
         <Play
           onClick={() => this.props.playItem(item.id)}
-          className="subtrack-play-icon"
+          className="icon subtrack-play-icon"
         />
         <img src={image} alt="" />
         <span data-testid={ids.subtrackText}>{item.title}</span>

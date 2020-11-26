@@ -62,15 +62,15 @@ class Player extends React.Component<Props> {
 
   renderVolumeIcon = () => {
     if (this.state.isMuted)
-      return <VolumeMute onClick={this.unmute} className="volume-icon" />;
+      return <VolumeMute onClick={this.unmute} className="icon volume-icon" />;
 
     if (this.state.volume > 66)
-      return <VolumeMax onClick={this.mute} className="volume-icon" />;
+      return <VolumeMax onClick={this.mute} className="icon volume-icon" />;
     else if (this.state.volume > 33)
-      return <VolumeMiddle onClick={this.mute} className="volume-icon" />;
+      return <VolumeMiddle onClick={this.mute} className="icon volume-icon" />;
     else if (this.state.volume > 0)
-      return <VolumeLow onClick={this.mute} className="volume-icon" />;
-    else return <VolumeMute onClick={this.unmute} className="volume-icon" />;
+      return <VolumeLow onClick={this.mute} className="icon volume-icon" />;
+    else return <VolumeMute onClick={this.unmute} className="icon volume-icon" />;
   };
 
   mute = () => {
@@ -132,28 +132,28 @@ class Player extends React.Component<Props> {
           )}
         </div>
         <div className="player__buttons__container">
-          <Forward className="backward-icon" onClick={playPreviousTrack} />
+          <Forward className="icon backward-icon" onClick={playPreviousTrack} />
           {itemBeingPlayed &&
           this.player?.getPlayerState() === PlayerState.playing ? (
             <Pause
-              className="play-icon"
+              className="icon play-icon"
               onClick={() => {
                 this.player?.pauseVideo();
               }}
             />
           ) : (
             <Play
-              className="play-icon"
+              className="icon play-icon"
               onClick={() => {
                 this.player?.playVideo();
               }}
             />
           )}
-          <Forward className="forward-icon" onClick={playNextTrack} />
+          <Forward className="icon forward-icon" onClick={playNextTrack} />
         </div>
         <div className="player__rightPart__container">
           <Youtube
-            className="volume-icon"
+            className="icon volume-icon"
             onClick={() =>
               this.setState({ isVideoShown: !this.state.isVideoShown })
             }

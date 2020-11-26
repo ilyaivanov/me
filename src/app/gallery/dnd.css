@@ -1,7 +1,8 @@
 .drag-avatar > .card {
   margin: 0;
-  box-shadow: rgba(77, 47, 128, 1) 0px 6px 12px -2px;
+  box-shadow: var(--focus-shadow) 0px 6px 12px -2px;
 }
+
 .drag-avatar {
   pointer-events: none;
   border-radius: 4px;
@@ -10,13 +11,15 @@
 .rotate-cw {
   --rotation: 8deg;
   transform: rotateZ(var(--rotation));
-  animation: rotate 150ms cubic-bezier(0.87, 0, 0.13, 1);
+  animation: rotate 150ms;
 }
+
 .rotate-ccw {
   --rotation: 8deg;
   transform: rotateZ(var(--rotation));
-  animation: rotate 150ms cubic-bezier(0.87, 0, 0.13, 1);
+  animation: rotate 150ms;
 }
+
 @keyframes rotate {
   from {
     transform: rotateZ(0);
@@ -30,28 +33,16 @@
 .card-drag-destination.card * {
   opacity: 0;
 }
+
 .card-drag-destination {
   background-color: transparent;
-  border: 2px white dashed;
+  border: 6px var(--primary-border) dashed;
 }
+
 .card-drag-destination.card {
   box-shadow: none;
 }
 
 .gallery-container .card-being-dragged.card {
   opacity: 0;
-}
-
-.drag-avatar .card .pause-icon,
-.drag-avatar .card .icon {
-  fill: rgba(255, 255, 255, 0);
-}
-
-.drag-avatar .gradient,
-.card:hover .gradient {
-  opacity: 1;
-}
-
-.drag-over-row {
-  background-color: yellow;
 }

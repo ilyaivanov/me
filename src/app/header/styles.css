@@ -1,24 +1,8 @@
-.bars-icon svg {
-  width: 20px;
-  display: block;
-}
-
-.bars-icon path {
-  fill: white;
-}
-
 .bars-icon {
+  width: 36px;
   margin-left: 10px;
-  border-radius: 40px;
   padding: 8px;
   cursor: pointer;
-}
-
-.bars-icon:hover {
-  background-color: #373740;
-}
-.bars-icon:active {
-  background-color: #424254;
 }
 
 .header {
@@ -39,35 +23,33 @@
   width: 400px;
   font-size: 18px;
   padding: 10px;
-  background-color: #121212;
+  color: inherit;
+  background-color: var(--page-color);
   border: none;
-  color: white;
   outline: none;
 }
 
 .search-container input:focus {
-  border: 1px #c8c8c8 solid;
+  border: 1px var(--primary-border) solid;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   padding-left: 9px;
 }
 
-.search-button svg {
+.search-icon {
   width: 20px;
   height: 20px;
 }
-.search-button path {
-  fill: darkgrey;
-}
+
 .search-button {
   width: 60px;
-  background-color: #303030;
+  background-color: var(--secondary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
-}
-.search-button:hover path {
-  fill: white;
 }
 
 .user-image img {
@@ -76,4 +58,12 @@
   margin-right: 6px;
   display: block;
   border-radius: 25px;
+}
+
+.fill-icon {
+  padding: 0.3em;
+  margin-right: 1em;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
 }

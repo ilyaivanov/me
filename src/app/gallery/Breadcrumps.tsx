@@ -46,8 +46,8 @@ class Breadcrumps extends React.Component<Props> {
         >
           {item.title}
         </div>
-        <div className="breadcrumps__section">
-          <Chevron className="breadcrumps__arrow" />
+        <div className="breadcrumps__section icon-hover-container">
+          <Chevron className="icon breadcrumps__arrow__icon" />
           <div className="breadcrumps__drawer">
             {this.renderOptionsForItem(item.id, nextItemInSectionId)}
           </div>
@@ -67,8 +67,8 @@ class Breadcrumps extends React.Component<Props> {
     return (
       <div>
         <div className="breadcrumps">
-          <div className="breadcrumps__section">
-            <Chevron className="breadcrumps__arrow" />
+          <div className="breadcrumps__section icon-hover-container">
+            <Chevron className="icon breadcrumps__arrow__icon" />
             <div className="breadcrumps__drawer">
               {this.renderOptions([items["HOME"]], "HOME")}
             </div>

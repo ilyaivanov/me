@@ -88,7 +88,7 @@ class Sidebar extends React.Component<SidebarProps> {
           <Chevron
             data-testid={"row-arrow-" + item.id}
             className={cn({
-              "row-arrow": true,
+              "icon row-arrow": true,
               hidden: !hasAnySubfolders(this.props.items, item.id),
               "row-arrow-open": item.isOpenFromSidebar,
             })}
@@ -103,7 +103,7 @@ class Sidebar extends React.Component<SidebarProps> {
               this.enterRenameMode(item);
             }}
             data-testid={`folder-rename-${item.id}`}
-            className={"row-buttons-icon"}
+            className={"icon row-buttons-icon"}
           />
           <Times
             onClick={(e) => {
@@ -111,7 +111,7 @@ class Sidebar extends React.Component<SidebarProps> {
               e.stopPropagation();
             }}
             data-testid={`folder-remove-${item.id}`}
-            className={"row-buttons-icon delete-icon"}
+            className={"icon icon-danger row-buttons-icon"}
           />
         </div>
       </div>
@@ -130,7 +130,7 @@ class Sidebar extends React.Component<SidebarProps> {
       <div className="sidebar-content">
         <div
           className={cn({
-            "row": true,
+            row: true,
             "row-mouse-over-during-drag":
               this.props.dragState.dragArea === "sidebar" &&
               "HOME" === this.props.dragState.cardUnderId,
@@ -151,13 +151,11 @@ class Sidebar extends React.Component<SidebarProps> {
           Home
         </div>
         {rows}
-        <div
-          className="plus-icon"
+        <Plus
+          className="icon plus-icon"
           onClick={this.props.createNewFolder}
           data-testid="folder-add"
-        >
-          <Plus />
-        </div>
+        />
       </div>
     );
   }

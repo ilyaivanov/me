@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "./App.css";
+import "./colors.css";
 import { cn } from "./utils";
 import { connect } from "react-redux";
 import { allActions, AllActions, RootState } from "./state";
@@ -35,7 +36,13 @@ const App = (props: Props) => {
       </div>
     );
   return (
-    <div className="page-container">
+    <div
+      className={cn({
+        "page-container": true,
+        "light-colors": props.scheme === "light",
+        "dark-colors": props.scheme === "dark",
+      })}
+    >
       <aside
         data-testid="sidebar"
         className={cn({
@@ -60,6 +67,7 @@ const App = (props: Props) => {
 const mapState = (state: RootState) => ({
   isSidebarVisible: state.isSidebarVisible,
   items: state.items,
+  scheme: state.colorScheme,
 });
 
 export default connect(mapState, allActions)(App);

@@ -1,0 +1,91 @@
+.light-colors {
+  /* Typography */
+  color: black;
+  --text-color: black;
+  --faded-text-color: grey;
+
+  /* Blocks */
+  --menu-color: white;
+  --page-color: #f9f9f9;
+  --secondary-color: #e7e7e7;
+  --hover-color: lightBlue;
+  --hover-accent-color: yellow;
+  --selected-color: rgba(123, 123, 124, 1);
+  --primary-border: lightGrey;
+
+  /* Icons */
+  --icon-color: #575757;
+  --icon-hover-color: black;
+  --icon-danger-color: #f16e6e;
+  --icon-danger-hover-color: #ffb7b7;
+
+  /* Shadows */
+  --regular-shadow: rgba(255, 255, 255, 0.2);
+  --focus-shadow: rgba(77, 47, 128, 1);
+
+  /* Player */
+  --player-track-color: rgba(79, 79, 81, 1);
+  --player-track-progress-color: red;
+}
+
+.dark-colors {
+  /* Typography */
+  color: white;
+  --text-color: white;
+  --faded-text-color: grey;
+
+  /* Blocks */
+  --page-color: #181818;
+  --menu-color: #232325;
+  --secondary-color: #303030;
+  --hover-color: lightGreen;
+  --hover-accent-color: yellow;
+  --selected-color: rgba(123, 123, 124, 1);
+  --primary-border: rgba(255, 255, 255, 0.1);
+
+  /* Icons */
+  --icon-color: #b3b3b3;
+  --icon-hover-color: white;
+  --icon-danger-color: #f16e6e;
+  --icon-danger-hover-color: #ffb7b7;
+
+  /* Shadows */
+  --regular-shadow: rgba(255, 255, 255, 0.2);
+  --focus-shadow: rgba(77, 47, 128, 1);
+
+  /* Player */
+  --player-track-color: rgba(79, 79, 81, 1);
+  --player-track-progress-color: red;
+}
+
+/* CSS Module for icons */
+.icon {
+  display: block;
+  color: var(--icon-color);
+  /* background-color: red; */
+}
+.icon:hover {
+  color: var(--icon-hover-color);
+}
+.icon-danger {
+  color: var(--icon-danger-color);
+}
+.icon-danger:hover {
+  color: var(--icon-danger-hover-color);
+}
+.icon-hover-container:hover .icon {
+  color: var(--icon-hover-color);
+}
+
+/* Scrollbars CSS Module */
+*::-webkit-scrollbar {
+  width: 0;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+}
+
+*:hover::-webkit-scrollbar {
+  width: 8px;
+}
