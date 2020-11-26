@@ -1,7 +1,5 @@
 import { prepareLoadedTestApp } from "./renderTestApp";
-import sidebar from "../sidebar/pageObject";
-import gallery from "../gallery/pageObject";
-import player from "../player/pageObject";
+import { gallery, player, sidebar } from "./testApp";
 import { allActions } from "../state";
 import { createItemsBasedOnStructure } from "./itemsBuilder";
 

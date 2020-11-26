@@ -6,7 +6,7 @@ import "@testing-library/jest-dom";
 import React from "react";
 
 jest.mock("./app/player/youtubePlayer", () => ({ videoId }: any) => (
-  <div data-testid={"media-explorer-player"}>{videoId}</div>
+  <div data-testid={"mocked-youtube-player"}>{videoId}</div>
 ));
 
 jest.mock("./app/api/youtubeRequest", () => ({

@@ -5,7 +5,7 @@ import "./dnd.css";
 import Card from "./Card";
 import { AllActions, allActions, Item, RootState } from "../state";
 import { connect } from "react-redux";
-import { ids } from "./pageObject";
+import { gallery as ids } from "../testId";
 import Breadcrumps from "./Breadcrumps";
 
 const GAP = 20;

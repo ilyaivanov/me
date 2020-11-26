@@ -1,6 +1,6 @@
 import { allActions, AllActions, RootState } from "./state";
 import React from "react";
-import { ids } from "./gallery/pageObject";
+import { gallery as ids } from "./testId";
 import { connect } from "react-redux";
 import Card from "./gallery/Card";
 import { cn } from "./utils";

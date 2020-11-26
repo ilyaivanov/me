@@ -1,7 +1,7 @@
 import React from "react";
 import { allActions, AllActions, RootState } from "../state";
 import { connect } from "react-redux";
-import { ids } from "./pageObject";
+import { header as ids } from "../testId";
 import { searchVideos } from "../api/searchVideos";
 import { Bars, Fill, Search } from "../icons";
 import "./styles.css";

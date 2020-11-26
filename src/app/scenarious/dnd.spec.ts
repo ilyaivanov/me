@@ -1,6 +1,5 @@
 import { prepareLoadedTestApp } from "./renderTestApp";
-import gallery from "../gallery/pageObject";
-import sidebar from "../sidebar/pageObject";
+import { gallery, sidebar } from "./testApp";
 import { createItemsBasedOnStructure } from "./itemsBuilder";
 
 const testData1 = createItemsBasedOnStructure(`

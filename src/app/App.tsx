@@ -15,15 +15,16 @@ type Props = ReturnType<typeof mapState> & AllActions;
 
 const App = (props: Props) => {
   const [isLoading, setIsLoading] = React.useState(true);
+  const { setItems } = props;
   useEffect(() => {
     firebaseApi.load().then((board) => {
       if (board) {
-        props.setItems(board);
+        setItems(board);
       }
 
       setIsLoading(false);
     });
-  }, []);
+  }, [setItems]);
 
   if (isLoading)
     return (

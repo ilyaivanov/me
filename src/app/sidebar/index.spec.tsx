@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import React from "react";
 import Sidebar from "./index";
-import sidebar from "./pageObject";
+import { sidebar } from "../scenarious/testApp";
 import { createId } from "../utils";
 
 const renderSidebar = () => {

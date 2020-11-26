@@ -1,13 +1,12 @@
 import { fireEvent, getByTestId, screen } from "@testing-library/react";
-import renderTestApp, { prepareLoadedTestApp } from "./renderTestApp";
-import {createItemsBasedOnStructure} from "./itemsBuilder";
-
+import { prepareLoadedTestApp } from "./renderTestApp";
+import { createItemsBasedOnStructure } from "./itemsBuilder";
 
 const testData = createItemsBasedOnStructure(`
   playground1
     video playground11
     video playground12
-`)
+`);
 
 it("by default sidebar is open", async () => {
   await prepareLoadedTestApp(testData);
@@ -22,7 +21,6 @@ it("when user clicks toggle sidebar it is closed", async function () {
 
 it("should have a playground1 in the sidebar", async function () {
   await prepareLoadedTestApp(testData);
-  renderTestApp();
   expect(screen.getByTestId("sidebar-row-playground1")).toBeInTheDocument();
 });
 

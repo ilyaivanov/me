@@ -1,6 +1,4 @@
-import gallery from "../gallery/pageObject";
-import header from "../header/pageObject";
-import sidebar from "../sidebar/pageObject";
+import { header, gallery, sidebar } from "./testApp";
 import renderTestApp from "./renderTestApp";
 import { fetchPlaylistVideos, findYoutubeVideos } from "../api/youtubeRequest";
 import firebaseApi from "../api/firebase";
@@ -129,7 +127,7 @@ it("having a playlisy item in a search query", async () => {
     gallery.queryLoadingIndicatorForCard("PLAYLIST_SEARCH_ITEM")
   ).not.toBeInTheDocument();
 
-  expect(gallery.getSubtrackLabel('PLAYLIST_SUBITEM_1')).toBe("subitem_video1_title");
-
-  
+  expect(gallery.getSubtrackLabel("PLAYLIST_SUBITEM_1")).toBe(
+    "subitem_video1_title"
+  );
 });

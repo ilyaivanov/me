@@ -4,7 +4,7 @@ import { allActions, Item, AllActions, RootState } from "../state";
 import { connect } from "react-redux";
 import { getPreviewItemsForFolder, traverseAllNodes } from "../state/selectors";
 import { cn } from "../utils";
-import { ids } from "./pageObject";
+import { gallery as ids } from "../testId";
 import { loadPlaylistVideos } from "../api/searchVideos";
 
 interface OuterProps {
