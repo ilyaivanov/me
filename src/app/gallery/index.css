@@ -1,12 +1,11 @@
 .gallery-container {
+  flex: 1;
   position: relative;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-start;
   align-content: flex-start;
-  height: 100%;
-  overflow-y: overlay;
   padding-bottom: 20px;
   margin-top: -20px; /*GAP constant*/
 }
@@ -36,8 +35,8 @@
   align-items: center;
 }
 
-.card:hover .play-card-icon, 
-.card:hover .expand-icon, 
+.card:hover .play-card-icon,
+.card:hover .expand-icon,
 .card:hover .card-arrow-icon {
   opacity: 1;
 }
@@ -123,7 +122,7 @@
 .folder-preview-container > .right > img {
   margin-top: 2px;
   /* 1.5 pixels because I have only three spaces between four images */
-    height: calc(25% - 1.5px);
+  height: calc(25% - 1.5px);
 }
 
 .folder-preview-container > .right > img:first-of-type {

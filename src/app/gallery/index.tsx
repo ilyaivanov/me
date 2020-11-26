@@ -89,7 +89,7 @@ class Gallery extends React.Component<Props> {
 
   render() {
     return (
-      <div>
+      <>
         <Breadcrumps />
         <div
           className="gallery-container"
@@ -100,7 +100,7 @@ class Gallery extends React.Component<Props> {
             ? this.renderLoadingIndicator()
             : this.props.items.map(this.renderCard)}
         </div>
-      </div>
+      </>
     );
   }
 }

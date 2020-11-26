@@ -26,9 +26,13 @@
 .page-body {
   border-top: 1px solid var(--primary-border);
   grid-area: body;
-  overflow: overlay;
+  overflow-y: overlay;
+  overflow-x: hidden;
   background-color: var(--page-color);
   user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .body-header {
