@@ -36,7 +36,9 @@
   align-items: center;
 }
 
-.card:hover .play-card-icon {
+.card:hover .play-card-icon, 
+.card:hover .expand-icon, 
+.card:hover .card-arrow-icon {
   opacity: 1;
 }
 
@@ -48,6 +50,7 @@
 
 .expand-icon {
   position: absolute;
+  opacity: 0;
   height: 32px;
   width: 32px;
   top: 0;
@@ -60,6 +63,7 @@
 }
 .card-arrow-icon {
   position: absolute;
+  opacity: 0;
   height: 26px;
   width: 26px;
   top: 5px;
