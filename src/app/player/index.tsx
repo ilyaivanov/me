@@ -1,8 +1,5 @@
 import React from "react";
-import YoutubePlayer, {
-  PlayerState,
-  YoutubePlayerInstance,
-} from "./youtubePlayer";
+import YoutubePlayer from "./youtubePlayer";
 import { AllActions, allActions, RootState } from "../state";
 import { connect } from "react-redux";
 import "./styles.css";
@@ -18,6 +15,7 @@ import {
 } from "../icons";
 import { cn } from "../utils";
 import { formatVideoTime } from "./utils";
+import { PlayerState, YoutubePlayerInstance } from "./types";
 
 type Props = ReturnType<typeof mapState> & AllActions;
 
@@ -70,7 +68,8 @@ class Player extends React.Component<Props> {
       return <VolumeMiddle onClick={this.mute} className="icon volume-icon" />;
     else if (this.state.volume > 0)
       return <VolumeLow onClick={this.mute} className="icon volume-icon" />;
-    else return <VolumeMute onClick={this.unmute} className="icon volume-icon" />;
+    else
+      return <VolumeMute onClick={this.unmute} className="icon volume-icon" />;
   };
 
   mute = () => {
