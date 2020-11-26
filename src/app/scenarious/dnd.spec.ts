@@ -1,6 +1,6 @@
-import { prepareLoadedTestApp } from "./renderTestApp";
-import { gallery, sidebar } from "./testApp";
-import { createItemsBasedOnStructure } from "./itemsBuilder";
+import { prepareLoadedTestApp } from "./helpers/renderTestApp";
+import { gallery, sidebar } from "./helpers/testApp";
+import { createItemsBasedOnStructure } from "./helpers/itemsBuilder";
 
 const testData1 = createItemsBasedOnStructure(`
   playground1

@@ -30,4 +30,5 @@ export const sidebar = {
   removeFolder: (itemId: string) => `folder-remove-${itemId}`,
   renameFolder: (itemId: string) => `folder-rename-${itemId}`,
   addFolder: "folder-add",
+  sidebarContainer:"sidebar-container"
 };

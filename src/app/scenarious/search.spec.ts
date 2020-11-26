@@ -1,8 +1,8 @@
-import { header, gallery, sidebar } from "./testApp";
-import renderTestApp from "./renderTestApp";
+import { header, gallery, sidebar } from "./helpers/testApp";
+import renderTestApp from "./helpers/renderTestApp";
 import { fetchPlaylistVideos, findYoutubeVideos } from "../api/youtubeRequest";
 import firebaseApi from "../api/firebase";
-import { createEmptyItems, createItemsBasedOnStructure } from "./itemsBuilder";
+import { createEmptyItems, createItemsBasedOnStructure } from "./helpers/itemsBuilder";
 
 const sampleYoutubeResponse = {
   items: [

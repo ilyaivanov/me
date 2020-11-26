@@ -7,7 +7,7 @@ import {
   getAllByAltText,
 } from "@testing-library/react";
 
-import * as ids from "../testId";
+import * as ids from "../../testId";
 
 export const header = {
   enterSearchTerm(term: string) {
@@ -20,8 +20,13 @@ export const header = {
     fireEvent.click(screen.getByTestId(ids.header.searchButton));
   },
 
+  //TODO: remove from here, not a header responsibility
   async waitForPageRender() {
-    await screen.findByTestId("sidebar");
+    await screen.findByTestId(ids.sidebar.sidebarContainer);
+  },
+
+  toggleSidebar() {
+    fireEvent.click(screen.getByTestId(ids.header.toggleSidebarButton));
   },
 };
 
@@ -37,6 +42,7 @@ class Gallery {
       ids.gallery.cardLoadingIndicator
     );
   }
+  
   clickOnExpandCard(itemId: string) {
     const expand = getByTestId(this.queryCard(itemId), ids.gallery.expandCard);
     fireEvent.click(expand);
@@ -173,6 +179,14 @@ class Sidebar {
   mouseEnterSidebarRow(itemId: string) {
     fireEvent.mouseEnter(screen.getByTestId(ids.sidebar.row(itemId)));
   }
+
+  getContainer = () => screen.getByTestId(ids.sidebar.sidebarContainer);
+
+  getRow = (itemId: string) => screen.getByTestId(ids.sidebar.row(itemId));
+
+  getRowArrow = (itemId: string) =>
+    screen.getByTestId(ids.sidebar.rowArrow(itemId));
+
 }
 
 export const sidebar = new Sidebar();

@@ -1,9 +1,9 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { render } from "@testing-library/react";
-import { createMediaExplorerStore, NodesContainer } from "../state";
-import App from "../App";
-import firebaseApi from "../api/firebase";
+import { createMediaExplorerStore, NodesContainer } from "../../state";
+import App from "../../App";
+import firebaseApi from "../../api/firebase";
 import { header } from "./testApp";
 
 const renderTestApp = () => {

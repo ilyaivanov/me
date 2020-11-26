@@ -10,6 +10,7 @@ import Player from "./player";
 import Header from "./header";
 import DndAvatar from "./DndAvatar";
 import firebaseApi from "./api/firebase";
+import * as ids from './testId';
 
 type Props = ReturnType<typeof mapState> & AllActions;
 
@@ -45,7 +46,7 @@ const App = (props: Props) => {
       })}
     >
       <aside
-        data-testid="sidebar"
+        data-testid={ids.sidebar.sidebarContainer}
         className={cn({
           "navigation-sidebar": true,
           closed: !props.isSidebarVisible,
