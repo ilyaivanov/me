@@ -26,7 +26,7 @@ describe("foo", () => {
     gallery.moveMouse({ movementX: 5, movementY: 5 });
     expect(gallery.getDragAvatar()).not.toBeInTheDocument();
 
-    gallery.mouseDownOnCard("playground1", { clientX: 10, clientY: 10 });
+    gallery.mouseDownOnDragInitiationArea("playground1", { clientX: 10, clientY: 10 });
 
     //I'm not initiating drag immediately, user needs to drag at least 4 pixels in distance
     gallery.moveMouse({ movementX: 1, movementY: 1 });
@@ -49,7 +49,7 @@ describe("foo", () => {
       left: 300,
     });
 
-    gallery.mouseDownOnCard("playground1", { clientX: 310, clientY: 260 });
+    gallery.mouseDownOnDragInitiationArea("playground1", { clientX: 310, clientY: 260 });
     gallery.moveMouse({
       movementX: 3,
       movementY: 4,
@@ -62,7 +62,6 @@ describe("foo", () => {
       throw new Error("Found no drag avatar");
     }
     expect(style.width).toBe("120px");
-    expect(style.height).toBe("200px");
     expect(style.top).toBe("254px");
     expect(style.left).toBe("303px");
   });
@@ -79,7 +78,7 @@ describe("foo", () => {
 
   it("while dragging and mouse enters card card-destination class should be added", function () {
     sidebar.focusOnItem("playground1");
-    gallery.mouseDownOnCard("video playground12", {
+    gallery.mouseDownOnDragInitiationArea("video playground12", {
       clientX: 310,
       clientY: 260,
     });
@@ -92,13 +91,13 @@ describe("foo", () => {
     expect(gallery.queryCard("video playground12")).toHaveClass(
       "card-being-dragged"
     );
-    gallery.mouseEnterCard("video playground11");
+    gallery.mouseEnterDragInitiationArea("video playground11");
 
     expect(gallery.queryCard("video playground11")).toHaveClass(
       "card-drag-destination"
     );
 
-    gallery.mouseLeaveCard("video playground11");
+    gallery.mouseLeaveDragInitiationArea("video playground11");
 
     expect(gallery.queryCard("video playground11")).not.toHaveClass(
       "card-drag-destination"
@@ -115,7 +114,7 @@ describe("foo", () => {
     expect(titles).toEqual(givenOrder);
 
     //TODO: extract this to a pageObject
-    gallery.mouseDownOnCard("playground1", { clientX: 310, clientY: 260 });
+    gallery.mouseDownOnDragInitiationArea("playground1", { clientX: 310, clientY: 260 });
     gallery.moveMouse({
       movementX: 3,
       movementY: 4,
@@ -123,7 +122,7 @@ describe("foo", () => {
       clientY: 264,
     });
 
-    gallery.mouseEnterCard("nestedRoot");
+    gallery.mouseEnterDragInitiationArea("nestedRoot");
     gallery.mouseUp();
 
     const newOrderOfCards = [
@@ -144,7 +143,7 @@ describe("foo", () => {
     expect(titles).toEqual(givenOrder);
 
     //TODO: extract this to a pageObject
-    gallery.mouseDownOnCard("video playground2", {
+    gallery.mouseDownOnDragInitiationArea("video playground2", {
       clientX: 310,
       clientY: 260,
     });
@@ -155,7 +154,7 @@ describe("foo", () => {
       clientY: 264,
     });
 
-    gallery.mouseEnterCard("playground1");
+    gallery.mouseEnterDragInitiationArea("playground1");
     gallery.mouseUp();
 
     const newOrderOfCards = [
@@ -168,7 +167,7 @@ describe("foo", () => {
 
   it("COPY 12", function () {
     //TODO: extract this to a pageObject
-    gallery.mouseDownOnCard("video playground2", {
+    gallery.mouseDownOnDragInitiationArea("video playground2", {
       clientX: 310,
       clientY: 260,
     });
@@ -192,7 +191,7 @@ describe("foo", () => {
 
   it("COPY 123", function () {
     //TODO: extract this to a pageObject
-    gallery.mouseDownOnCard("video playground2", {
+    gallery.mouseDownOnDragInitiationArea("video playground2", {
       clientX: 310,
       clientY: 260,
     });
@@ -226,7 +225,7 @@ describe("foo", () => {
     expect(gallery.queryCard("playground1")).not.toHaveClass(
       "card-being-dragged"
     );
-    gallery.mouseDownOnCard("playground1");
+    gallery.mouseDownOnDragInitiationArea("playground1");
     expect(gallery.queryCard("playground1")).not.toHaveClass(
       "card-being-dragged"
     );

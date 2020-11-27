@@ -1,6 +1,5 @@
 import React from "react";
 import "./index.css";
-import "./dnd.css";
 
 import Card from "./Card";
 import { AllActions, allActions, Item, RootState } from "../state";

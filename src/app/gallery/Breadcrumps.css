@@ -69,6 +69,14 @@
   white-space: nowrap;
 }
 
+.options__item:hover {
+  background-color: var(--hover-color);
+}
+
+.options .options__item--dropTarget {
+  background-color: var(--hover-accent-color);
+}
+
 .options__item:first-child {
   padding-top: 0.4em;
 }
@@ -79,6 +87,3 @@
   font-weight: bold;
 }
 
-.options__item:hover {
-  background-color: var(--hover-color);
-}

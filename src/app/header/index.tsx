@@ -6,6 +6,7 @@ import { searchVideos } from "../api/searchVideos";
 import { Bars, Fill, Search } from "../icons";
 import "./styles.css";
 import logo from "./logo.png";
+import Breadcrumps from "../gallery/Breadcrumps";
 
 type Props = ReturnType<typeof mapState> & AllActions;
 class Header extends React.Component<Props> {

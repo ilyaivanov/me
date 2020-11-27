@@ -38,9 +38,9 @@
   --page-color: #181818;
   --menu-color: #232325;
   --secondary-color: #303030;
-  --hover-color: lightGreen;
-  --hover-accent-color: yellow;
-  --selected-color: rgba(123, 123, 124, 1);
+  --hover-color: #313131;
+  --hover-accent-color: #518056;
+  --selected-color: #414141;
   --primary-border: rgba(255, 255, 255, 0.1);
 
   /* Icons */

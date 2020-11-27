@@ -25,6 +25,7 @@ class Sidebar extends React.Component<SidebarProps> {
         onClick={(e) => e.stopPropagation()}
         onKeyUp={(e) => e.key === "Enter" && this.stopRenameMode()}
         onChange={(e) => this.setState({ newNodeName: e.currentTarget.value })}
+        onMouseDown={e => e.stopPropagation()}
         value={this.state.newNodeName}
       />
     ) : (
@@ -73,6 +74,18 @@ class Sidebar extends React.Component<SidebarProps> {
           if (this.props.dragState.cardDraggedId) {
             this.props.setCardDestination(item.id, "sidebar");
           }
+        }}
+        onMouseDown={() => {
+          //Same as Subtrack handler
+          this.props.onMouseDownForCard(
+            item.id,
+            { width: 200 } as any,
+            {
+              x: 100,
+              y: 100,
+            },
+            "small"
+          );
         }}
         onMouseLeave={() => {
           if (this.props.dragState.cardDraggedId) {
@@ -128,7 +141,10 @@ class Sidebar extends React.Component<SidebarProps> {
       .filter(({ item }) => item.itemType === "folder")
       .map(this.renderRow);
     return (
-      <div className="sidebar-content">
+      <div
+        className="sidebar-content"
+        onMouseEnter={() => this.props.setCardDragAvatar("small")}
+      >
         <div
           className={cn({
             row: true,

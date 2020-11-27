@@ -42,7 +42,7 @@ class Gallery {
       ids.gallery.cardLoadingIndicator
     );
   }
-  
+
   clickOnExpandCard(itemId: string) {
     const expand = getByTestId(this.queryCard(itemId), ids.gallery.expandCard);
     fireEvent.click(expand);
@@ -87,11 +87,24 @@ class Gallery {
     return screen.queryByTestId(ids.gallery.loadingIndicator);
   }
 
-  mouseDownOnCard(itemId: string, eventData?: Partial<MouseEvent>) {
-    fireEvent.mouseDown(
-      screen.getByTestId(ids.gallery.card(itemId)),
-      eventData
-    );
+  mouseDownOnDragInitiationArea(
+    itemId: string,
+    eventData?: Partial<MouseEvent>
+  ) {
+    fireEvent.mouseDown(this.getDragEnterArea(itemId), eventData);
+  }
+
+  mouseEnterDragInitiationArea(itemId: string) {
+    fireEvent.mouseEnter(this.getDragEnterArea(itemId));
+  }
+
+  mouseLeaveDragInitiationArea(itemId: string) {
+    fireEvent.mouseLeave(this.getDragEnterArea(itemId));
+  }
+
+  getDragEnterArea(itemId: string) {
+    const card = screen.getByTestId(ids.gallery.card(itemId));
+    return getByTestId(card, ids.gallery.cardDragDropArea);
   }
 
   moveMouse(eventData: Partial<MouseEvent>) {
@@ -186,7 +199,6 @@ class Sidebar {
 
   getRowArrow = (itemId: string) =>
     screen.getByTestId(ids.sidebar.rowArrow(itemId));
-
 }
 
 export const sidebar = new Sidebar();

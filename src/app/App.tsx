@@ -8,9 +8,10 @@ import Sidebar from "./sidebar";
 import Gallery from "./gallery";
 import Player from "./player";
 import Header from "./header";
-import DndAvatar from "./DndAvatar";
+import DndAvatar from "./dragAndDrop/DndAvatar";
 import firebaseApi from "./api/firebase";
-import * as ids from './testId';
+import * as ids from "./testId";
+import Breadcrumps from "./gallery/Breadcrumps";
 
 type Props = ReturnType<typeof mapState> & AllActions;
 
@@ -57,7 +58,10 @@ const App = (props: Props) => {
       <div className="body-header">
         <Header />
       </div>
-      <div className="page-body">
+      <div
+        className="page-body"
+        onMouseEnter={() => props.setCardDragAvatar("big")}
+      >
         <Gallery isSidebarVisible={props.isSidebarVisible} />
       </div>
       <Player />

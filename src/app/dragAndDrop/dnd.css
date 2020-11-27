@@ -1,0 +1,45 @@
+.drag-avatar > .card {
+  margin: 0;
+  box-shadow: var(--focus-shadow) 0px 6px 12px -2px;
+}
+
+.drag-avatar {
+  position: fixed;
+  transition: width 400ms;
+  z-index: 200;
+  pointer-events: none;
+  border-radius: 4px;
+}
+
+.drag-avatar-mini {
+  background-color: var(--menu-color);
+  box-shadow: var(--focus-shadow) 0px 6px 12px -2px;
+}
+
+.rotate-avatar {
+  --rotation: 5deg;
+  transform: rotateZ(var(--rotation));
+}
+
+.card-drag-destination.card * {
+  opacity: 0.9;
+}
+
+.card .subtrack-drag-destination {
+  border-top: 3px solid var(--hover-accent-color);
+  margin-top: -3px;
+}
+
+.card-drag-destination {
+  background-color: transparent;
+  background-color: var(--primary-border);
+}
+
+.card-drag-destination.card {
+  box-shadow: none;
+}
+
+.gallery-container .card-being-dragged.card,
+.gallery-container .subtrack-being-dragged {
+  opacity: 0;
+}

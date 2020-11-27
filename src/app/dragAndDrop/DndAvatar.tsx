@@ -1,13 +1,13 @@
-import { allActions, AllActions, RootState } from "./state";
+import { allActions, AllActions, RootState } from "../state";
 import React from "react";
-import { gallery as ids } from "./testId";
+import { gallery as ids } from "../testId";
 import { connect } from "react-redux";
-import Card from "./gallery/Card";
-import { cn } from "./utils";
+import Card from "../gallery/Card";
+import "./dnd.css";
 
-type DndAvatarProps = AllActions & ReturnType<typeof mapDragState>;
+type Props = AllActions & ReturnType<typeof mapDragState>;
 
-class DndAvatar extends React.Component<DndAvatarProps> {
+class DndAvatar extends React.Component<Props> {
   state = {
     event: undefined as MouseEvent | undefined,
   };
@@ -33,10 +33,12 @@ class DndAvatar extends React.Component<DndAvatarProps> {
     this.distance = 0;
     this.props.onMouseUp();
   };
+
   componentDidMount() {
     document.addEventListener("mousemove", this.onMouseMove);
     document.addEventListener("mouseup", this.onMouseUp);
   }
+
   componentWillUnmount() {
     document.removeEventListener("mousemove", this.onMouseMove);
     document.removeEventListener("mouseup", this.onMouseUp);
@@ -45,28 +47,36 @@ class DndAvatar extends React.Component<DndAvatarProps> {
   render() {
     const { itemOffsets } = this.props.dragState;
     if (this.props.dragState.isDragging && this.state.event && itemOffsets) {
-      const inOnLeftHalf =
-        itemOffsets.x < (this.props.dragState.itemDraggedRect?.width || 0) / 2;
-      return (
-        <div
-          className={cn({
-            "drag-avatar": true,
-            "rotate-ccw": inOnLeftHalf,
-            "rotate-cw": !inOnLeftHalf,
-          })}
-          style={{
-            position: "fixed",
-            transformOrigin: `${itemOffsets.x}px ${itemOffsets.y}px`,
-            top: this.state.event.clientY - itemOffsets.y,
-            left: this.state.event.clientX - itemOffsets.x,
-            width: this.props.dragState.itemDraggedRect?.width,
-            height: this.props.dragState.itemDraggedRect?.height,
-          }}
-          data-testid={ids.dragAvatar}
-        >
-          <Card item={this.props.dragItem} isPlaying={false} />
-        </div>
-      );
+      if (this.props.dragState.dragAvatarType === "small") {
+        return (
+          <div
+            className="drag-avatar drag-avatar-mini text-container "
+            style={{
+              transformOrigin: `${itemOffsets.x}px ${itemOffsets.y}px`,
+              top: this.state.event.clientY,
+              left: this.state.event.clientX,
+              maxWidth: this.props.dragState.itemDraggedRect?.width,
+            }}
+          >
+            {this.props.dragItem.title}
+          </div>
+        );
+      } else {
+        return (
+          <div
+            className="drag-avatar"
+            style={{
+              transformOrigin: `${itemOffsets.x}px ${itemOffsets.y}px`,
+              top: this.state.event.clientY - itemOffsets.y,
+              left: this.state.event.clientX - itemOffsets.x,
+              width: this.props.dragState.itemDraggedRect?.width,
+            }}
+            data-testid={ids.dragAvatar}
+          >
+            <Card item={this.props.dragItem} isPlaying={false} />
+          </div>
+        );
+      }
     } else return <div></div>;
   }
 }

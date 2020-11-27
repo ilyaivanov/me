@@ -18,7 +18,7 @@ class Card extends React.Component<Props> {
   renderItemPreview = () => {
     if (
       this.props.folderFirstItems.length === 0 &&
-      this.props.item.itemType === "folder" && 
+      this.props.item.itemType === "folder" &&
       !this.props.item.youtubePlaylistId
     )
       return this.renderEmpty();
@@ -31,7 +31,11 @@ class Card extends React.Component<Props> {
           <>
             <div className="left">
               <img
-                src={this.props.item.youtubePlaylistId ? this.props.item.image : this.props.folderFirstItems[0].image}
+                src={
+                  this.props.item.youtubePlaylistId
+                    ? this.props.item.image
+                    : this.props.folderFirstItems[0].image
+                }
                 alt="preview"
                 draggable={false}
               />
@@ -78,7 +82,11 @@ class Card extends React.Component<Props> {
   onMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const itemOffsets = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    this.props.onMouseDownForCard(this.props.item.id, rect, itemOffsets);
+    if (this.props.item.isOpenInGallery) {
+      //if Card is open I want to extract height of the image, which is closed by overflow
+      itemOffsets.y -= rect.width * 0.5625;
+    }
+    this.props.onMouseDownForCard(this.props.item.id, rect, itemOffsets, "big");
   };
 
   onMouseEnter = () => {
@@ -87,6 +95,7 @@ class Card extends React.Component<Props> {
       this.props.item.id !== this.props.dragState.cardDraggedId
     ) {
       this.props.setCardDestination(this.props.item.id, "gallery");
+      this.props.setCardDragAvatar("big");
     }
   };
   onMouseLeave = () => {
@@ -96,6 +105,38 @@ class Card extends React.Component<Props> {
     ) {
       this.props.setCardDestination("", undefined);
     }
+  };
+
+  onSubtrackMouseEnter = (item: Item) => {
+    if (
+      this.props.dragState.cardDraggedId &&
+      item.id !== this.props.dragState.cardDraggedId
+    ) {
+      this.props.setCardDestination(item.id, "gallery");
+      this.props.setCardDragAvatar("small");
+    }
+  };
+
+  onSubtrackMouseLeave = (item: Item) => {
+    if (
+      this.props.dragState.cardDraggedId &&
+      item.id !== this.props.dragState.cardDraggedId
+    ) {
+      this.props.setCardDestination("", undefined);
+    }
+  };
+
+  onSubtrackMouseDown = (item: Item) => {
+    //Same as Sidebar handler
+    this.props.onMouseDownForCard(
+      item.id,
+      { width: 200 } as any,
+      {
+        x: 100,
+        y: 100,
+      },
+      "small"
+    );
   };
 
   renderChildTrack = (item: Item) => {
@@ -115,7 +156,21 @@ class Card extends React.Component<Props> {
       image = item.image;
     }
     return (
-      <div className={"subtrack"} data-testid={ids.subtrack(item.id)} key={item.id}>
+      <div
+        className={cn({
+          subtrack: true,
+          "subtrack-drag-destination":
+            this.props.dragState.cardUnderId === item.id,
+          "subtrack-being-dragged":
+            this.props.dragState.isDragging &&
+            this.props.dragState.cardDraggedId === item.id,
+        })}
+        data-testid={ids.subtrack(item.id)}
+        key={item.id}
+        onMouseEnter={() => this.onSubtrackMouseEnter(item)}
+        onMouseLeave={() => this.onSubtrackMouseLeave(item)}
+        onMouseDown={() => this.onSubtrackMouseDown(item)}
+      >
         <Play
           onClick={() => this.props.playItem(item.id)}
           className="icon subtrack-play-icon"
@@ -150,19 +205,22 @@ class Card extends React.Component<Props> {
             dragState.isDragging && item.id === dragState.cardDraggedId,
         })}
         data-testid={ids.card(item.id)}
-        onMouseDown={this.onMouseDown}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
         style={{
           width: this.props.width,
         }}
       >
-        {this.renderItemPreview()}
+        <div
+          data-testid={ids.cardDragDropArea}
+          onMouseDown={this.onMouseDown}
+          onMouseLeave={this.onMouseLeave}
+          onMouseEnter={this.onMouseEnter}
+        >
+          {this.renderItemPreview()}
 
-        <div data-testid={ids.cardTitle} className="text-container">
-          {item.title}
+          <div data-testid={ids.cardTitle} className="text-container">
+            {item.title}
+          </div>
         </div>
-
         <div
           className={cn({
             "subtracks-container": true,

@@ -63,7 +63,7 @@ it("Saving an items from search in a folder and vieweing that folder should show
 
   await gallery.findCard("ITEM_FROM_BACKEND_1");
 
-  gallery.mouseDownOnCard("ITEM_FROM_BACKEND_1");
+  gallery.mouseDownOnDragInitiationArea("ITEM_FROM_BACKEND_1");
   gallery.moveMouse({ movementX: 10, movementY: 10 });
   sidebar.mouseEnterSidebarRow("folder1");
   gallery.mouseUp();

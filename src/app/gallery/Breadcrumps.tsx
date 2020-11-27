@@ -16,9 +16,33 @@ class Breadcrumps extends React.Component<Props> {
           className={cn({
             options__item: true,
             "options__item--selected": highlightedId === item.id,
+            "options__item--dropTarget":
+              this.props.dragState.dragArea === "breadcrump" &&
+              this.props.dragState.cardUnderId === item.id,
           })}
           onClick={() => this.props.focusNode(item.id)}
           key={item.id}
+          onMouseEnter={() => {
+            if (this.props.dragState.cardDraggedId) {
+              this.props.setCardDestination(item.id, "breadcrump");
+            }
+          }}
+          onMouseDown={() => {
+            this.props.onMouseDownForCard(
+              item.id,
+              { width: 200 } as any,
+              {
+                x: 100,
+                y: 100,
+              },
+              "small"
+            );
+          }}
+          onMouseLeave={() => {
+            if (this.props.dragState.cardDraggedId) {
+              this.props.setCardDestination("", undefined);
+            }
+          }}
         >
           {item.title}
         </div>
@@ -65,18 +89,19 @@ class Breadcrumps extends React.Component<Props> {
     }
     path.reverse();
     return (
-      <div>
-        <div className="breadcrumps">
-          <div className="breadcrumps__section icon-hover-container">
-            <Chevron className="icon breadcrumps__arrow__icon" />
-            <div className="breadcrumps__drawer">
-              {this.renderOptions([items["HOME"]], "HOME")}
-            </div>
+      <div
+        className="breadcrumps"
+        onMouseEnter={() => this.props.setCardDragAvatar("small")}
+      >
+        <div className="breadcrumps__section icon-hover-container">
+          <Chevron className="icon breadcrumps__arrow__icon" />
+          <div className="breadcrumps__drawer">
+            {this.renderOptions([items["HOME"]], "HOME")}
           </div>
-          {path.map((item, index) =>
-            this.renderSection(item, path[index + 1]?.id)
-          )}
         </div>
+        {path.map((item, index) =>
+          this.renderSection(item, path[index + 1]?.id)
+        )}
       </div>
     );
   }
@@ -85,6 +110,7 @@ class Breadcrumps extends React.Component<Props> {
 const mapState = (state: RootState) => ({
   focusedNodeId: state.nodeFocusedId,
   items: state.items,
+  dragState: state.dragState,
 });
 
 export default connect(mapState, allActions)(Breadcrumps);

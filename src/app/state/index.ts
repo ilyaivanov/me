@@ -24,8 +24,9 @@ export type NodesContainer = {
 
 type SearchState = { stateType: "loading" | "done"; term: string };
 
-type DragArea = "sidebar" | "gallery";
+type DragArea = "sidebar" | "gallery" | "breadcrump";
 type ColorScheme = "dark" | "light";
+type DragAvatarView = "big" | "small";
 export const initialState = {
   isSidebarVisible: true,
   colorScheme: "dark" as ColorScheme,
@@ -39,6 +40,7 @@ export const initialState = {
     isDragging: false,
     cardUnderId: "",
     dragArea: undefined as DragArea | undefined,
+    dragAvatarType: "big" as DragAvatarView,
     itemDraggedRect: undefined as DOMRect | undefined,
     itemOffsets: undefined as { x: number; y: number } | undefined,
   },
@@ -178,7 +180,15 @@ const reducer = (state = initialState, action: Action): RootState => {
       items,
     };
   }
-
+  if (action.type === "SET_CARD_DRAG_AVATAR") {
+    return {
+      ...state,
+      dragState: {
+        ...state.dragState,
+        dragAvatarType: action.avatarType,
+      },
+    };
+  }
   if (action.type === "MOUSE_DOWN") {
     return {
       ...state,
@@ -189,6 +199,7 @@ const reducer = (state = initialState, action: Action): RootState => {
         isDragging: false,
         dragArea: undefined,
         cardUnderId: "",
+        dragAvatarType: action.dragAvatarType,
       },
     };
   }
@@ -206,7 +217,7 @@ const reducer = (state = initialState, action: Action): RootState => {
     let items;
     const dragArea = dragState.dragArea;
     if (dragState.cardUnderId && dragState.cardDraggedId && dragArea) {
-      if (dragArea === "sidebar") {
+      if (dragArea === "sidebar" || dragArea === "breadcrump") {
         items = drop(
           state.items,
           dragState.cardDraggedId,
@@ -235,6 +246,7 @@ const reducer = (state = initialState, action: Action): RootState => {
         itemDraggedRect: undefined,
         itemOffsets: undefined,
         isDragging: false,
+        dragAvatarType: "big",
       },
     };
   }
@@ -303,8 +315,16 @@ const setItemChildren = (parentId: string, items: Item[]) =>
 const onMouseDownForCard = (
   itemId: string,
   elementRect: DOMRect,
-  itemOffsets: { x: number; y: number }
-) => ({ type: "MOUSE_DOWN", itemId, elementRect, itemOffsets } as const);
+  itemOffsets: { x: number; y: number },
+  dragAvatarType: DragAvatarView
+) =>
+  ({
+    type: "MOUSE_DOWN",
+    itemId,
+    elementRect,
+    itemOffsets,
+    dragAvatarType,
+  } as const);
 
 const onMouseUp = () => ({ type: "MOUSE_UP" } as const);
 
@@ -318,6 +338,9 @@ const startDragging = () => ({ type: "START_DRAGGING" } as const);
 
 const setColorScheme = (scheme: ColorScheme) =>
   ({ type: "SET_COLOR_SCHEME", scheme } as const);
+
+const setCardDragAvatar = (avatarType: DragAvatarView) =>
+  ({ type: "SET_CARD_DRAG_AVATAR", avatarType } as const);
 
 export const allActions = {
   toggleSidebar,
@@ -336,6 +359,7 @@ export const allActions = {
   setItemChildren,
   startDragging,
   setColorScheme,
+  setCardDragAvatar,
 };
 
 export type AllActions = typeof allActions;

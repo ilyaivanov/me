@@ -15,6 +15,7 @@ export const gallery = {
   expandCard: "expand-card",
   subtrackText: "subtrack-label",
   cardLoadingIndicator: "card-loading-indicator",
+  cardDragDropArea: "card-drag-drop-area",
 };
 
 export const player = {
