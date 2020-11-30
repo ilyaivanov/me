@@ -110,6 +110,7 @@ class Card extends React.Component<Props> {
   onSubtrackMouseEnter = (item: Item) => {
     if (
       this.props.dragState.cardDraggedId &&
+      this.props.dragState.cardDraggedId !== this.props.item.id &&
       item.id !== this.props.dragState.cardDraggedId
     ) {
       this.props.setCardDestination(item.id, "gallery");
