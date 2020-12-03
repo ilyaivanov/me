@@ -1,5 +1,4 @@
 import React from "react";
-import YoutubePlayer from "./youtubePlayer";
 import { AllActions, allActions, RootState } from "../state";
 import { connect } from "react-redux";
 import "./styles.css";
@@ -12,22 +11,30 @@ import {
   VolumeMiddle,
   VolumeLow,
   VolumeMute,
+  Collapse,
+  Expand,
 } from "../icons";
 import { cn } from "../utils";
 import { formatVideoTime } from "./utils";
 import { PlayerState, YoutubePlayerInstance } from "./types";
+import ReactDOM from "react-dom";
+import YoutubePlayer from "./youtubePlayer";
 
-type Props = ReturnType<typeof mapState> & AllActions;
+interface OuterProps {
+  galleryPlayer?: HTMLDivElement;
+}
+
+type Props = ReturnType<typeof mapState> & AllActions & OuterProps;
 
 class Player extends React.Component<Props> {
   interval: NodeJS.Timeout | undefined;
-
   state = {
     duration: 0,
     currentTime: 0,
-    isVideoShown: true,
     volume: 50,
     isMuted: false,
+    isVideoShown: true,
+    isTheatreMode: false,
   };
   player: YoutubePlayerInstance | undefined;
 
@@ -82,6 +89,40 @@ class Player extends React.Component<Props> {
     this.setState({ isMuted: false });
   };
 
+  renderYoutubePlayer = () => {
+    const { itemBeingPlayed, playNextTrack } = this.props;
+    return (
+      <div
+        className={cn({
+          "youtube__player--hidden": !this.state.isVideoShown,
+          "theater-player": this.state.isVideoShown && this.state.isTheatreMode,
+          youtube__player: !this.state.isTheatreMode,
+        })}
+      >
+        {itemBeingPlayed && itemBeingPlayed.videoId && (
+          <YoutubePlayer
+            videoId={itemBeingPlayed.videoId}
+            onVideoEn={playNextTrack}
+            onPlayerReady={(player) => (this.player = player)}
+          />
+        )}
+      </div>
+    );
+  };
+
+  createYoutubePlayer = () => {
+    if (
+      this.props.galleryPlayer &&
+      this.state.isTheatreMode &&
+      this.state.isVideoShown
+    )
+      return ReactDOM.createPortal(
+        this.renderYoutubePlayer(),
+        this.props.galleryPlayer
+      );
+    else return this.renderYoutubePlayer();
+  };
+
   render() {
     const { itemBeingPlayed, playNextTrack, playPreviousTrack } = this.props;
     let trackWidth;
@@ -108,20 +149,7 @@ class Player extends React.Component<Props> {
             </div>
           </div>
         </div>
-        <div
-          className={cn({
-            youtube__player: true,
-            "youtube__player--hidden": !this.state.isVideoShown,
-          })}
-        >
-          {itemBeingPlayed && itemBeingPlayed.videoId && (
-            <YoutubePlayer
-              videoId={itemBeingPlayed.videoId}
-              onVideoEn={playNextTrack}
-              onPlayerReady={(player) => (this.player = player)}
-            />
-          )}
-        </div>
+        {this.createYoutubePlayer()}
         <div className="player__trackInfo__container">
           {itemBeingPlayed && (
             <>
@@ -151,6 +179,18 @@ class Player extends React.Component<Props> {
           <Forward className="icon forward-icon" onClick={playNextTrack} />
         </div>
         <div className="player__rightPart__container">
+          {this.state.isTheatreMode ? (
+            <Collapse
+              className="icon volume-icon"
+              onClick={() => this.setState({isTheatreMode: false})}
+            />
+          ) : (
+            <Expand
+              className="icon volume-icon"
+              onClick={() => this.setState({isTheatreMode: true})}
+            />
+          )}
+
           <Youtube
             className="icon volume-icon"
             onClick={() =>

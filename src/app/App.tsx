@@ -11,12 +11,12 @@ import Header from "./header";
 import DndAvatar from "./dragAndDrop/DndAvatar";
 import firebaseApi from "./api/firebase";
 import * as ids from "./testId";
-import Breadcrumps from "./gallery/Breadcrumps";
 
 type Props = ReturnType<typeof mapState> & AllActions;
 
 const App = (props: Props) => {
   const [isLoading, setIsLoading] = React.useState(true);
+  const [ref, setRef] = React.useState<HTMLDivElement | undefined>(undefined);
   const { setItems } = props;
   useEffect(() => {
     firebaseApi.load().then((board) => {
@@ -62,9 +62,11 @@ const App = (props: Props) => {
         className="page-body"
         onMouseEnter={() => props.setCardDragAvatar("big")}
       >
+        <div ref={s => s && setRef(s)}></div>
+        
         <Gallery isSidebarVisible={props.isSidebarVisible} />
       </div>
-      <Player />
+      <Player galleryPlayer={ref} />
       <DndAvatar />
     </div>
   );

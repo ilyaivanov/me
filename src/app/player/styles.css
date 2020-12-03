@@ -164,8 +164,11 @@
 
 .youtube__player {
   position: fixed;
+  z-index: 100;
   bottom: 80px;
   right: 20px;
+  height: 150px;
+  width: 400px;
   opacity: 1;
   transform: translate3d(0, 0, 0);
   transition: transform 400ms, opacity 400ms;
@@ -175,4 +178,11 @@
   pointer-events: none;
   opacity: 0;
   transform: translate3d(0, 10px, 0);
+}
+
+.theater-player > div {
+  height: calc((9 / 16) * 100vw);
+  max-height: calc(100vh - 169px);
+  min-height: 480px;
+  width: 100%;
 }
