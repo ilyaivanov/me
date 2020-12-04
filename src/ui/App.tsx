@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import "./App.css";
 import "./colors.css";
-import { connect } from "react-redux";
-import { cn } from "./utils";
-import Sidebar from "../ui/sidebar";
-import Gallery from "../ui/gallery";
-import Player from "../ui/player";
-import Header from "../ui/header";
-import DndAvatar from "../ui/dragAvatar";
-import firebaseApi from "./api/firebase";
-import * as ids from "../ui/testId";
-import { actions } from "./state";
+import { cn } from ".";
+import Sidebar from "./sidebar";
+import Gallery from "./gallery";
+import Player from "./player";
+import Header from "./header";
+import DndAvatar from "./dragAvatar";
+import firebaseApi from "../api/firebase";
+import * as ids from "./testId";
+import { actions } from "../domain";
 
 type Props = ReturnType<typeof mapState>;
 

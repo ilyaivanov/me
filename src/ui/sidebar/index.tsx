@@ -1,8 +1,8 @@
 import React from "react";
 import "./styles.css";
-import { cn } from "../../app/utils";
+import { cn } from "../";
 import { Chevron, Edit, Plus, Times } from "../icons";
-import { actions, selectors } from "../../app/state";
+import { actions, selectors } from "../../domain";
 import { connect } from "react-redux";
 import { sidebar as ids } from "../testId";
 
@@ -132,10 +132,11 @@ class Sidebar extends React.Component<SidebarProps> {
   render() {
     //TODO: consider extract this heavy-duty operations into selectors
     // and maybe try to see if using reselect has any benefits
-    const rows = selectors.traverseOpenNodes(this.props.items, "HOME", (item, level) => ({
-      item,
-      level,
-    }))
+    const rows = selectors
+      .traverseOpenNodes(this.props.items, "HOME", (item, level) => ({
+        item,
+        level,
+      }))
       .filter(({ item }) => item.itemType === "folder")
       .map(this.renderRow);
     return (

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { actions } from "../../app/state";
+import { actions } from "../../domain";
 import { gallery as ids } from "../testId";
 import Card from "../gallery/Card";
 import "./dnd.css";

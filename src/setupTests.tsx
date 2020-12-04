@@ -5,22 +5,22 @@
 import "@testing-library/jest-dom";
 import React from "react";
 
-jest.mock("./app/player/youtubePlayer", () => ({ videoId }: any) => (
+jest.mock("./ui/player/youtubePlayer", () => ({ videoId }: any) => (
   <div data-testid={"mocked-youtube-player"}>{videoId}</div>
 ));
 
-jest.mock("./app/api/youtubeRequest", () => ({
+jest.mock("./api/youtubeRequest", () => ({
   findYoutubeVideos: jest.fn(),
   fetchPlaylistVideos: jest.fn(),
 }));
 
-jest.mock("./app/api/firebase", () => ({
+jest.mock("./api/firebase", () => ({
   save: jest.fn(),
   load: jest.fn(),
   auth: jest.fn(),
 }));
 
-jest.mock("./app/utils/createId", () => ({
+jest.mock("./domain/createId", () => ({
   createId: jest.fn(),
 }));
 

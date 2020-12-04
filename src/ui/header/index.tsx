@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { actions } from "../../app/state";
+import { actions } from "../../domain";
 import { header as ids } from "../testId";
-import { searchVideos } from "../../app/api/searchVideos";
+import { searchVideos } from "../../api/searchVideos";
 import { Bars, Fill, Search } from "../icons";
 import "./styles.css";
 import logo from "./logo.png";

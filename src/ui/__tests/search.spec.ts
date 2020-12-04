@@ -1,7 +1,7 @@
 import { header, gallery, sidebar } from "./helpers/testApp";
 import renderTestApp from "./helpers/renderTestApp";
-import { fetchPlaylistVideos, findYoutubeVideos } from "../api/youtubeRequest";
-import firebaseApi from "../api/firebase";
+import { fetchPlaylistVideos, findYoutubeVideos } from "../../api/youtubeRequest";
+import firebaseApi from "../../api/firebase";
 import { createEmptyItems, createItemsBasedOnStructure } from "./helpers/itemsBuilder";
 
 const sampleYoutubeResponse = {

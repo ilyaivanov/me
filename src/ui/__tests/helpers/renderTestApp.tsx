@@ -2,9 +2,9 @@ import React from "react";
 import { Provider } from "react-redux";
 import { render } from "@testing-library/react";
 import App from "../../App";
-import firebaseApi from "../../api/firebase";
+import firebaseApi from "../../../api/firebase";
 import { header } from "./testApp";
-import { store, actions } from "../../state";
+import { store, actions } from "../../../domain";
 
 const renderTestApp = () => {
   render(

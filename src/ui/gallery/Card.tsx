@@ -1,10 +1,10 @@
 import React from "react";
 import { Play, Pause, Chevron, Arrow } from "../icons";
 import { connect } from "react-redux";
-import { cn } from "../../app/utils";
+import { cn } from "../";
 import { gallery as ids } from "../testId";
-import { loadPlaylistVideos } from "../../app/api/searchVideos";
-import { actions, selectors } from "../../app/state";
+import { loadPlaylistVideos } from "../../api/searchVideos";
+import { actions, selectors } from "../../domain";
 
 interface OuterProps {
   item: Item;

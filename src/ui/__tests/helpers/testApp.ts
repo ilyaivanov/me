@@ -7,7 +7,7 @@ import {
   getAllByAltText,
 } from "@testing-library/react";
 
-import * as ids from "../../../ui/testId";
+import * as ids from "../../testId";
 
 export const header = {
   enterSearchTerm(term: string) {
@@ -147,6 +147,7 @@ export const gallery = new Gallery();
 
 class Player {
   getVideoIdBeingPlayed = () => {
+    const elem = screen.getByTestId(ids.player.mockedYoutubePlayer);
     return screen.getByTestId(ids.player.mockedYoutubePlayer).innerHTML;
   };
 }

@@ -5,7 +5,7 @@ import {
   applyMiddleware,
   Store,
 } from "redux";
-import { createId } from "../utils";
+import { createId } from "./createId";
 import { drop, setItemOnPlaceOf } from "./dndHelpers";
 import { createActionCreators, createReducer } from "./reduxInfra";
 import { findParentId, getPreviewItemsForFolder } from "./selectors";

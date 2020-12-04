@@ -1,6 +1,6 @@
 import { prepareLoadedTestApp } from "./helpers/renderTestApp";
 import { gallery, player, sidebar } from "./helpers/testApp";
-import { actions } from "../state";
+import { actions } from "../../domain";
 import { createItemsBasedOnStructure } from "./helpers/itemsBuilder";
 
 const testData = createItemsBasedOnStructure(`
@@ -9,7 +9,6 @@ const testData = createItemsBasedOnStructure(`
     video playground12
 `);
 
-it("opening a folder and playing a video should play that video id", async () => {
   await prepareLoadedTestApp(testData);
   sidebar.focusOnItem("playground1");
   gallery.playItem("video playground11");
