@@ -19,6 +19,7 @@ export const createReducer = <T>(
   if (!state) return { ...initialState };
   else {
     const actionDefinition = actionDefinitions[action.type];
+    if (!actionDefinition) return state;
     const actionHandlerResult = actionDefinition(
       action.payload,
       action.extraPayload
@@ -28,6 +29,6 @@ export const createReducer = <T>(
         ? actionHandlerResult(state)
         : actionHandlerResult;
 
-    return Object.assign(state, assignedVal);
+    return Object.assign({}, state, assignedVal);
   }
 };

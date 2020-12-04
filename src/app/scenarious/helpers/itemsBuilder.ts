@@ -1,4 +1,4 @@
-import { Item, NodesContainer } from "../../state";
+import { Item, NodesContainer } from "../../state/store";
 
 const empty: NodesContainer = {
   HOME: {

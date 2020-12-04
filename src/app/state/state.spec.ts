@@ -1,5 +1,5 @@
-import { Item } from ".";
-import { store, actions } from "./newStore";
+import { Item } from "./store";
+import { store, actions } from "./store";
 
 describe("Domain specs", () => {
   beforeEach(actions.reset);

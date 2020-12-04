@@ -1,13 +1,13 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { render } from "@testing-library/react";
-import { createMediaExplorerStore, NodesContainer } from "../../state";
 import App from "../../App";
 import firebaseApi from "../../api/firebase";
 import { header } from "./testApp";
+import { store, actions } from "../../state/store";
+import { NodesContainer } from "../../state/store";
 
 const renderTestApp = () => {
-  const store = createMediaExplorerStore();
   render(
     <Provider store={store}>
       <App />
@@ -17,6 +17,7 @@ const renderTestApp = () => {
 };
 
 export const prepareLoadedTestApp = async (items: NodesContainer) => {
+  actions.reset();
   (firebaseApi.load as jest.Mock).mockResolvedValue(items);
   const store = renderTestApp();
   await header.waitForPageRender();

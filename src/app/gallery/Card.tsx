@@ -1,19 +1,20 @@
 import React from "react";
 import { Play, Pause, Chevron, Arrow } from "../icons";
-import { allActions, Item, AllActions, RootState } from "../state";
+import { Item } from "../state/store";
 import { connect } from "react-redux";
 import { getPreviewItemsForFolder, traverseAllNodes } from "../state/selectors";
 import { cn } from "../utils";
 import { gallery as ids } from "../testId";
 import { loadPlaylistVideos } from "../api/searchVideos";
-import { onSubtracksScroll } from "../state/actions";
+import { onSubtracksScroll } from "../state/operations";
+import { MyState, actions } from "../state/store";
 
 interface OuterProps {
   item: Item;
   isPlaying?: boolean;
   width?: string;
 }
-type Props = OuterProps & AllActions & ReturnType<typeof mapState>;
+type Props = OuterProps & ReturnType<typeof mapState>;
 
 class Card extends React.Component<Props> {
   renderItemPreview = () => {
@@ -77,7 +78,7 @@ class Card extends React.Component<Props> {
 
   onPlayClick = () => {
     const { item } = this.props;
-    this.props.playItem(item.id);
+    actions.playItem(item.id);
   };
 
   onMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -87,7 +88,11 @@ class Card extends React.Component<Props> {
       //if Card is open I want to extract height of the image, which is closed by overflow
       itemOffsets.y -= rect.width * 0.5625;
     }
-    this.props.onMouseDownForCard(this.props.item.id, rect, itemOffsets, "big");
+    actions.mouseDown(this.props.item.id, {
+      elementRect: rect,
+      itemOffsets,
+      dragAvatarType: "big",
+    });
   };
 
   onMouseEnter = () => {
@@ -95,8 +100,8 @@ class Card extends React.Component<Props> {
       this.props.dragState.cardDraggedId &&
       this.props.item.id !== this.props.dragState.cardDraggedId
     ) {
-      this.props.setCardDestination(this.props.item.id, "gallery");
-      this.props.setCardDragAvatar("big");
+      actions.setCardDestination(this.props.item.id, "gallery");
+      actions.setCardDragAvatarType("big");
     }
   };
   onMouseLeave = () => {
@@ -104,7 +109,7 @@ class Card extends React.Component<Props> {
       this.props.dragState.cardDraggedId &&
       this.props.item.id !== this.props.dragState.cardDraggedId
     ) {
-      this.props.setCardDestination("", undefined);
+      actions.setCardDestination("", undefined);
     }
   };
 
@@ -114,8 +119,8 @@ class Card extends React.Component<Props> {
       this.props.dragState.cardDraggedId !== this.props.item.id &&
       item.id !== this.props.dragState.cardDraggedId
     ) {
-      this.props.setCardDestination(item.id, "gallery");
-      this.props.setCardDragAvatar("small");
+      actions.setCardDestination(item.id, "gallery");
+      actions.setCardDragAvatarType("small");
     }
   };
 
@@ -124,21 +129,20 @@ class Card extends React.Component<Props> {
       this.props.dragState.cardDraggedId &&
       item.id !== this.props.dragState.cardDraggedId
     ) {
-      this.props.setCardDestination("", undefined);
+      actions.setCardDestination("", undefined);
     }
   };
 
   onSubtrackMouseDown = (item: Item) => {
     //Same as Sidebar handler
-    this.props.onMouseDownForCard(
-      item.id,
-      { width: 200 } as any,
-      {
+    actions.mouseDown(item.id, {
+      dragAvatarType: "small",
+      itemOffsets: {
         x: 100,
         y: 100,
       },
-      "small"
-    );
+      elementRect: { width: 200 } as any,
+    });
   };
 
   renderChildTrack = (item: Item) => {
@@ -174,7 +178,7 @@ class Card extends React.Component<Props> {
         onMouseDown={() => this.onSubtrackMouseDown(item)}
       >
         <Play
-          onClick={() => this.props.playItem(item.id)}
+          onClick={() => actions.playItem(item.id)}
           className="icon subtrack-play-icon"
         />
         <img src={image} alt="" />
@@ -185,7 +189,7 @@ class Card extends React.Component<Props> {
         {item.itemType === "folder" && (
           <Arrow
             title={"Fooo"}
-            onClick={() => this.props.focusNode(item.id)}
+            onClick={() => actions.focusNode(item.id)}
             className={"icon subtrack-arrow-icon"}
           />
         )}
@@ -228,7 +232,7 @@ class Card extends React.Component<Props> {
             "subtracks-container": true,
             "subtracks-container-closed": !this.props.item.isOpenInGallery,
           })}
-          onScroll={(e) => onSubtracksScroll(e, item, this.props)}
+          onScroll={(e) => onSubtracksScroll(e, item)}
         >
           {this.props.childItems.map(this.renderChildTrack)}
           {(item.youtubePlaylistNextPageId || item.isLoadingYoutubePlaylist) &&
@@ -239,7 +243,7 @@ class Card extends React.Component<Props> {
           <Chevron
             data-testid={ids.expandCard}
             onClick={() => {
-              this.props.changeNode(item.id, {
+              actions.changeItem(item.id, {
                 isOpenInGallery: !item.isOpenInGallery,
               });
 
@@ -248,17 +252,17 @@ class Card extends React.Component<Props> {
                 !item.isLoadingYoutubePlaylist &&
                 item.children.length === 0
               ) {
-                this.props.changeNode(item.id, {
+                actions.changeItem(item.id, {
                   isLoadingYoutubePlaylist: true,
                 });
 
                 loadPlaylistVideos(item.youtubePlaylistId).then((response) => {
-                  this.props.changeNode(item.id, {
+                  actions.changeItem(item.id, {
                     isLoadingYoutubePlaylist: false,
                     youtubePlaylistNextPageId: response.nextPageToken,
                   });
 
-                  this.props.setItemChildren(item.id, response.items);
+                  actions.replaceChildren(item.id, response.items);
                 });
               }
             }}
@@ -270,7 +274,7 @@ class Card extends React.Component<Props> {
         )}
         {item.itemType === "folder" && (
           <Arrow
-            onClick={() => this.props.focusNode(this.props.item.id)}
+            onClick={() => actions.focusNode(this.props.item.id)}
             className={"icon card-arrow-icon"}
           />
         )}
@@ -291,7 +295,7 @@ class Card extends React.Component<Props> {
     );
   }
 }
-const mapState = (state: RootState, props: OuterProps) => {
+const mapState = (state: MyState, props: OuterProps) => {
   const folderFirstItems =
     props.item.itemType === "folder"
       ? getPreviewItemsForFolder(state.items, props.item.id)
@@ -303,4 +307,4 @@ const mapState = (state: RootState, props: OuterProps) => {
     items: state.items,
   };
 };
-export default connect(mapState, allActions)(Card);
+export default connect(mapState)(Card);

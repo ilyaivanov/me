@@ -1,4 +1,3 @@
-import { createMediaExplorerStore } from "../state";
 import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import React from "react";
@@ -7,9 +6,9 @@ import { header, sidebar, gallery } from "./helpers/testApp";
 import { createId } from "../utils";
 import { prepareLoadedTestApp } from "./helpers/renderTestApp";
 import { createItemsBasedOnStructure } from "./helpers/itemsBuilder";
+import { actions, store } from "../state/store";
 
 const renderSidebar = () => {
-  const store = createMediaExplorerStore();
   render(
     <Provider store={store}>
       <Sidebar />
@@ -25,6 +24,10 @@ const testData = createItemsBasedOnStructure(`
 `);
 
 describe("having a sidebar when pressing on a Playground folder", () => {
+  beforeEach(() => {
+    actions.reset();
+  });
+
   it("Playground is set to focus", async () => {
     await prepareLoadedTestApp(testData);
     expect(sidebar.getRow("playground1")).not.toHaveClass("focused");

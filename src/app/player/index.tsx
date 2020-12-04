@@ -1,5 +1,4 @@
 import React from "react";
-import { AllActions, allActions, RootState } from "../state";
 import { connect } from "react-redux";
 import "./styles.css";
 import {
@@ -19,12 +18,13 @@ import { formatVideoTime } from "./utils";
 import { PlayerState, YoutubePlayerInstance } from "./types";
 import ReactDOM from "react-dom";
 import YoutubePlayer from "./youtubePlayer";
+import { actions, MyState } from "../state/store";
 
 interface OuterProps {
   galleryPlayer?: HTMLDivElement;
 }
 
-type Props = ReturnType<typeof mapState> & AllActions & OuterProps;
+type Props = ReturnType<typeof mapState> & OuterProps;
 
 class Player extends React.Component<Props> {
   interval: NodeJS.Timeout | undefined;
@@ -90,19 +90,20 @@ class Player extends React.Component<Props> {
   };
 
   renderYoutubePlayer = () => {
-    const { itemBeingPlayed, playNextTrack } = this.props;
+    const { itemBeingPlayed } = this.props;
     return (
       <div
         className={cn({
           "youtube__player--hidden": !this.state.isVideoShown,
           "theater-player": this.state.isVideoShown && this.state.isTheatreMode,
-          youtube__player: !this.state.isTheatreMode || !this.state.isVideoShown,
+          youtube__player:
+            !this.state.isTheatreMode || !this.state.isVideoShown,
         })}
       >
         {itemBeingPlayed && itemBeingPlayed.videoId && (
           <YoutubePlayer
             videoId={itemBeingPlayed.videoId}
-            onVideoEn={playNextTrack}
+            onVideoEn={() => actions.playNextTrack()}
             onPlayerReady={(player) => (this.player = player)}
           />
         )}
@@ -124,7 +125,7 @@ class Player extends React.Component<Props> {
   };
 
   render() {
-    const { itemBeingPlayed, playNextTrack, playPreviousTrack } = this.props;
+    const { itemBeingPlayed } = this.props;
     let trackWidth;
     if (this.state.duration)
       trackWidth = (this.state.currentTime / this.state.duration) * 100;
@@ -159,7 +160,10 @@ class Player extends React.Component<Props> {
           )}
         </div>
         <div className="player__buttons__container">
-          <Forward className="icon backward-icon" onClick={playPreviousTrack} />
+          <Forward
+            className="icon backward-icon"
+            onClick={() => actions.playPreviousTrack()}
+          />
           {itemBeingPlayed &&
           this.player?.getPlayerState() === PlayerState.playing ? (
             <Pause
@@ -176,18 +180,21 @@ class Player extends React.Component<Props> {
               }}
             />
           )}
-          <Forward className="icon forward-icon" onClick={playNextTrack} />
+          <Forward
+            className="icon forward-icon"
+            onClick={() => actions.playNextTrack()}
+          />
         </div>
         <div className="player__rightPart__container">
           {this.state.isTheatreMode ? (
             <Collapse
               className="icon volume-icon"
-              onClick={() => this.setState({isTheatreMode: false})}
+              onClick={() => this.setState({ isTheatreMode: false })}
             />
           ) : (
             <Expand
               className="icon volume-icon"
-              onClick={() => this.setState({isTheatreMode: true})}
+              onClick={() => this.setState({ isTheatreMode: true })}
             />
           )}
 
@@ -272,7 +279,7 @@ class TrackInfoViz extends React.PureComponent<TrackInfoVizProps> {
   }
 }
 
-const mapState = (state: RootState) => {
+const mapState = (state: MyState) => {
   const item = state.itemIdBeingPlayed
     ? state.items[state.itemIdBeingPlayed]
     : undefined;
@@ -282,4 +289,4 @@ const mapState = (state: RootState) => {
   };
 };
 
-export default connect(mapState, allActions)(Player);
+export default connect(mapState)(Player);

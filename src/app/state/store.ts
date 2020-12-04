@@ -1,16 +1,40 @@
-import { bindActionCreators, createStore, Store } from "redux";
 import {
-  assertUnreachable,
-  ColorScheme,
-  DragArea,
-  DragAvatarView,
-  Item,
-  NodesContainer,
-  SearchState,
-} from ".";
+  bindActionCreators,
+  compose,
+  createStore,
+  applyMiddleware,
+  Store,
+} from "redux";
+import { createId } from "../utils";
 import { drop, setItemOnPlaceOf } from "./dndHelpers";
 import { createActionCreators, createReducer } from "./reduxInfra";
 import { findParentId, getPreviewItemsForFolder } from "./selectors";
+import syncingMiddleware from "./syncingMiddleware";
+
+export interface Item {
+  id: string;
+  itemType: "folder" | "video";
+  title: string;
+  children: string[];
+
+  videoId?: string;
+  image?: string;
+  isOpenFromSidebar?: boolean;
+  isOpenInGallery?: boolean;
+
+  youtubePlaylistId?: string;
+  youtubePlaylistNextPageId?: string;
+  isLoadingYoutubePlaylist?: boolean;
+}
+export type NodesContainer = {
+  [key: string]: Item;
+};
+
+export type SearchState = { stateType: "loading" | "done"; term: string };
+
+export type DragArea = "sidebar" | "gallery" | "breadcrump";
+export type ColorScheme = "dark" | "light";
+export type DragAvatarView = "big" | "small";
 
 const initialState = {
   items: {
@@ -45,27 +69,27 @@ const initialState = {
   colorScheme: "dark" as ColorScheme,
 };
 
-type State = typeof initialState;
+export type MyState = typeof initialState;
 
 const actionHandlers = {
-  focusNode: (nodeFocusedId: string): Partial<State> => ({
+  focusNode: (nodeFocusedId: string): Partial<MyState> => ({
     nodeFocusedId,
   }),
-  toggleSodebar: (isSidebarVisible: boolean): Partial<State> => ({
-    isSidebarVisible,
+  toggleSidebar: () => (state: MyState): Partial<MyState> => ({
+    isSidebarVisible: !state.isSidebarVisible,
   }),
-  setSearchState: (searchState: SearchState): Partial<State> => ({
+  setSearchState: (searchState: SearchState): Partial<MyState> => ({
     searchState,
   }),
-  setColorScheme: (colorScheme: ColorScheme): Partial<State> => ({
+  setColorScheme: (colorScheme: ColorScheme): Partial<MyState> => ({
     colorScheme,
   }),
-  setItems: (items: NodesContainer): Partial<State> => ({
+  setItems: (items: NodesContainer): Partial<MyState> => ({
     items,
   }),
   replaceChildren: (parentId: string, newChildren: Item[]) => (
-    state: State
-  ): Partial<State> => {
+    state: MyState
+  ): Partial<MyState> => {
     const items = {
       ...state.items,
     };
@@ -79,8 +103,8 @@ const actionHandlers = {
     return { items };
   },
   appendChildren: (parentId: string, newChildren: Item[]) => (
-    state: State
-  ): Partial<State> => {
+    state: MyState
+  ): Partial<MyState> => {
     const items = {
       ...state.items,
     };
@@ -95,8 +119,8 @@ const actionHandlers = {
   },
 
   changeItem: (itemId: string, itemChange: Partial<Item>) => (
-    state: State
-  ): Partial<State> => {
+    state: MyState
+  ): Partial<MyState> => {
     return {
       items: {
         ...state.items,
@@ -108,7 +132,7 @@ const actionHandlers = {
     };
   },
 
-  removeItem: (itemId: string) => (state: State): Partial<State> => {
+  removeItem: (itemId: string) => (state: MyState): Partial<MyState> => {
     const parent = findParentId(state.items, itemId);
     const copy = { ...state.items };
     copy[parent] = {
@@ -121,7 +145,9 @@ const actionHandlers = {
     };
   },
 
-  createNewFolder: (itemId: string) => (state: State): Partial<State> => {
+  createNewFolder: () => (state: MyState): Partial<MyState> => {
+    //TODO: think about this side effect
+    const itemId = createId();
     const chil = state.items["HOME"].children.concat([itemId]);
     return {
       ...state,
@@ -142,7 +168,7 @@ const actionHandlers = {
   },
 
   //PLAYER slice (controls only itemIdBeingPlayed, but acess items)
-  playItem: (itemId: string) => (state: State): Partial<State> => {
+  playItem: (itemId: string) => (state: MyState): Partial<MyState> => {
     let id;
 
     if (state.items[itemId].itemType === "folder") {
@@ -157,7 +183,7 @@ const actionHandlers = {
       itemIdBeingPlayed: id,
     };
   },
-  playNextTrack: () => (state: State): Partial<State> => {
+  playNextTrack: () => (state: MyState): Partial<MyState> => {
     if (state.itemIdBeingPlayed) {
       const parent = findParentId(state.items, state.itemIdBeingPlayed);
       const context = state.items[parent];
@@ -169,7 +195,7 @@ const actionHandlers = {
     }
     return {};
   },
-  playPreviousTrack: () => (state: State): Partial<State> => {
+  playPreviousTrack: () => (state: MyState): Partial<MyState> => {
     if (state.itemIdBeingPlayed) {
       const parent = findParentId(state.items, state.itemIdBeingPlayed);
       const context = state.items[parent];
@@ -185,8 +211,8 @@ const actionHandlers = {
 
   //Dnd, controls only dragState
   setCardDragAvatarType: (dragAvatarType: DragAvatarView) => (
-    state: State
-  ): Partial<State> => ({
+    state: MyState
+  ): Partial<MyState> => ({
     dragState: {
       ...state.dragState,
       dragAvatarType,
@@ -211,7 +237,7 @@ const actionHandlers = {
       dragAvatarType: downInfo.dragAvatarType,
     },
   }),
-  startDragging: () => (state: State) => ({
+  startDragging: () => (state: MyState) => ({
     dragState: {
       ...state.dragState,
       isDragging: true,
@@ -219,7 +245,7 @@ const actionHandlers = {
   }),
 
   setCardDestination: (itemId: string, dragArea: DragArea | undefined) => (
-    state: State
+    state: MyState
   ) => ({
     dragState: {
       ...state.dragState,
@@ -227,7 +253,7 @@ const actionHandlers = {
       dragArea: dragArea,
     },
   }),
-  mouseUp: () => (state: State) => {
+  mouseUp: () => (state: MyState) => {
     const dragState = state.dragState;
     let items;
     const dragArea = dragState.dragArea;
@@ -265,29 +291,30 @@ const actionHandlers = {
     };
   },
 
-  reset: (): Partial<State> => ({
+  reset: (): Partial<MyState> => ({
     ...initialState,
   }),
 };
+const composeEnhancers: typeof compose =
+  // @ts-ignore
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export const createMyStore = () => {
-  const store = createStore(createReducer(initialState, actionHandlers));
+  const store = createStore(
+    createReducer(initialState, actionHandlers),
+    //@ts-expect-error
+    composeEnhancers(applyMiddleware(syncingMiddleware))
+  );
   return store;
 };
 
-export const store: Store<State, any> = createMyStore();
-
-// export const loadNewQuote = () => {
-//   actions.setIsLoading(true);
-//   return fetch("https://uselessfacts.jsph.pl/random.json?language=en")
-//     .then((response) => response.json())
-//     .then((res) => {
-//       actions.setQuote(res.text);
-//       actions.setIsLoading(false);
-//     });
-// };
+export const store: Store<MyState, any> = createMyStore();
 
 export const actions = {
   ...bindActionCreators(createActionCreators(actionHandlers), store.dispatch),
   //   loadNewQuote,
 };
+
+export function assertUnreachable(x: never): never {
+  throw new Error("Didn't expect to get here for type value " + x);
+}

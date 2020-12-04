@@ -1,10 +1,10 @@
 import { loadPlaylistVideos } from "../api/searchVideos";
-import { AllActions, Item } from "./index";
+import { Item } from "./store";
+import { actions } from "./store";
 
 export const onSubtracksScroll = (
   e: React.UIEvent<HTMLDivElement, UIEvent>,
-  item: Item,
-  actions: AllActions
+  item: Item
 ) => {
   if (item.youtubePlaylistNextPageId && !item.isLoadingYoutubePlaylist) {
     const el = e.currentTarget;
@@ -14,23 +14,22 @@ export const onSubtracksScroll = (
       LOADING_INDICATOR_HEIGHT
     ) {
       if (item.youtubePlaylistId) {
-        actions.changeNode(item.id, {
+        actions.changeItem(item.id, {
           isLoadingYoutubePlaylist: true,
         });
         loadPlaylistVideos(
           item.youtubePlaylistId,
           item.youtubePlaylistNextPageId
         ).then((response) => {
-          actions.changeNode(item.id, {
+          actions.changeItem(item.id, {
             isLoadingYoutubePlaylist: false,
             youtubePlaylistNextPageId: response.nextPageToken,
           });
 
-          actions.appendItemChildren(item.id, response.items);
+          actions.appendChildren(item.id, response.items);
         });
       }
-    }else {
-
+    } else {
     }
   }
 };

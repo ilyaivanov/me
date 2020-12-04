@@ -1,12 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Chevron } from "../icons";
-import { AllActions, allActions, Item, RootState } from "../state";
+import { Item } from "../state/store";
+import { actions, MyState } from "../state/store";
 import { findParentId } from "../state/selectors";
 import { cn } from "../utils";
 import "./Breadcrumps.css";
 
-type Props = ReturnType<typeof mapState> & AllActions;
+type Props = ReturnType<typeof mapState>;
 
 class Breadcrumps extends React.Component<Props> {
   renderOptions = (items: Item[], highlightedId: string | undefined) => (
@@ -20,27 +21,26 @@ class Breadcrumps extends React.Component<Props> {
               this.props.dragState.dragArea === "breadcrump" &&
               this.props.dragState.cardUnderId === item.id,
           })}
-          onClick={() => this.props.focusNode(item.id)}
+          onClick={() => actions.focusNode(item.id)}
           key={item.id}
           onMouseEnter={() => {
             if (this.props.dragState.cardDraggedId) {
-              this.props.setCardDestination(item.id, "breadcrump");
+              actions.setCardDestination(item.id, "breadcrump");
             }
           }}
           onMouseDown={() => {
-            this.props.onMouseDownForCard(
-              item.id,
-              { width: 200 } as any,
-              {
+            actions.mouseDown(item.id, {
+              elementRect: { width: 200 } as any,
+              itemOffsets: {
                 x: 100,
                 y: 100,
               },
-              "small"
-            );
+              dragAvatarType: "small",
+            });
           }}
           onMouseLeave={() => {
             if (this.props.dragState.cardDraggedId) {
-              this.props.setCardDestination("", undefined);
+              actions.setCardDestination("", undefined);
             }
           }}
         >
@@ -66,7 +66,7 @@ class Breadcrumps extends React.Component<Props> {
         <div
           className="breadcrumps__section"
           data-testid="breadcrump-section-text"
-          onClick={() => this.props.focusNode(item.id)}
+          onClick={() => actions.focusNode(item.id)}
         >
           {item.title}
         </div>
@@ -91,7 +91,7 @@ class Breadcrumps extends React.Component<Props> {
     return (
       <div
         className="breadcrumps"
-        onMouseEnter={() => this.props.setCardDragAvatar("small")}
+        onMouseEnter={() => actions.setCardDragAvatarType("small")}
       >
         <div className="breadcrumps__section icon-hover-container">
           <Chevron className="icon breadcrumps__arrow__icon" />
@@ -107,10 +107,10 @@ class Breadcrumps extends React.Component<Props> {
   }
 }
 
-const mapState = (state: RootState) => ({
+const mapState = (state: MyState) => ({
   focusedNodeId: state.nodeFocusedId,
   items: state.items,
   dragState: state.dragState,
 });
 
-export default connect(mapState, allActions)(Breadcrumps);
+export default connect(mapState)(Breadcrumps);

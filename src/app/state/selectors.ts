@@ -1,4 +1,4 @@
-import { Item, NodesContainer } from "./index";
+import { Item, NodesContainer } from "./store";
 
 export const traverseOpenNodes = <T>(
   items: NodesContainer,

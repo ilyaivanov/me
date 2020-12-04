@@ -1,4 +1,4 @@
-import { NodesContainer } from "../state";
+import { NodesContainer } from "../state/store";
 import firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";

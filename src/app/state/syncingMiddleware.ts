@@ -1,10 +1,10 @@
 import { Store } from "redux";
-import { Action, NodesContainer, RootState } from "./index";
+import { MyState, NodesContainer } from "./store";
 import firebaseApi from "../api/firebase";
 import debounce from "lodash/debounce";
 
-export default function middleware({ getState }: Store<RootState>) {
-  return (next: any) => (action: Action) => {
+export default function middleware({ getState }: Store<MyState>) {
+  return (next: any) => (action: any) => {
     const itemsBefore = getState().items;
     const returnValue = next(action);
     const itemsAfter = getState().items;

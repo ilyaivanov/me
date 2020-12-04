@@ -1,6 +1,6 @@
 import { prepareLoadedTestApp } from "./helpers/renderTestApp";
 import { gallery, player, sidebar } from "./helpers/testApp";
-import { allActions } from "../state";
+import { actions } from "../state/store";
 import { createItemsBasedOnStructure } from "./helpers/itemsBuilder";
 
 const testData = createItemsBasedOnStructure(`
@@ -26,7 +26,7 @@ it("when a video ends next video in that folder should be played", async () => {
   const store = await prepareLoadedTestApp(testData);
   sidebar.focusOnItem("playground1");
   gallery.playItem("video playground11");
-  store.dispatch(allActions.playNextTrack());
+  store.dispatch(actions.playNextTrack());
   expect(player.getVideoIdBeingPlayed()).toBe("video playground12 videoId");
 });
 
@@ -34,6 +34,6 @@ it("when the last video in a folder ends no new video should be played", async (
   const store = await prepareLoadedTestApp(testData);
   sidebar.focusOnItem("playground1");
   gallery.playItem("video playground12");
-  store.dispatch(allActions.playNextTrack());
+  store.dispatch(actions.playNextTrack());
   expect(player.getVideoIdBeingPlayed()).toBe("video playground12 videoId");
 });

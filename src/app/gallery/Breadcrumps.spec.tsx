@@ -2,20 +2,19 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { createItemsBasedOnStructure } from "../scenarious/helpers/itemsBuilder";
-import { allActions, createMediaExplorerStore } from "../state";
+import { store, actions } from "../state/store";
 import Breadcrumps from "./Breadcrumps";
 
 describe("Having a sidebar with some folders", () => {
-  let store: ReturnType<typeof createMediaExplorerStore>;
   beforeEach(() => {
+    actions.reset();
     const items = createItemsBasedOnStructure(`
               folder1
                   subfolder1.1
                       video 1.1.1
                   subfolder1.2
           `);
-    store = createMediaExplorerStore();
-    store.dispatch(allActions.setItems(items));
+    actions.setItems(items);
     render(
       <Provider store={store}>
         <Breadcrumps />
@@ -28,7 +27,7 @@ describe("Having a sidebar with some folders", () => {
 
   describe("focusing on folder1", () => {
     beforeEach(() => {
-      store.dispatch(allActions.focusNode("folder1"));
+      actions.focusNode("folder1");
     });
     it("adds that folder to the breadcrumps", () => {
       expect(getBreadcrumpLabels()).toEqual(["Home", "folder1 title"]);
@@ -38,7 +37,7 @@ describe("Having a sidebar with some folders", () => {
   });
 
   it("focusing on subfolder1.1 should add all intermediate folders to the breadcrumps", () => {
-    store.dispatch(allActions.focusNode("subfolder1.1"));
+    store.dispatch(actions.focusNode("subfolder1.1"));
     expect(getBreadcrumpLabels()).toEqual([
       "Home",
       "folder1 title",

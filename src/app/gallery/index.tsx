@@ -2,7 +2,8 @@ import React from "react";
 import "./index.css";
 
 import Card from "./Card";
-import { AllActions, allActions, Item, RootState } from "../state";
+import { Item } from "../state/store";
+import { MyState } from "../state/store";
 import { connect } from "react-redux";
 import { gallery as ids } from "../testId";
 import Breadcrumps from "./Breadcrumps";
@@ -10,7 +11,7 @@ import Breadcrumps from "./Breadcrumps";
 const GAP = 20;
 const minCardWidth = 240;
 
-interface Props extends ReturnType<typeof mapState>, AllActions {
+interface Props extends ReturnType<typeof mapState> {
   isSidebarVisible: boolean;
 }
 
@@ -111,7 +112,7 @@ class Gallery extends React.Component<Props> {
   }
 }
 
-function mapState(state: RootState) {
+function mapState(state: MyState) {
   return {
     items: state.items[state.nodeFocusedId].children.map(
       (id) => state.items[id]
@@ -122,4 +123,4 @@ function mapState(state: RootState) {
   };
 }
 
-export default connect(mapState, allActions)(Gallery);
+export default connect(mapState)(Gallery);

@@ -3,7 +3,6 @@ import "./App.css";
 import "./colors.css";
 import { cn } from "./utils";
 import { connect } from "react-redux";
-import { allActions, AllActions, RootState } from "./state";
 import Sidebar from "./sidebar";
 import Gallery from "./gallery";
 import Player from "./player";
@@ -11,23 +10,24 @@ import Header from "./header";
 import DndAvatar from "./dragAndDrop/DndAvatar";
 import firebaseApi from "./api/firebase";
 import * as ids from "./testId";
-import { onSubtracksScroll } from "./state/actions";
+import { onSubtracksScroll } from "./state/operations";
+import { MyState, actions } from "./state/store";
 
-type Props = ReturnType<typeof mapState> & AllActions;
+type Props = ReturnType<typeof mapState>;
 
 const App = (props: Props) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [ref, setRef] = React.useState<HTMLDivElement | undefined>(undefined);
-  const { setItems } = props;
+
   useEffect(() => {
     firebaseApi.load().then((board) => {
       if (board) {
-        setItems(board);
+        actions.setItems(board);
       }
 
       setIsLoading(false);
     });
-  }, [setItems]);
+  }, []);
 
   if (isLoading)
     return (
@@ -61,11 +61,11 @@ const App = (props: Props) => {
       </div>
       <div
         className="page-body"
-        onMouseEnter={() => props.setCardDragAvatar("big")}
-        onScroll={(e) => onSubtracksScroll(e, props.itemFocused, props)}
+        onMouseEnter={() => actions.setCardDragAvatarType("big")}
+        onScroll={(e) => onSubtracksScroll(e, props.itemFocused)}
       >
-        <div ref={s => s && setRef(s)}></div>
-        
+        <div ref={(s) => s && setRef(s)}></div>
+
         <Gallery isSidebarVisible={props.isSidebarVisible} />
       </div>
       <Player galleryPlayer={ref} />
@@ -74,11 +74,11 @@ const App = (props: Props) => {
   );
 };
 
-const mapState = (state: RootState) => ({
+const mapState = (state: MyState) => ({
   isSidebarVisible: state.isSidebarVisible,
   items: state.items,
   scheme: state.colorScheme,
   itemFocused: state.items[state.nodeFocusedId],
 });
 
-export default connect(mapState, allActions)(App);
+export default connect(mapState)(App);

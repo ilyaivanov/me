@@ -2,12 +2,13 @@ import React from "react";
 import "./styles.css";
 import { cn } from "../utils";
 import { Chevron, Edit, Plus, Times } from "../icons";
-import { AllActions, allActions, Item, RootState } from "../state";
+import { Item } from "../state/store";
+import { actions, MyState } from "../state/store";
 import { connect } from "react-redux";
 import { hasAnySubfolders, traverseOpenNodes } from "../state/selectors";
 import { sidebar as ids } from "../testId";
 
-type SidebarProps = ReturnType<typeof mapState> & AllActions;
+type SidebarProps = ReturnType<typeof mapState>;
 
 class Sidebar extends React.Component<SidebarProps> {
   state = {
@@ -25,7 +26,7 @@ class Sidebar extends React.Component<SidebarProps> {
         onClick={(e) => e.stopPropagation()}
         onKeyUp={(e) => e.key === "Enter" && this.stopRenameMode()}
         onChange={(e) => this.setState({ newNodeName: e.currentTarget.value })}
-        onMouseDown={e => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
         value={this.state.newNodeName}
       />
     ) : (
@@ -33,7 +34,7 @@ class Sidebar extends React.Component<SidebarProps> {
     );
 
   stopRenameMode = () => {
-    this.props.changeNode(this.state.nodeBeingRenamed, {
+    actions.changeItem(this.state.nodeBeingRenamed, {
       title: this.state.newNodeName,
     });
     this.setState({
@@ -50,7 +51,7 @@ class Sidebar extends React.Component<SidebarProps> {
   };
 
   arrowClicked = (item: Item) =>
-    this.props.changeNode(item.id, {
+    actions.changeItem(item.id, {
       isOpenFromSidebar: !item.isOpenFromSidebar,
     });
 
@@ -68,28 +69,27 @@ class Sidebar extends React.Component<SidebarProps> {
         })}
         title={item.title}
         style={{ paddingLeft: level * 20 }}
-        onClick={() => this.props.focusNode(item.id)}
+        onClick={() => actions.focusNode(item.id)}
         data-testid={ids.row(item.id)}
         onMouseEnter={() => {
           if (this.props.dragState.cardDraggedId) {
-            this.props.setCardDestination(item.id, "sidebar");
+            actions.setCardDestination(item.id, "sidebar");
           }
         }}
         onMouseDown={() => {
           //Same as Subtrack handler
-          this.props.onMouseDownForCard(
-            item.id,
-            { width: 200 } as any,
-            {
+          actions.mouseDown(item.id, {
+            dragAvatarType: "small",
+            elementRect: { width: 200 } as any,
+            itemOffsets: {
               x: 100,
               y: 100,
             },
-            "small"
-          );
+          });
         }}
         onMouseLeave={() => {
           if (this.props.dragState.cardDraggedId) {
-            this.props.setCardDestination("", undefined);
+            actions.setCardDestination("", undefined);
           }
         }}
       >
@@ -121,7 +121,7 @@ class Sidebar extends React.Component<SidebarProps> {
           />
           <Times
             onClick={(e) => {
-              this.props.removeItem(item.id);
+              actions.removeItem(item.id);
               e.stopPropagation();
             }}
             data-testid={ids.removeFolder(item.id)}
@@ -143,7 +143,7 @@ class Sidebar extends React.Component<SidebarProps> {
     return (
       <div
         className="sidebar-content"
-        onMouseEnter={() => this.props.setCardDragAvatar("small")}
+        onMouseEnter={() => actions.setCardDragAvatarType("small")}
       >
         <div
           className={cn({
@@ -153,15 +153,15 @@ class Sidebar extends React.Component<SidebarProps> {
               "HOME" === this.props.dragState.cardUnderId,
           })}
           data-testid={ids.row("HOME")}
-          onClick={() => this.props.focusNode("HOME")}
+          onClick={() => actions.focusNode("HOME")}
           onMouseEnter={() => {
             if (this.props.dragState.cardDraggedId) {
-              this.props.setCardDestination("HOME", "sidebar");
+              actions.setCardDestination("HOME", "sidebar");
             }
           }}
           onMouseLeave={() => {
             if (this.props.dragState.cardDraggedId) {
-              this.props.setCardDestination("", undefined);
+              actions.setCardDestination("", undefined);
             }
           }}
         >
@@ -170,7 +170,7 @@ class Sidebar extends React.Component<SidebarProps> {
         {rows}
         <Plus
           className="icon plus-icon"
-          onClick={this.props.createNewFolder}
+          onClick={actions.createNewFolder}
           data-testid={ids.addFolder}
         />
       </div>
@@ -178,10 +178,10 @@ class Sidebar extends React.Component<SidebarProps> {
   }
 }
 
-const mapState = (state: RootState) => ({
+const mapState = (state: MyState) => ({
   items: state.items,
   nodeFocusedId: state.nodeFocusedId,
   dragState: state.dragState,
 });
 
-export default connect(mapState, allActions)(Sidebar);
+export default connect(mapState)(Sidebar);

@@ -4,9 +4,8 @@ import "./index.css";
 import App from "./app/App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import { createMediaExplorerStore } from "./app/state";
+import { store } from "./app/state/store";
 
-const store = createMediaExplorerStore();
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

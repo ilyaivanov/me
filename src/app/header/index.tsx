@@ -1,5 +1,5 @@
 import React from "react";
-import { allActions, AllActions, RootState } from "../state";
+import { actions, MyState } from "../state/store";
 import { connect } from "react-redux";
 import { header as ids } from "../testId";
 import { searchVideos } from "../api/searchVideos";
@@ -7,31 +7,31 @@ import { Bars, Fill, Search } from "../icons";
 import "./styles.css";
 import logo from "./logo.png";
 
-type Props = ReturnType<typeof mapState> & AllActions;
+type Props = ReturnType<typeof mapState>;
 class Header extends React.Component<Props> {
   state = {
     searchValue: "",
   };
   onSearchRequest = () => {
-    this.props.setSearchState({
+    actions.setSearchState({
       stateType: "loading",
       term: this.state.searchValue,
     });
-    this.props.focusNode("SEARCH");
+    actions.focusNode("SEARCH");
     searchVideos(this.state.searchValue).then((response) => {
-      this.props.setSearchState({
+      actions.setSearchState({
         stateType: "done",
         term: this.state.searchValue,
       });
-      this.props.setItemChildren("SEARCH", response.items);
-      this.props.changeNode("SEARCH", {
+      actions.replaceChildren("SEARCH", response.items);
+      actions.changeItem("SEARCH", {
         youtubePlaylistNextPageId: response.nextPageToken,
       });
     });
   };
 
   toggleColorScheme = () => {
-    this.props.setColorScheme(this.props.scheme === "dark" ? "light" : "dark");
+    actions.setColorScheme(this.props.scheme === "dark" ? "light" : "dark");
   };
   render() {
     return (
@@ -39,7 +39,7 @@ class Header extends React.Component<Props> {
         <Bars
           className="icon bars-icon"
           data-testid={ids.toggleSidebarButton}
-          onClick={this.props.toggleSidebar}
+          onClick={() => actions.toggleSidebar()}
         />
         <img className="logo" src={logo} alt="" />
         <div className="search-container">
@@ -75,8 +75,8 @@ class Header extends React.Component<Props> {
   }
 }
 
-const mapState = (state: RootState) => ({
+const mapState = (state: MyState) => ({
   scheme: state.colorScheme,
 });
 
-export default connect(mapState, allActions)(Header);
+export default connect(mapState)(Header);

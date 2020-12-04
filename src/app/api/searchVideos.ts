@@ -1,4 +1,4 @@
-import { Item } from "../state";
+import { Item } from "../state/store";
 import { fetchPlaylistVideos, findYoutubeVideos } from "./youtubeRequest";
 
 export const searchVideos = (

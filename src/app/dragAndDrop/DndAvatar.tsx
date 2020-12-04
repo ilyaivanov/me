@@ -1,11 +1,11 @@
-import { allActions, AllActions, RootState } from "../state";
+import { actions, MyState } from "../state/store";
 import React from "react";
 import { gallery as ids } from "../testId";
 import { connect } from "react-redux";
 import Card from "../gallery/Card";
 import "./dnd.css";
 
-type Props = AllActions & ReturnType<typeof mapDragState>;
+type Props = ReturnType<typeof mapDragState>;
 
 class DndAvatar extends React.Component<Props> {
   state = {
@@ -22,7 +22,7 @@ class DndAvatar extends React.Component<Props> {
           movementX * movementX + movementY * movementY
         );
         if (this.distance >= 5) {
-          this.props.startDragging();
+          actions.startDragging();
         }
       }
       this.setState({ event: e });
@@ -31,7 +31,7 @@ class DndAvatar extends React.Component<Props> {
 
   onMouseUp = () => {
     this.distance = 0;
-    this.props.onMouseUp();
+    actions.mouseUp();
   };
 
   componentDidMount() {
@@ -80,8 +80,8 @@ class DndAvatar extends React.Component<Props> {
     } else return <div></div>;
   }
 }
-const mapDragState = (state: RootState) => ({
+const mapDragState = (state: MyState) => ({
   dragState: state.dragState,
   dragItem: state.items[state.dragState.cardDraggedId],
 });
-export default connect(mapDragState, allActions)(DndAvatar);
+export default connect(mapDragState)(DndAvatar);
