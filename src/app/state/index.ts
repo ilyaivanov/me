@@ -23,11 +23,11 @@ export type NodesContainer = {
   [key: string]: Item;
 };
 
-type SearchState = { stateType: "loading" | "done"; term: string };
+export type SearchState = { stateType: "loading" | "done"; term: string };
 
-type DragArea = "sidebar" | "gallery" | "breadcrump";
-type ColorScheme = "dark" | "light";
-type DragAvatarView = "big" | "small";
+export type DragArea = "sidebar" | "gallery" | "breadcrump";
+export type ColorScheme = "dark" | "light";
+export type DragAvatarView = "big" | "small";
 export const initialState = {
   isSidebarVisible: true,
   colorScheme: "dark" as ColorScheme,
@@ -190,7 +190,9 @@ const reducer = (state = initialState, action: Action): RootState => {
     });
     items[action.parentId] = {
       ...items[action.parentId],
-      children: items[action.parentId].children.concat(action.items.map((i) => i.id)),
+      children: items[action.parentId].children.concat(
+        action.items.map((i) => i.id)
+      ),
     };
     return {
       ...state,
@@ -365,6 +367,7 @@ const setCardDragAvatar = (avatarType: DragAvatarView) =>
 export const allActions = {
   toggleSidebar,
   focusNode,
+
   createNewFolder,
   removeItem,
   changeNode,
@@ -387,6 +390,6 @@ export type AllActions = typeof allActions;
 export type RootState = typeof initialState;
 export type Action = ReturnType<AllActions[keyof AllActions]>;
 
-function assertUnreachable(x: never): never {
+export function assertUnreachable(x: never): never {
   throw new Error("Didn't expect to get here for type value " + x);
 }

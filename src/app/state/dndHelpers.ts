@@ -1,4 +1,4 @@
-import { Item, NodesContainer, RootState } from "./index";
+import { Item, NodesContainer } from "./index";
 import { findParentId } from "./selectors";
 
   export const drop = (
@@ -59,16 +59,6 @@ export const setItemOnPlaceOf = (
     return drop(items, itemBeingDragged, itemToReplace, "before");
   }
 };
-
-//state helpers
-const assignItemsInState = (
-  state: RootState,
-  itemId: string,
-  mapper: (item: Item) => Partial<Item>
-) => ({
-  ...state,
-  items: assignItem(state.items, itemId, mapper),
-});
 
 const assignItem = (
   items: NodesContainer,

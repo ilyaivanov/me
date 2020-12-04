@@ -20,7 +20,10 @@ jest.mock("./app/api/firebase", () => ({
   auth: jest.fn(),
 }));
 
-
 jest.mock("./app/utils/createId", () => ({
   createId: jest.fn(),
 }));
+
+// @ts-expect-error
+// eslint-disable-next-line no-native-reassign
+fetch = jest.fn();
