@@ -1,13 +1,12 @@
 import React from "react";
 import { Play, Pause, Chevron, Arrow } from "../icons";
-import { Item } from "../state/store";
 import { connect } from "react-redux";
 import { getPreviewItemsForFolder, traverseAllNodes } from "../state/selectors";
 import { cn } from "../utils";
 import { gallery as ids } from "../testId";
 import { loadPlaylistVideos } from "../api/searchVideos";
 import { onSubtracksScroll } from "../state/operations";
-import { MyState, actions } from "../state/store";
+import { actions } from "../state/store";
 
 interface OuterProps {
   item: Item;

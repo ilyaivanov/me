@@ -1,5 +1,5 @@
 import React from "react";
-import { actions, MyState } from "../state/store";
+import { actions } from "../state/store";
 import { connect } from "react-redux";
 import { header as ids } from "../testId";
 import { searchVideos } from "../api/searchVideos";

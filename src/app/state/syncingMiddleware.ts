@@ -1,5 +1,4 @@
 import { Store } from "redux";
-import { MyState, NodesContainer } from "./store";
 import firebaseApi from "../api/firebase";
 import debounce from "lodash/debounce";
 

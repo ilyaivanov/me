@@ -1,4 +1,4 @@
-import { actions, MyState } from "../state/store";
+import { actions } from "../state/store";
 import React from "react";
 import { gallery as ids } from "../testId";
 import { connect } from "react-redux";

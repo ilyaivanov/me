@@ -1,4 +1,3 @@
-import { Item } from "./store";
 import { store, actions } from "./store";
 
 describe("Domain specs", () => {

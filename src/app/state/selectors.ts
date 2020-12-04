@@ -1,5 +1,3 @@
-import { Item, NodesContainer } from "./store";
-
 export const traverseOpenNodes = <T>(
   items: NodesContainer,
   rootKey: string,
@@ -40,14 +38,14 @@ export const traverseAllNodes = <T>(
   else return [];
 };
 
-
 //TODO: optimization, no need to traverse ALL nodes, just find first 5
 export const getPreviewItemsForFolder = (
   items: NodesContainer,
   itemId: string
 ): Item[] =>
-  traverseAllNodes(items, itemId, (item) => item)
-    .filter((item) => item.itemType === "video")
+  traverseAllNodes(items, itemId, (item) => item).filter(
+    (item) => item.itemType === "video"
+  );
 
 export const hasAnySubfolders = (items: NodesContainer, itemId: string) =>
   items[itemId].children

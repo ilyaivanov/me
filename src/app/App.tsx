@@ -11,7 +11,7 @@ import DndAvatar from "./dragAndDrop/DndAvatar";
 import firebaseApi from "./api/firebase";
 import * as ids from "./testId";
 import { onSubtracksScroll } from "./state/operations";
-import { MyState, actions } from "./state/store";
+import { actions } from "./state/store";
 
 type Props = ReturnType<typeof mapState>;
 

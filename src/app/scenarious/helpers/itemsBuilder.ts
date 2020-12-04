@@ -1,5 +1,3 @@
-import { Item, NodesContainer } from "../../state/store";
-
 const empty: NodesContainer = {
   HOME: {
     id: "HOME",

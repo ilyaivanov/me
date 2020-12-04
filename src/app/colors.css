@@ -12,6 +12,7 @@
   --hover-accent-color: yellow;
   --selected-color: rgba(123, 123, 124, 1);
   --primary-border: lightGrey;
+  --scrollbar-color: rgb(252, 117, 117);
 
   /* Icons */
   --icon-color: #575757;
@@ -42,6 +43,7 @@
   --hover-accent-color: #518056;
   --selected-color: #414141;
   --primary-border: rgba(255, 255, 255, 0.1);
+  --scrollbar-color: rgb(63, 63, 97);
 
   /* Icons */
   --icon-color: #b3b3b3;
@@ -56,36 +58,4 @@
   /* Player */
   --player-track-color: rgba(79, 79, 81, 1);
   --player-track-progress-color: red;
-}
-
-/* CSS Module for icons */
-.icon {
-  display: block;
-  color: var(--icon-color);
-  /* background-color: red; */
-}
-.icon:hover {
-  color: var(--icon-hover-color);
-}
-.icon-danger {
-  color: var(--icon-danger-color);
-}
-.icon-danger:hover {
-  color: var(--icon-danger-hover-color);
-}
-.icon-hover-container:hover .icon {
-  color: var(--icon-hover-color);
-}
-
-/* Scrollbars CSS Module */
-*::-webkit-scrollbar {
-  width: 0;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
-}
-
-*:hover::-webkit-scrollbar {
-  width: 8px;
 }

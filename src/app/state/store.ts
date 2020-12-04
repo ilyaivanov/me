@@ -11,32 +11,7 @@ import { createActionCreators, createReducer } from "./reduxInfra";
 import { findParentId, getPreviewItemsForFolder } from "./selectors";
 import syncingMiddleware from "./syncingMiddleware";
 
-export interface Item {
-  id: string;
-  itemType: "folder" | "video";
-  title: string;
-  children: string[];
-
-  videoId?: string;
-  image?: string;
-  isOpenFromSidebar?: boolean;
-  isOpenInGallery?: boolean;
-
-  youtubePlaylistId?: string;
-  youtubePlaylistNextPageId?: string;
-  isLoadingYoutubePlaylist?: boolean;
-}
-export type NodesContainer = {
-  [key: string]: Item;
-};
-
-export type SearchState = { stateType: "loading" | "done"; term: string };
-
-export type DragArea = "sidebar" | "gallery" | "breadcrump";
-export type ColorScheme = "dark" | "light";
-export type DragAvatarView = "big" | "small";
-
-const initialState = {
+const initialState: MyState = {
   items: {
     HOME: {
       id: "HOME",
@@ -50,26 +25,22 @@ const initialState = {
       title: "Search",
       children: [],
     },
-  } as NodesContainer,
+  },
   dragState: {
-    // type: "no_drag" as DragStateType,
-    // distanceTraveled: 0,
     cardDraggedId: "",
     isDragging: false,
     cardUnderId: "",
-    dragArea: undefined as DragArea | undefined,
-    dragAvatarType: "big" as DragAvatarView,
-    itemDraggedRect: undefined as DOMRect | undefined,
-    itemOffsets: undefined as { x: number; y: number } | undefined,
+    dragArea: undefined,
+    dragAvatarType: "big",
+    itemDraggedRect: undefined,
+    itemOffsets: undefined,
   },
   nodeFocusedId: "HOME",
   isSidebarVisible: true,
   itemIdBeingPlayed: "",
-  searchState: { stateType: "done", term: "" } as SearchState,
-  colorScheme: "dark" as ColorScheme,
+  searchState: { stateType: "done", term: "" },
+  colorScheme: "dark",
 };
-
-export type MyState = typeof initialState;
 
 const actionHandlers = {
   focusNode: (nodeFocusedId: string): Partial<MyState> => ({

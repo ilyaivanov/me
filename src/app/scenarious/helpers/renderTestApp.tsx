@@ -5,7 +5,6 @@ import App from "../../App";
 import firebaseApi from "../../api/firebase";
 import { header } from "./testApp";
 import { store, actions } from "../../state/store";
-import { NodesContainer } from "../../state/store";
 
 const renderTestApp = () => {
   render(

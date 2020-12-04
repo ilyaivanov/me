@@ -1,8 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Chevron } from "../icons";
-import { Item } from "../state/store";
-import { actions, MyState } from "../state/store";
+import { actions } from "../state/store";
 import { findParentId } from "../state/selectors";
 import { cn } from "../utils";
 import "./Breadcrumps.css";

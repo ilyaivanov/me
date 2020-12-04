@@ -49,3 +49,17 @@
   visibility: hidden;
   pointer-events: none;
 }
+
+
+/* Scrollbars CSS Module */
+*::-webkit-scrollbar {
+  width: 0;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-color);
+}
+
+*:hover::-webkit-scrollbar {
+  width: 8px;
+}

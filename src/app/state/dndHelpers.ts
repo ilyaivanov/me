@@ -1,4 +1,3 @@
-import { Item, NodesContainer } from "./store";
 import { findParentId } from "./selectors";
 
   export const drop = (

@@ -2,8 +2,6 @@ import React from "react";
 import "./index.css";
 
 import Card from "./Card";
-import { Item } from "../state/store";
-import { MyState } from "../state/store";
 import { connect } from "react-redux";
 import { gallery as ids } from "../testId";
 import Breadcrumps from "./Breadcrumps";
