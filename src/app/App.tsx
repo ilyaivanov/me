@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import "./colors.css";
-import { cn } from "./utils";
 import { connect } from "react-redux";
+import { cn } from "./utils";
 import Sidebar from "./sidebar";
 import Gallery from "./gallery";
 import Player from "./player";
@@ -10,8 +10,7 @@ import Header from "./header";
 import DndAvatar from "./dragAndDrop/DndAvatar";
 import firebaseApi from "./api/firebase";
 import * as ids from "./testId";
-import { onSubtracksScroll } from "./state/operations";
-import { actions } from "./state/store";
+import { actions } from "./state";
 
 type Props = ReturnType<typeof mapState>;
 
@@ -62,7 +61,7 @@ const App = (props: Props) => {
       <div
         className="page-body"
         onMouseEnter={() => actions.setCardDragAvatarType("big")}
-        onScroll={(e) => onSubtracksScroll(e, props.itemFocused)}
+        onScroll={(e) => actions.onSubtracksScroll(e, props.itemFocused)}
       >
         <div ref={(s) => s && setRef(s)}></div>
 

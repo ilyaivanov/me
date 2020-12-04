@@ -18,7 +18,7 @@ import { formatVideoTime } from "./utils";
 import { PlayerState, YoutubePlayerInstance } from "./types";
 import ReactDOM from "react-dom";
 import YoutubePlayer from "./youtubePlayer";
-import { actions } from "../state/store";
+import { actions } from "../state";
 
 interface OuterProps {
   galleryPlayer?: HTMLDivElement;

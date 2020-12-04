@@ -1,12 +1,10 @@
 import React from "react";
 import { Play, Pause, Chevron, Arrow } from "../icons";
 import { connect } from "react-redux";
-import { getPreviewItemsForFolder, traverseAllNodes } from "../state/selectors";
 import { cn } from "../utils";
 import { gallery as ids } from "../testId";
 import { loadPlaylistVideos } from "../api/searchVideos";
-import { onSubtracksScroll } from "../state/operations";
-import { actions } from "../state/store";
+import { actions, selectors } from "../state";
 
 interface OuterProps {
   item: Item;
@@ -148,7 +146,7 @@ class Card extends React.Component<Props> {
     let image;
     let videoCount;
     if (item.itemType === "folder") {
-      const allSubvideos = traverseAllNodes(
+      const allSubvideos = selectors.traverseAllNodes(
         this.props.items,
         item.id,
         (item) => item
@@ -231,7 +229,7 @@ class Card extends React.Component<Props> {
             "subtracks-container": true,
             "subtracks-container-closed": !this.props.item.isOpenInGallery,
           })}
-          onScroll={(e) => onSubtracksScroll(e, item)}
+          onScroll={(e) => actions.onSubtracksScroll(e, item)}
         >
           {this.props.childItems.map(this.renderChildTrack)}
           {(item.youtubePlaylistNextPageId || item.isLoadingYoutubePlaylist) &&
@@ -297,7 +295,7 @@ class Card extends React.Component<Props> {
 const mapState = (state: MyState, props: OuterProps) => {
   const folderFirstItems =
     props.item.itemType === "folder"
-      ? getPreviewItemsForFolder(state.items, props.item.id)
+      ? selectors.getPreviewItemsForFolder(state.items, props.item.id)
       : [];
   return {
     folderFirstItems,

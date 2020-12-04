@@ -1,8 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Chevron } from "../icons";
-import { actions } from "../state/store";
-import { findParentId } from "../state/selectors";
+import { actions, selectors } from "../state";
 import { cn } from "../utils";
 import "./Breadcrumps.css";
 
@@ -84,7 +83,7 @@ class Breadcrumps extends React.Component<Props> {
     let parentId = focusedNodeId;
     while (parentId) {
       path.push(items[parentId]);
-      parentId = findParentId(items, parentId);
+      parentId = selectors.findParentId(items, parentId);
     }
     path.reverse();
     return (

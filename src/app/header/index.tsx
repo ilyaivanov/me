@@ -1,6 +1,6 @@
 import React from "react";
-import { actions } from "../state/store";
 import { connect } from "react-redux";
+import { actions } from "../state";
 import { header as ids } from "../testId";
 import { searchVideos } from "../api/searchVideos";
 import { Bars, Fill, Search } from "../icons";

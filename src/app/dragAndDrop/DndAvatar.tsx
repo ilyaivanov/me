@@ -1,7 +1,7 @@
-import { actions } from "../state/store";
 import React from "react";
-import { gallery as ids } from "../testId";
 import { connect } from "react-redux";
+import { actions } from "../state";
+import { gallery as ids } from "../testId";
 import Card from "../gallery/Card";
 import "./dnd.css";
 

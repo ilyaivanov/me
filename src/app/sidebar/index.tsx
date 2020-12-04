@@ -2,9 +2,8 @@ import React from "react";
 import "./styles.css";
 import { cn } from "../utils";
 import { Chevron, Edit, Plus, Times } from "../icons";
-import { actions } from "../state/store";
+import { actions, selectors } from "../state";
 import { connect } from "react-redux";
-import { hasAnySubfolders, traverseOpenNodes } from "../state/selectors";
 import { sidebar as ids } from "../testId";
 
 type SidebarProps = ReturnType<typeof mapState>;
@@ -102,7 +101,7 @@ class Sidebar extends React.Component<SidebarProps> {
             data-testid={ids.rowArrow(item.id)}
             className={cn({
               "icon row-arrow": true,
-              hidden: !hasAnySubfolders(this.props.items, item.id),
+              hidden: !selectors.hasAnySubfolders(this.props.items, item.id),
               "row-arrow-open": item.isOpenFromSidebar,
             })}
           />
@@ -133,7 +132,7 @@ class Sidebar extends React.Component<SidebarProps> {
   render() {
     //TODO: consider extract this heavy-duty operations into selectors
     // and maybe try to see if using reselect has any benefits
-    const rows = traverseOpenNodes(this.props.items, "HOME", (item, level) => ({
+    const rows = selectors.traverseOpenNodes(this.props.items, "HOME", (item, level) => ({
       item,
       level,
     }))
