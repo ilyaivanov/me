@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Chevron } from "../icons";
-import { actions, selectors } from "../state";
-import { cn } from "../utils";
+import { actions, selectors } from "../../app/state";
+import { cn } from "../../app/utils";
 import "./Breadcrumps.css";
 
 type Props = ReturnType<typeof mapState>;

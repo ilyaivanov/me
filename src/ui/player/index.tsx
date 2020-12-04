@@ -13,12 +13,12 @@ import {
   Collapse,
   Expand,
 } from "../icons";
-import { cn } from "../utils";
+import { cn } from "../../app/utils";
 import { formatVideoTime } from "./utils";
 import { PlayerState, YoutubePlayerInstance } from "./types";
 import ReactDOM from "react-dom";
 import YoutubePlayer from "./youtubePlayer";
-import { actions } from "../state";
+import { actions } from "../../app/state";
 
 interface OuterProps {
   galleryPlayer?: HTMLDivElement;

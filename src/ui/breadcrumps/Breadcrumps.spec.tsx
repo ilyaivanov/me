@@ -1,9 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { createItemsBasedOnStructure } from "../scenarious/helpers/itemsBuilder";
-import { store, actions } from "../state";
-import Breadcrumps from "./Breadcrumps";
+import { createItemsBasedOnStructure } from "../../app/scenarious/helpers/itemsBuilder";
+import { store, actions } from "../../app/state";
+import Breadcrumps from ".";
 
 describe("Having a sidebar with some folders", () => {
   beforeEach(() => {

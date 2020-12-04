@@ -1,6 +1,6 @@
 import { prepareLoadedTestApp } from "./helpers/renderTestApp";
 import { gallery, player, sidebar } from "./helpers/testApp";
-import { actions } from "../state/store";
+import { actions } from "../state";
 import { createItemsBasedOnStructure } from "./helpers/itemsBuilder";
 
 const testData = createItemsBasedOnStructure(`

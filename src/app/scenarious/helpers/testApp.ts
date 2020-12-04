@@ -7,7 +7,7 @@ import {
   getAllByAltText,
 } from "@testing-library/react";
 
-import * as ids from "../../testId";
+import * as ids from "../../../ui/testId";
 
 export const header = {
   enterSearchTerm(term: string) {

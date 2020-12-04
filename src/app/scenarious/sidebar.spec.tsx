@@ -1,12 +1,12 @@
 import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import React from "react";
-import Sidebar from "../sidebar/index";
+import Sidebar from "../../ui/sidebar/index";
 import { header, sidebar, gallery } from "./helpers/testApp";
 import { createId } from "../utils";
 import { prepareLoadedTestApp } from "./helpers/renderTestApp";
 import { createItemsBasedOnStructure } from "./helpers/itemsBuilder";
-import { actions, store } from "../state/store";
+import { actions, store } from "../state";
 
 const renderSidebar = () => {
   render(

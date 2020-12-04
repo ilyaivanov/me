@@ -4,7 +4,7 @@ import { render } from "@testing-library/react";
 import App from "../../App";
 import firebaseApi from "../../api/firebase";
 import { header } from "./testApp";
-import { store, actions } from "../../state/store";
+import { store, actions } from "../../state";
 
 const renderTestApp = () => {
   render(

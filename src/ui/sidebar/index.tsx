@@ -1,8 +1,8 @@
 import React from "react";
 import "./styles.css";
-import { cn } from "../utils";
+import { cn } from "../../app/utils";
 import { Chevron, Edit, Plus, Times } from "../icons";
-import { actions, selectors } from "../state";
+import { actions, selectors } from "../../app/state";
 import { connect } from "react-redux";
 import { sidebar as ids } from "../testId";
 

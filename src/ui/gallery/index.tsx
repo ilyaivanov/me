@@ -1,10 +1,10 @@
 import React from "react";
+import { connect } from "react-redux";
 import "./index.css";
 
 import Card from "./Card";
-import { connect } from "react-redux";
 import { gallery as ids } from "../testId";
-import Breadcrumps from "./Breadcrumps";
+import Breadcrumps from "../../ui/breadcrumps";
 
 const GAP = 20;
 const minCardWidth = 240;
