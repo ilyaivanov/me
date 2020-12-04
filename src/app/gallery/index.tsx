@@ -76,13 +76,13 @@ class Gallery extends React.Component<Props> {
     );
   };
 
-  renderLoadingIndicator = () => (
+  renderLoadingIndicator = (text?: string) => (
     <div className="overlay flex-center" data-testid={ids.loadingIndicator}>
       <div className="lds-ripple">
         <div></div>
         <div></div>
       </div>
-      Searching for '{this.props.searchState.term}'...
+      {text}
     </div>
   );
 
@@ -96,9 +96,16 @@ class Gallery extends React.Component<Props> {
           data-testid={"gallery"}
         >
           {this.props.searchState.stateType === "loading"
-            ? this.renderLoadingIndicator()
+            ? this.renderLoadingIndicator(
+                `Searching for '${this.props.searchState.term}'...`
+              )
             : this.props.items.map(this.renderCard)}
         </div>
+        {this.props.itemFocused.youtubePlaylistNextPageId && (
+          <div style={{ position: "relative", minHeight: 100 }}>
+            {this.renderLoadingIndicator()}
+          </div>
+        )}
       </>
     );
   }
@@ -111,6 +118,7 @@ function mapState(state: RootState) {
     ),
     allItems: state.items,
     searchState: state.searchState,
+    itemFocused: state.items[state.nodeFocusedId],
   };
 }
 

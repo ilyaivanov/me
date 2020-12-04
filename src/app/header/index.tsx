@@ -6,7 +6,6 @@ import { searchVideos } from "../api/searchVideos";
 import { Bars, Fill, Search } from "../icons";
 import "./styles.css";
 import logo from "./logo.png";
-import Breadcrumps from "../gallery/Breadcrumps";
 
 type Props = ReturnType<typeof mapState> & AllActions;
 class Header extends React.Component<Props> {
@@ -19,12 +18,15 @@ class Header extends React.Component<Props> {
       term: this.state.searchValue,
     });
     this.props.focusNode("SEARCH");
-    searchVideos(this.state.searchValue).then((items) => {
+    searchVideos(this.state.searchValue).then((response) => {
       this.props.setSearchState({
         stateType: "done",
         term: this.state.searchValue,
       });
-      this.props.setItemChildren("SEARCH", items);
+      this.props.setItemChildren("SEARCH", response.items);
+      this.props.changeNode("SEARCH", {
+        youtubePlaylistNextPageId: response.nextPageToken,
+      });
     });
   };
 

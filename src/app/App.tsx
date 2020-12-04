@@ -11,6 +11,7 @@ import Header from "./header";
 import DndAvatar from "./dragAndDrop/DndAvatar";
 import firebaseApi from "./api/firebase";
 import * as ids from "./testId";
+import { onSubtracksScroll } from "./state/actions";
 
 type Props = ReturnType<typeof mapState> & AllActions;
 
@@ -61,6 +62,7 @@ const App = (props: Props) => {
       <div
         className="page-body"
         onMouseEnter={() => props.setCardDragAvatar("big")}
+        onScroll={(e) => onSubtracksScroll(e, props.itemFocused, props)}
       >
         <div ref={s => s && setRef(s)}></div>
         
@@ -76,6 +78,7 @@ const mapState = (state: RootState) => ({
   isSidebarVisible: state.isSidebarVisible,
   items: state.items,
   scheme: state.colorScheme,
+  itemFocused: state.items[state.nodeFocusedId],
 });
 
 export default connect(mapState, allActions)(App);

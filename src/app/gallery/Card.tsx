@@ -6,6 +6,7 @@ import { getPreviewItemsForFolder, traverseAllNodes } from "../state/selectors";
 import { cn } from "../utils";
 import { gallery as ids } from "../testId";
 import { loadPlaylistVideos } from "../api/searchVideos";
+import { onSubtracksScroll } from "../state/actions";
 
 interface OuterProps {
   item: Item;
@@ -227,10 +228,11 @@ class Card extends React.Component<Props> {
             "subtracks-container": true,
             "subtracks-container-closed": !this.props.item.isOpenInGallery,
           })}
+          onScroll={(e) => onSubtracksScroll(e, item, this.props)}
         >
-          {item.isLoadingYoutubePlaylist
-            ? this.renderSubtracksLoadingIndicator()
-            : this.props.childItems.map(this.renderChildTrack)}
+          {this.props.childItems.map(this.renderChildTrack)}
+          {(item.youtubePlaylistNextPageId || item.isLoadingYoutubePlaylist) &&
+            this.renderSubtracksLoadingIndicator()}
         </div>
 
         {item.itemType === "folder" && (
@@ -250,12 +252,13 @@ class Card extends React.Component<Props> {
                   isLoadingYoutubePlaylist: true,
                 });
 
-                loadPlaylistVideos(item.youtubePlaylistId).then((items) => {
+                loadPlaylistVideos(item.youtubePlaylistId).then((response) => {
                   this.props.changeNode(item.id, {
                     isLoadingYoutubePlaylist: false,
+                    youtubePlaylistNextPageId: response.nextPageToken,
                   });
 
-                  this.props.setItemChildren(item.id, items);
+                  this.props.setItemChildren(item.id, response.items);
                 });
               }
             }}

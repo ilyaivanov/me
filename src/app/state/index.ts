@@ -16,6 +16,7 @@ export interface Item {
   isOpenInGallery?: boolean;
 
   youtubePlaylistId?: string;
+  youtubePlaylistNextPageId?: string;
   isLoadingYoutubePlaylist?: boolean;
 }
 export type NodesContainer = {
@@ -180,6 +181,22 @@ const reducer = (state = initialState, action: Action): RootState => {
       items,
     };
   }
+  if (action.type === "APPEND_ITEM_CHILDREN") {
+    const items = {
+      ...state.items,
+    };
+    action.items.forEach((item) => {
+      items[item.id] = item;
+    });
+    items[action.parentId] = {
+      ...items[action.parentId],
+      children: items[action.parentId].children.concat(action.items.map((i) => i.id)),
+    };
+    return {
+      ...state,
+      items,
+    };
+  }
   if (action.type === "SET_CARD_DRAG_AVATAR") {
     return {
       ...state,
@@ -312,6 +329,9 @@ const setSearchState = (state: SearchState) =>
 const setItemChildren = (parentId: string, items: Item[]) =>
   ({ type: "SET_ITEM_CHILDREN", parentId, items } as const);
 
+const appendItemChildren = (parentId: string, items: Item[]) =>
+  ({ type: "APPEND_ITEM_CHILDREN", parentId, items } as const);
+
 const onMouseDownForCard = (
   itemId: string,
   elementRect: DOMRect,
@@ -357,6 +377,7 @@ export const allActions = {
   setCardDestination,
   setItems,
   setItemChildren,
+  appendItemChildren,
   startDragging,
   setColorScheme,
   setCardDragAvatar,
