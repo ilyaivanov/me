@@ -147,7 +147,6 @@ export const gallery = new Gallery();
 
 class Player {
   getVideoIdBeingPlayed = () => {
-    const elem = screen.getByTestId(ids.player.mockedYoutubePlayer);
     return screen.getByTestId(ids.player.mockedYoutubePlayer).innerHTML;
   };
 }

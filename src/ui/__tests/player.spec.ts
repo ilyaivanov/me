@@ -9,6 +9,7 @@ const testData = createItemsBasedOnStructure(`
     video playground12
 `);
 
+it("opening a folder and playing a video should play that video id", async () => {
   await prepareLoadedTestApp(testData);
   sidebar.focusOnItem("playground1");
   gallery.playItem("video playground11");

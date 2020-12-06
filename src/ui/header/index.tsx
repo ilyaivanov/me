@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { actions } from "../../domain";
 import { header as ids } from "../testId";
-import { searchVideos } from "../../api/searchVideos";
 import { Bars, Fill, Search } from "../icons";
 import "./styles.css";
 import logo from "./logo.png";
@@ -12,23 +11,7 @@ class Header extends React.Component<Props> {
   state = {
     searchValue: "",
   };
-  onSearchRequest = () => {
-    actions.setSearchState({
-      stateType: "loading",
-      term: this.state.searchValue,
-    });
-    actions.focusNode("SEARCH");
-    searchVideos(this.state.searchValue).then((response) => {
-      actions.setSearchState({
-        stateType: "done",
-        term: this.state.searchValue,
-      });
-      actions.replaceChildren("SEARCH", response.items);
-      actions.changeItem("SEARCH", {
-        youtubePlaylistNextPageId: response.nextPageToken,
-      });
-    });
-  };
+  onSearchRequest = () => actions.searchForItems(this.state.searchValue);
 
   toggleColorScheme = () => {
     actions.setColorScheme(this.props.scheme === "dark" ? "light" : "dark");

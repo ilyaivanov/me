@@ -3,7 +3,6 @@ import { Play, Pause, Chevron, Arrow } from "../icons";
 import { connect } from "react-redux";
 import { cn } from "../";
 import { gallery as ids } from "../testId";
-import { loadPlaylistVideos } from "../../api/searchVideos";
 import { actions, selectors } from "../../domain";
 
 interface OuterProps {
@@ -146,11 +145,9 @@ class Card extends React.Component<Props> {
     let image;
     let videoCount;
     if (item.itemType === "folder") {
-      const allSubvideos = selectors.traverseAllNodes(
-        this.props.items,
-        item.id,
-        (item) => item
-      ).filter((item) => item.itemType === "video");
+      const allSubvideos = selectors
+        .traverseAllNodes(this.props.items, item.id, (item) => item)
+        .filter((item) => item.itemType === "video");
       videoCount = allSubvideos.length;
       if (allSubvideos.length > 0) {
         image = allSubvideos[0].image;
@@ -244,24 +241,7 @@ class Card extends React.Component<Props> {
                 isOpenInGallery: !item.isOpenInGallery,
               });
 
-              if (
-                item.youtubePlaylistId &&
-                !item.isLoadingYoutubePlaylist &&
-                item.children.length === 0
-              ) {
-                actions.changeItem(item.id, {
-                  isLoadingYoutubePlaylist: true,
-                });
-
-                loadPlaylistVideos(item.youtubePlaylistId).then((response) => {
-                  actions.changeItem(item.id, {
-                    isLoadingYoutubePlaylist: false,
-                    youtubePlaylistNextPageId: response.nextPageToken,
-                  });
-
-                  actions.replaceChildren(item.id, response.items);
-                });
-              }
+              actions.loadYoutubePlaylist(item);
             }}
             className={cn({
               "icon expand-icon": true,
