@@ -32,7 +32,7 @@ body {
   grid-area: sidebar;
   overflow: hidden;
   width: var(--sidebar-width);
-  transition: margin-left 200ms;
+  transition: margin-left 300ms ease-out;
   margin-left: 0;
 }
 .navigation-sidebar.closed {
