@@ -1,18 +1,13 @@
 .gallery-container {
   flex: 1;
   position: relative;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  align-content: flex-start;
-  padding-bottom: 20px;
-  margin-top: -20px; /*GAP constant*/
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-gap: 20px;
+  padding: 20px;
 }
 
 .card {
-  margin-top: 20px; /*GAP constant*/
-  margin-left: 20px; /*GAP constant*/
   cursor: pointer;
   font-weight: lighter;
   position: relative;

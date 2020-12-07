@@ -65,7 +65,7 @@ const App = (props: Props) => {
       >
         <div ref={(s) => s && setRef(s)}></div>
 
-        <Gallery isSidebarVisible={props.isSidebarVisible} />
+        <Gallery />
       </div>
       <Player galleryPlayer={ref} />
       <DndAvatar />

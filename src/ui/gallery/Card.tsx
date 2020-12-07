@@ -8,7 +8,6 @@ import { actions, selectors } from "../../domain";
 interface OuterProps {
   item: Item;
   isPlaying?: boolean;
-  width?: string;
 }
 type Props = OuterProps & ReturnType<typeof mapState>;
 
@@ -205,9 +204,6 @@ class Card extends React.Component<Props> {
             dragState.isDragging && item.id === dragState.cardDraggedId,
         })}
         data-testid={ids.card(item.id)}
-        style={{
-          width: this.props.width,
-        }}
       >
         <div
           data-testid={ids.cardDragDropArea}
