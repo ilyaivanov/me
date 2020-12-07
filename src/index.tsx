@@ -1,12 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./app/App";
-import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import { createMediaExplorerStore } from "./app/state";
+import App from "./ui/App";
+import reportWebVitals from "./reportWebVitals";
+import { store } from "./domain";
 
-const store = createMediaExplorerStore();
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

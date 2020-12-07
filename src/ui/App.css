@@ -1,0 +1,81 @@
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',*/
+  /*  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',*/
+  /*  sans-serif;*/
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+.page-container {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 56px 1fr 70px;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "body-header body-header"
+    "sidebar body"
+    "player player";
+  overflow: hidden;
+}
+
+.navigation-sidebar {
+  --sidebar-width: 300px;
+  background-color: var(--menu-color);
+  grid-area: sidebar;
+  overflow: hidden;
+  width: var(--sidebar-width);
+  transition: margin-left 200ms;
+  margin-left: 0;
+}
+.navigation-sidebar.closed {
+  margin-left: calc(-1 * var(--sidebar-width));
+}
+
+.page-body {
+  border-top: 1px solid var(--primary-border);
+  grid-area: body;
+  overflow-y: overlay;
+  overflow-x: hidden;
+  background-color: var(--page-color);
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.body-header {
+  background-color: var(--menu-color);
+  grid-area: body-header;
+}
+
+.page-player {
+  background-color: var(--menu-color);
+  grid-area: player;
+}
+
+.hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+/* Scrollbars CSS Module */
+*::-webkit-scrollbar {
+  width: 0;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-color);
+}
+
+*:hover::-webkit-scrollbar {
+  width: 8px;
+}
