@@ -24,3 +24,11 @@ export const fetchPlaylistVideos = (
     return fetch(url).then((res) => res.json());
   }
 };
+
+
+export const findSimilarYoutubeVideos  = (videoId: string, pageToken?: string) => {
+  let url = `https://europe-west1-lean-watch.cloudfunctions.net/getVideos?relatedToVideoId=${videoId}&type=video`;
+
+    if (pageToken) url += `&pageToken=${pageToken}`;
+    return fetch(url).then((res) => res.json());
+}

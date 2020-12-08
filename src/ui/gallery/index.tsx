@@ -33,16 +33,15 @@ class Gallery extends React.Component<Props> {
         <Breadcrumps />
         <div className="gallery-container" data-testid={"gallery"}>
           {this.props.searchState.stateType === "loading"
-            ? this.renderLoadingIndicator(
-                `Searching for '${this.props.searchState.term}'...`
-              )
+            ? this.renderLoadingIndicator(this.props.searchState.term)
             : this.props.items.map(this.renderCard)}
         </div>
-        {this.props.itemFocused.youtubePlaylistNextPageId && (
-          <div style={{ position: "relative", minHeight: 100 }}>
-            {this.renderLoadingIndicator()}
-          </div>
-        )}
+        {this.props.itemFocused.youtubePlaylistNextPageId &&
+          this.props.searchState.stateType !== "loading" && (
+            <div style={{ position: "relative", minHeight: 100 }}>
+              {this.renderLoadingIndicator()}
+            </div>
+          )}
       </>
     );
   }

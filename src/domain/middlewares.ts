@@ -2,7 +2,7 @@ import { Store } from "redux";
 import firebaseApi from "../api/firebase";
 import debounce from "lodash/debounce";
 
-export default function middleware({ getState }: Store<MyState>) {
+export function firebaseSyncMiddleware({ getState }: Store<MyState>) {
   return (next: any) => (action: any) => {
     const itemsBefore = getState().items;
     const returnValue = next(action);
@@ -19,3 +19,14 @@ const saveStateDebounced = debounce(
   (items: NodesContainer) => firebaseApi.save(items),
   500
 );
+
+export const myThunks = ({ getState }: Store<MyState>) => (next: any) => (
+  action: any
+) => {
+  console.log(action)
+  if (typeof action === "function") {
+    console.log(action);
+  } else {
+    return next(action);
+  }
+};

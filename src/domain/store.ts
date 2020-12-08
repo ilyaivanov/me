@@ -9,7 +9,7 @@ import { createId } from "./createId";
 import { drop, setItemOnPlaceOf } from "./dndHelpers";
 import { createActionCreators, createReducer } from "./reduxInfra";
 import { findParentId, getPreviewItemsForFolder } from "./selectors";
-import syncingMiddleware from "./syncingMiddleware";
+import { firebaseSyncMiddleware, myThunks } from "./middlewares";
 
 const initialState: MyState = {
   items: {
@@ -274,7 +274,7 @@ export const createMyStore = () => {
   const store = createStore(
     createReducer(initialState, actionHandlers),
     //@ts-expect-error
-    composeEnhancers(applyMiddleware(syncingMiddleware))
+    composeEnhancers(applyMiddleware(myThunks, firebaseSyncMiddleware))
   );
   return store;
 };

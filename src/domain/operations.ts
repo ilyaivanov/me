@@ -1,5 +1,9 @@
-import { fetchPlaylistVideos, findYoutubeVideos } from "../api/youtubeRequest";
-import { actions } from "./store";
+import {
+  fetchPlaylistVideos,
+  findYoutubeVideos,
+  findSimilarYoutubeVideos,
+} from "../api/youtubeRequest";
+import { actions, store } from "./store";
 
 export const onSubtracksScroll = (
   e: React.UIEvent<HTMLDivElement, UIEvent>,
@@ -36,19 +40,40 @@ export const onSubtracksScroll = (
 export const searchForItems = (term: string) => {
   actions.setSearchState({
     stateType: "loading",
-    term: term,
+    term: `Searching for '${term}'...`,
   });
   actions.focusNode("SEARCH");
   searchVideos(term).then((response) => {
     actions.setSearchState({
       stateType: "done",
-      term: term,
+      term: ``,
     });
     actions.replaceChildren("SEARCH", response.items);
     actions.changeItem("SEARCH", {
       youtubePlaylistNextPageId: response.nextPageToken,
     });
   });
+};
+
+export const findSimilarVideos = (itemId: string) => {
+  const item = store.getState().items[itemId];
+  actions.setSearchState({
+    stateType: "loading",
+    term: `Searching similar to '${item.title}'...`,
+  });
+  actions.focusNode("SEARCH");
+  if (item.videoId) {
+    findSimilar(item.videoId).then((response) => {
+      actions.setSearchState({
+        stateType: "done",
+        term: "",
+      });
+      actions.replaceChildren("SEARCH", response.items);
+      actions.changeItem("SEARCH", {
+        youtubePlaylistNextPageId: response.nextPageToken,
+      });
+    });
+  }
 };
 
 export const loadYoutubePlaylist = (item: Item) => {
@@ -94,11 +119,30 @@ const loadPlaylistVideos = (
     })),
   }));
 };
+
 const searchVideos = (
   term: string,
   pageToken?: string
 ): Promise<GetVideosResponse> => {
   return findYoutubeVideos(term, pageToken).then((response) => ({
+    nextPageToken: response.nextPageToken,
+    items: response.items.map((item: any) => ({
+      id: item.id,
+      itemType: item.itemType === "playlist" ? "folder" : item.itemType,
+      image: item.image,
+      title: item.name,
+      videoId: item.itemId,
+      youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
+      children: [],
+    })),
+  }));
+};
+
+const findSimilar = (
+  videoId: string,
+  pageToken?: string
+): Promise<GetVideosResponse> => {
+  return findSimilarYoutubeVideos(videoId, pageToken).then((response) => ({
     nextPageToken: response.nextPageToken,
     items: response.items.map((item: any) => ({
       id: item.id,

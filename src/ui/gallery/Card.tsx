@@ -1,5 +1,5 @@
 import React from "react";
-import { Play, Pause, Chevron, Arrow } from "../icons";
+import { Play, Pause, Chevron, Arrow, Search } from "../icons";
 import { connect } from "react-redux";
 import { cn } from "../";
 import { gallery as ids } from "../testId";
@@ -248,6 +248,12 @@ class Card extends React.Component<Props> {
         {item.itemType === "folder" && (
           <Arrow
             onClick={() => actions.focusNode(this.props.item.id)}
+            className={"icon card-arrow-icon"}
+          />
+        )}
+        {item.itemType === "video" && (
+          <Search
+            onClick={() => actions.findSimilarVideos(this.props.item.id)}
             className={"icon card-arrow-icon"}
           />
         )}
