@@ -19,14 +19,3 @@ const saveStateDebounced = debounce(
   (items: NodesContainer) => firebaseApi.save(items),
   500
 );
-
-export const myThunks = ({ getState }: Store<MyState>) => (next: any) => (
-  action: any
-) => {
-  console.log(action)
-  if (typeof action === "function") {
-    console.log(action);
-  } else {
-    return next(action);
-  }
-};

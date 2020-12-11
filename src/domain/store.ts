@@ -9,23 +9,31 @@ import { createId } from "./createId";
 import { drop, setItemOnPlaceOf } from "./dndHelpers";
 import { createActionCreators, createReducer } from "./reduxInfra";
 import { findParentId, getPreviewItemsForFolder } from "./selectors";
-import { firebaseSyncMiddleware, myThunks } from "./middlewares";
+import { firebaseSyncMiddleware } from "./middlewares";
 
-const initialState: MyState = {
-  items: {
-    HOME: {
-      id: "HOME",
-      itemType: "folder",
-      title: "Home",
-      children: [],
-    },
-    SEARCH: {
-      id: "SEARCH",
-      itemType: "folder",
-      title: "Search",
-      children: [],
-    },
+export const rootNodes: NodesContainer = {
+  HOME: {
+    id: "HOME",
+    itemType: "folder",
+    title: "Home",
+    children: [],
   },
+  SEARCH: {
+    id: "SEARCH",
+    itemType: "folder",
+    title: "Search",
+    children: [],
+  },
+  SEARCH_SIMILAR: {
+    id: "SEARCH_SIMILAR",
+    itemType: "folder",
+    title: "Search",
+    children: [],
+  },
+};
+
+export const initialState: MyState = {
+  items: rootNodes,
   dragState: {
     cardDraggedId: "",
     isDragging: false,
@@ -56,7 +64,7 @@ const actionHandlers = {
     colorScheme,
   }),
   setItems: (items: NodesContainer): Partial<MyState> => ({
-    items,
+    items
   }),
   replaceChildren: (parentId: string, newChildren: Item[]) => (
     state: MyState
@@ -274,7 +282,7 @@ export const createMyStore = () => {
   const store = createStore(
     createReducer(initialState, actionHandlers),
     //@ts-expect-error
-    composeEnhancers(applyMiddleware(myThunks, firebaseSyncMiddleware))
+    composeEnhancers(applyMiddleware(firebaseSyncMiddleware))
   );
   return store;
 };

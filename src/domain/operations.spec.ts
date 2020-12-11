@@ -33,12 +33,31 @@ describe("Having some video in gallery", () => {
 
   describe("when clicking on find similar video icon", () => {
     beforeEach(() => actions.findSimilarVideos("video"));
-    fit("focus should be set on search", () => {
-      expect(getState().nodeFocusedId).toBe("SEARCH");
+    it("focus should be set on search", () => {
+      expect(getState().nodeFocusedId).toBe("SEARCH_SIMILAR");
     });
 
-    fit("fpo", () => {
+    it("fpo", () => {
       expect(getState().searchState.stateType).toBe("done");
+    });
+
+    it("foo", () => {
+      expect(getState().items["SEARCH_SIMILAR"].children).toHaveLength(1);
+    });
+
+    it("scrolling till the end should load more items", async () => {
+      actions.onSubtracksScroll(
+        {
+          currentTarget: {
+            scrollHeight: 1000,
+            scrollTop: 700,
+            offsetHeight: 200,
+          },
+        } as any,
+        getState().items["SEARCH_SIMILAR"]
+      );
+      await new Promise((resolve) => setTimeout(resolve, 2));
+      expect(getState().items["SEARCH_SIMILAR"].children).toHaveLength(2);
     });
   });
 });

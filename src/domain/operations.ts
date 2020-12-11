@@ -9,6 +9,7 @@ export const onSubtracksScroll = (
   e: React.UIEvent<HTMLDivElement, UIEvent>,
   item: Item
 ) => {
+  console.log(item);
   if (item.youtubePlaylistNextPageId && !item.isLoadingYoutubePlaylist) {
     const el = e.currentTarget;
     const LOADING_INDICATOR_HEIGHT = 100;
@@ -31,8 +32,33 @@ export const onSubtracksScroll = (
 
           actions.appendChildren(item.id, response.items);
         });
+      } else if (item.videoId) {
+        actions.changeItem(item.id, {
+          isLoadingYoutubePlaylist: true,
+        });
+        findSimilar(item.videoId, item.youtubePlaylistNextPageId).then(
+          (response) => {
+            actions.changeItem(item.id, {
+              isLoadingYoutubePlaylist: false,
+              youtubePlaylistNextPageId: response.nextPageToken,
+            });
+            actions.appendChildren(item.id, response.items);
+          }
+        );
+      } else if (item.searchTerm) {
+        actions.changeItem(item.id, {
+          isLoadingYoutubePlaylist: true,
+        });
+        searchVideos(item.searchTerm, item.youtubePlaylistNextPageId).then(
+          (response) => {
+            actions.changeItem(item.id, {
+              isLoadingYoutubePlaylist: false,
+              youtubePlaylistNextPageId: response.nextPageToken,
+            });
+            actions.appendChildren(item.id, response.items);
+          }
+        );
       }
-    } else {
     }
   }
 };
@@ -51,6 +77,7 @@ export const searchForItems = (term: string) => {
     actions.replaceChildren("SEARCH", response.items);
     actions.changeItem("SEARCH", {
       youtubePlaylistNextPageId: response.nextPageToken,
+      searchTerm: term,
     });
   });
 };
@@ -61,16 +88,17 @@ export const findSimilarVideos = (itemId: string) => {
     stateType: "loading",
     term: `Searching similar to '${item.title}'...`,
   });
-  actions.focusNode("SEARCH");
+  actions.focusNode("SEARCH_SIMILAR");
   if (item.videoId) {
     findSimilar(item.videoId).then((response) => {
       actions.setSearchState({
         stateType: "done",
         term: "",
       });
-      actions.replaceChildren("SEARCH", response.items);
-      actions.changeItem("SEARCH", {
+      actions.replaceChildren("SEARCH_SIMILAR", response.items);
+      actions.changeItem("SEARCH_SIMILAR", {
         youtubePlaylistNextPageId: response.nextPageToken,
+        videoId: item.videoId,
       });
     });
   }

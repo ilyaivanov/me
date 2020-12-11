@@ -1,17 +1,4 @@
-const empty: NodesContainer = {
-  HOME: {
-    id: "HOME",
-    itemType: "folder",
-    title: "Home",
-    children: [],
-  },
-  SEARCH: {
-    id: "SEARCH",
-    itemType: "folder",
-    title: "Search",
-    children: [],
-  },
-};
+import { rootNodes } from "../../../domain/store";
 
 //for examples see unit tests
 export const createItemsBasedOnStructure = (structure: string) => {
@@ -26,11 +13,11 @@ export const createItemsBasedOnStructure = (structure: string) => {
     }))
     .reduce(
       (items, { id, parentId }) => addItemTo(parentId, createItem(id), items),
-      empty
+      rootNodes
     );
 };
 
-export const createEmptyItems = () => empty;
+export const createEmptyItems = () => rootNodes;
 
 const getParent = (lines: string[], currentItemIndex: number) => {
   if (currentItemIndex === 0) return "HOME";

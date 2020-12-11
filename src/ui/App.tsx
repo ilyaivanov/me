@@ -11,6 +11,7 @@ import DndAvatar from "./dragAvatar";
 import firebaseApi from "../api/firebase";
 import * as ids from "./testId";
 import { actions } from "../domain";
+import { rootNodes } from "../domain/store";
 
 type Props = ReturnType<typeof mapState>;
 
@@ -21,7 +22,10 @@ const App = (props: Props) => {
   useEffect(() => {
     firebaseApi.load().then((board) => {
       if (board) {
-        actions.setItems(board);
+        actions.setItems({
+          ...rootNodes,
+          ...board,
+        });
       }
 
       setIsLoading(false);

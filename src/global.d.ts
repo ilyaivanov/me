@@ -12,6 +12,7 @@ declare global {
 
     youtubePlaylistId?: string;
     youtubePlaylistNextPageId?: string;
+    searchTerm?: string;
     isLoadingYoutubePlaylist?: boolean;
   }
   export type NodesContainer = {

@@ -5,7 +5,7 @@ describe("Domain specs", () => {
 
   it("by default items should only be home and search", () => {
     const { items } = getState();
-    expect(Object.keys(items)).toEqual(["HOME", "SEARCH"]);
+    expect(Object.keys(items)).toEqual(["HOME", "SEARCH", "SEARCH_SIMILAR"]);
   });
 
   it("by default Home is focused", () => {
