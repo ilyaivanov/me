@@ -1,6 +1,7 @@
 import { Store } from "redux";
 import firebaseApi from "../api/firebase";
 import debounce from "lodash/debounce";
+import { traverseAllNodes } from "./selectors";
 
 export function firebaseSyncMiddleware({ getState }: Store<MyState>) {
   return (next: any) => (action: any) => {
@@ -15,7 +16,14 @@ export function firebaseSyncMiddleware({ getState }: Store<MyState>) {
     return returnValue;
   };
 }
-const saveStateDebounced = debounce(
-  (items: NodesContainer) => firebaseApi.save(items),
-  500
-);
+const saveStateDebounced = debounce((items: NodesContainer) => {
+  const copy: NodesContainer = {
+    HOME: items.HOME,
+  };
+  const ids = traverseAllNodes(items, "HOME", (x) => x.id);
+  ids.forEach((id) => {
+    copy[id] = items[id];
+  });
+  console.log(`Saving ${ids.length} of items`);
+  firebaseApi.save(copy);
+}, 500);
