@@ -9,7 +9,6 @@ export const onSubtracksScroll = (
   e: React.UIEvent<HTMLDivElement, UIEvent>,
   item: Item
 ) => {
-  console.log(item);
   if (item.youtubePlaylistNextPageId && !item.isLoadingYoutubePlaylist) {
     const el = e.currentTarget;
     const LOADING_INDICATOR_HEIGHT = 100;
