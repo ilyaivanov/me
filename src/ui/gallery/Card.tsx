@@ -216,7 +216,9 @@ class Card extends React.Component<Props> {
 
           <div data-testid={ids.cardTitle} className="text-container">
             {item.title}
-            <div className="card-type">{item.itemType}</div>
+            <div className="card-type">
+              {item.youtubePlaylistId ? "playlist" : item.itemType}
+            </div>
           </div>
         </div>
         <div
