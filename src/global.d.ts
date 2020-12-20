@@ -1,7 +1,7 @@
 declare global {
   export interface Item {
     id: string;
-    itemType: "folder" | "video";
+    itemType: "folder" | "video" | "channel";
     title: string;
     children: string[];
 

@@ -2,6 +2,7 @@ import {
   fetchPlaylistVideos,
   findYoutubeVideos,
   findSimilarYoutubeVideos,
+  getChannelPlaylists,
 } from "../api/youtubeRequest";
 import { actions, store } from "./store";
 
@@ -31,6 +32,23 @@ export const onSubtracksScroll = (
 
           actions.appendChildren(item.id, response.items);
         });
+      } else if (
+        item.itemType === "channel" &&
+        item.videoId && 
+        item.youtubePlaylistNextPageId
+      ) {
+        actions.changeItem(item.id, {
+          isLoadingYoutubePlaylist: true,
+        });
+        findChannelPlaylists(item.videoId, item.youtubePlaylistNextPageId).then(
+          (response) => {
+            actions.changeItem(item.id, {
+              isLoadingYoutubePlaylist: false,
+              youtubePlaylistNextPageId: response.nextPageToken,
+            });
+            actions.appendChildren(item.id, response.items);
+          }
+        );
       } else if (item.videoId) {
         actions.changeItem(item.id, {
           isLoadingYoutubePlaylist: true,
@@ -105,6 +123,21 @@ export const findSimilarVideos = (itemId: string) => {
 
 export const loadYoutubePlaylist = (item: Item) => {
   if (
+    item.itemType === "channel" &&
+    !item.isLoadingYoutubePlaylist &&
+    item.children.length === 0
+  ) {
+    actions.changeItem(item.id, {
+      isLoadingYoutubePlaylist: true,
+    });
+    findChannelPlaylists(item.videoId as string).then((response) => {
+      actions.changeItem(item.id, {
+        isLoadingYoutubePlaylist: false,
+        youtubePlaylistNextPageId: response.nextPageToken,
+      });
+      actions.replaceChildren(item.id, response.items);
+    });
+  } else if (
     item.youtubePlaylistId &&
     !item.isLoadingYoutubePlaylist &&
     item.children.length === 0
@@ -135,15 +168,17 @@ const loadPlaylistVideos = (
 ): Promise<GetVideosResponse> => {
   return fetchPlaylistVideos(playlistId, pageToken).then((response) => ({
     nextPageToken: response.nextPageToken,
-    items: response.items.map((item: any) => ({
-      id: item.id,
-      itemType: item.itemType === "playlist" ? "folder" : item.itemType,
-      image: item.image,
-      title: item.name,
-      videoId: item.itemId,
-      youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
-      children: [],
-    })),
+    items: response.items.map(
+      (item: any): Item => ({
+        id: item.id,
+        itemType: item.itemType === "playlist" ? "folder" : item.itemType,
+        image: item.image,
+        title: item.name,
+        videoId: item.itemId,
+        youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
+        children: [],
+      })
+    ),
   }));
 };
 
@@ -153,15 +188,17 @@ const searchVideos = (
 ): Promise<GetVideosResponse> => {
   return findYoutubeVideos(term, pageToken).then((response) => ({
     nextPageToken: response.nextPageToken,
-    items: response.items.map((item: any) => ({
-      id: item.id,
-      itemType: item.itemType === "playlist" ? "folder" : item.itemType,
-      image: item.image,
-      title: item.name,
-      videoId: item.itemId,
-      youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
-      children: [],
-    })),
+    items: response.items.map(
+      (item: any): Item => ({
+        id: item.id,
+        itemType: item.itemType === "playlist" ? "folder" : item.itemType,
+        image: item.image,
+        title: item.name,
+        videoId: item.itemId,
+        youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
+        children: [],
+      })
+    ),
   }));
 };
 
@@ -171,14 +208,36 @@ const findSimilar = (
 ): Promise<GetVideosResponse> => {
   return findSimilarYoutubeVideos(videoId, pageToken).then((response) => ({
     nextPageToken: response.nextPageToken,
-    items: response.items.map((item: any) => ({
-      id: item.id,
-      itemType: item.itemType === "playlist" ? "folder" : item.itemType,
-      image: item.image,
-      title: item.name,
-      videoId: item.itemId,
-      youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
-      children: [],
-    })),
+    items: response.items.map(
+      (item: any): Item => ({
+        id: item.id,
+        itemType: item.itemType === "playlist" ? "folder" : item.itemType,
+        image: item.image,
+        title: item.name,
+        videoId: item.itemId,
+        youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
+        children: [],
+      })
+    ),
+  }));
+};
+
+const findChannelPlaylists = (
+  channelId: string,
+  pageToken?: string
+): Promise<GetVideosResponse> => {
+  return getChannelPlaylists(channelId, pageToken).then((response) => ({
+    nextPageToken: response.nextPageToken,
+    items: response.items.map(
+      (item: any): Item => ({
+        id: item.id,
+        itemType: item.itemType === "playlist" ? "folder" : item.itemType,
+        image: item.image,
+        title: item.name,
+        videoId: item.itemId,
+        youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
+        children: [],
+      })
+    ),
   }));
 };
