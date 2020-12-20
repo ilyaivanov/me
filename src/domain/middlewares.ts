@@ -22,7 +22,12 @@ const saveStateDebounced = debounce((items: NodesContainer) => {
   };
   const ids = traverseAllNodes(items, "HOME", (x) => x.id);
   ids.forEach((id) => {
-    copy[id] = items[id];
+    const itemCopy = {
+      ...items[id],
+    };
+    if (!itemCopy.youtubePlaylistNextPageId)
+      delete itemCopy.youtubePlaylistNextPageId;
+    copy[id] = itemCopy;
   });
   console.log(`Saving ${ids.length} of items`);
   firebaseApi.save(copy);
