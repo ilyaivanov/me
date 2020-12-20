@@ -5,7 +5,7 @@ import "./index.css";
 import Card from "./Card";
 import { gallery as ids } from "../testId";
 import Breadcrumps from "../../ui/breadcrumps";
-
+import CardsTransitionAnimation from "./CardsTransitionAnimation";
 type Props = ReturnType<typeof mapState>;
 
 class Gallery extends React.Component<Props> {
@@ -31,17 +31,21 @@ class Gallery extends React.Component<Props> {
     return (
       <>
         <Breadcrumps />
-        <div className="gallery-container" data-testid={"gallery"}>
-          {this.props.searchState.stateType === "loading"
-            ? this.renderLoadingIndicator(this.props.searchState.term)
-            : this.props.items.map(this.renderCard)}
-        </div>
-        {this.props.itemFocused.youtubePlaylistNextPageId &&
-          this.props.searchState.stateType !== "loading" && (
-            <div style={{ position: "relative", minHeight: 100 }}>
-              {this.renderLoadingIndicator()}
+        <CardsTransitionAnimation nodeFocusedId={this.props.itemFocused.id}>
+          <>
+            <div className="gallery-container" data-testid={"gallery"}>
+              {this.props.searchState.stateType === "loading"
+                ? this.renderLoadingIndicator(this.props.searchState.term)
+                : this.props.items.map(this.renderCard)}
             </div>
-          )}
+            {this.props.itemFocused.youtubePlaylistNextPageId &&
+              this.props.searchState.stateType !== "loading" && (
+                <div style={{ position: "relative", minHeight: 100 }}>
+                  {this.renderLoadingIndicator()}
+                </div>
+              )}
+          </>
+        </CardsTransitionAnimation>
       </>
     );
   }
