@@ -149,7 +149,7 @@ export const loadYoutubePlaylist = (item: Item) => {
         image: item.image,
         itemType: "folder",
       };
-      console.log(uploadsPlaylist)
+      console.log(uploadsPlaylist);
       const allPlaylits = [uploadsPlaylist].concat(response.items);
       actions.replaceChildren(item.id, allPlaylits);
     });
@@ -184,17 +184,7 @@ const loadPlaylistVideos = (
 ): Promise<GetVideosResponse> => {
   return fetchPlaylistVideos(playlistId, pageToken).then((response) => ({
     nextPageToken: response.nextPageToken,
-    items: response.items.map(
-      (item: any): Item => ({
-        id: item.id,
-        itemType: item.itemType === "playlist" ? "folder" : item.itemType,
-        image: item.image,
-        title: item.name,
-        videoId: item.itemId,
-        youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
-        children: [],
-      })
-    ),
+    items: response.items.map(mapItem),
   }));
 };
 
@@ -204,17 +194,7 @@ const searchVideos = (
 ): Promise<GetVideosResponse> => {
   return findYoutubeVideos(term, pageToken).then((response) => ({
     nextPageToken: response.nextPageToken,
-    items: response.items.map(
-      (item: any): Item => ({
-        id: item.id,
-        itemType: item.itemType === "playlist" ? "folder" : item.itemType,
-        image: item.image,
-        title: item.name,
-        videoId: item.itemId,
-        youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
-        children: [],
-      })
-    ),
+    items: response.items.map(mapItem),
   }));
 };
 
@@ -224,17 +204,7 @@ const findSimilar = (
 ): Promise<GetVideosResponse> => {
   return findSimilarYoutubeVideos(videoId, pageToken).then((response) => ({
     nextPageToken: response.nextPageToken,
-    items: response.items.map(
-      (item: any): Item => ({
-        id: item.id,
-        itemType: item.itemType === "playlist" ? "folder" : item.itemType,
-        image: item.image,
-        title: item.name,
-        videoId: item.itemId,
-        youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
-        children: [],
-      })
-    ),
+    items: response.items.map(mapItem),
   }));
 };
 
@@ -244,16 +214,18 @@ const findChannelPlaylists = (
 ): Promise<GetVideosResponse> => {
   return getChannelPlaylists(channelId, pageToken).then((response) => ({
     nextPageToken: response.nextPageToken,
-    items: response.items.map(
-      (item: any): Item => ({
-        id: item.id,
-        itemType: item.itemType === "playlist" ? "folder" : item.itemType,
-        image: item.image,
-        title: item.name,
-        videoId: item.itemId,
-        youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
-        children: [],
-      })
-    ),
+    items: response.items.map(mapItem),
   }));
 };
+
+const mapItem = (item: any): Item => ({
+  id: item.id,
+  itemType: item.itemType === "playlist" ? "folder" : item.itemType,
+  image: item.image,
+  title: item.name,
+  videoId: item.itemId,
+  channelId: item.channelId,
+  channelTitle: item.channelTitle,
+  youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
+  children: [],
+});

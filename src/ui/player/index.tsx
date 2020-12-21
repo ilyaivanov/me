@@ -155,7 +155,10 @@ class Player extends React.Component<Props> {
           {itemBeingPlayed && (
             <>
               <img src={itemBeingPlayed.image} alt="" />
-              <TrackInfoViz text={itemBeingPlayed.title} />
+              <TrackInfoViz
+                text={itemBeingPlayed.title}
+                channelTitle={this.props.channelTitle}
+              />
             </>
           )}
         </div>
@@ -223,6 +226,7 @@ class Player extends React.Component<Props> {
 
 interface TrackInfoVizProps {
   text: string;
+  channelTitle: string | undefined;
 }
 class TrackInfoViz extends React.PureComponent<TrackInfoVizProps> {
   containerRef = React.createRef<HTMLDivElement>();
@@ -271,7 +275,9 @@ class TrackInfoViz extends React.PureComponent<TrackInfoVizProps> {
         >
           {this.props.text}
         </span>
-        <div className="trackInfo__playlist__title">Radio Intense</div>
+        <div className="trackInfo__playlist__title">
+          {this.props.channelTitle}
+        </div>
         <div className="gradient-after"></div>
         <div className="gradient-before"></div>
       </div>
@@ -285,6 +291,7 @@ const mapState = (state: MyState) => {
     : undefined;
   return {
     videoId: item?.videoId,
+    channelTitle: item?.channelTitle,
     itemBeingPlayed: item,
   };
 };

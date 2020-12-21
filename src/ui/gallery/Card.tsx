@@ -219,6 +219,11 @@ class Card extends React.Component<Props> {
             <div className="card-type">
               {item.youtubePlaylistId ? "playlist" : item.itemType}
             </div>
+            {this.props.item.channelTitle && (
+              <div className="card_channel-title">
+                {this.props.item.channelTitle}
+              </div>
+            )}
           </div>
         </div>
         <div
