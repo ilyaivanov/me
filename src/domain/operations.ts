@@ -3,7 +3,9 @@ import {
   findYoutubeVideos,
   findSimilarYoutubeVideos,
   getChannelPlaylists,
+  getChannelUploadsPlaylistId,
 } from "../api/youtubeRequest";
+import { createId } from "./createId";
 import { actions, store } from "./store";
 
 export const onSubtracksScroll = (
@@ -34,7 +36,7 @@ export const onSubtracksScroll = (
         });
       } else if (
         item.itemType === "channel" &&
-        item.videoId && 
+        item.videoId &&
         item.youtubePlaylistNextPageId
       ) {
         actions.changeItem(item.id, {
@@ -130,12 +132,26 @@ export const loadYoutubePlaylist = (item: Item) => {
     actions.changeItem(item.id, {
       isLoadingYoutubePlaylist: true,
     });
-    findChannelPlaylists(item.videoId as string).then((response) => {
+    Promise.all([
+      findChannelPlaylists(item.videoId as string),
+      getChannelUploadsPlaylistId(item.videoId as string),
+    ]).then(([response, allUploadsPlaylistId]) => {
       actions.changeItem(item.id, {
         isLoadingYoutubePlaylist: false,
         youtubePlaylistNextPageId: response.nextPageToken,
       });
-      actions.replaceChildren(item.id, response.items);
+      const uploadsPlaylist: Item = {
+        id: createId(),
+        title: item.title + " - All",
+        children: [],
+        youtubePlaylistId: allUploadsPlaylistId,
+        videoId: allUploadsPlaylistId,
+        image: item.image,
+        itemType: "folder",
+      };
+      console.log(uploadsPlaylist)
+      const allPlaylits = [uploadsPlaylist].concat(response.items);
+      actions.replaceChildren(item.id, allPlaylits);
     });
   } else if (
     item.youtubePlaylistId &&
