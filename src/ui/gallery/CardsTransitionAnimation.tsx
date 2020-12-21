@@ -63,7 +63,7 @@ class CardsTransitionAnimation extends React.Component<Props, State> {
     if (prevParent) {
       const context = items[prevParent].children;
       const nextItemIndex = context.indexOf(nextItem);
-      if (nextItemIndex > 0) {
+      if (nextItemIndex >= 0) {
         const prevItemIndex = context.indexOf(prevItem);
         return prevItemIndex < nextItemIndex ? Direction.down : Direction.up;
       }
