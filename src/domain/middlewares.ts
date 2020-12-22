@@ -8,15 +8,17 @@ export function firebaseSyncMiddleware({ getState }: Store<MyState>) {
     const itemsBefore = getState().items;
     const returnValue = next(action);
     const itemsAfter = getState().items;
-    if (itemsAfter !== itemsBefore) {
+    const userState = getState().loginState;
+    if (itemsAfter !== itemsBefore && userState.state === "userLoggedIn") {
       const host = document.location.hostname;
       //avoid syncing state during development
-      if (host !== "localhost") saveStateDebounced(itemsAfter);
+      if (host !== "localhost")
+        saveStateDebounced(itemsAfter, userState.userId);
     }
     return returnValue;
   };
 }
-const saveStateDebounced = debounce((items: NodesContainer) => {
+const saveStateDebounced = debounce((items: NodesContainer, userId: string) => {
   const copy: NodesContainer = {
     HOME: items.HOME,
   };
@@ -30,5 +32,5 @@ const saveStateDebounced = debounce((items: NodesContainer) => {
     copy[id] = itemCopy;
   });
   console.log(`Saving ${ids.length} of items`);
-  firebaseApi.save(copy);
+  firebaseApi.save(copy, userId);
 }, 500);

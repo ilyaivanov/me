@@ -28,6 +28,22 @@ declare global {
   export type ColorScheme = "dark" | "light";
   export type DragAvatarView = "big" | "small";
 
+  type Loading = {
+    state: "loading";
+  };
+
+  type UserInfo = {
+    state: "userLoggedIn";
+    userName: string | null;
+    picture: string | null;
+    userId: string;
+  };
+
+  type Anonymous = {
+    state: "anonymous";
+  };
+  type LoginState = Anonymous | UserInfo | Loading;
+
   export type MyState = {
     items: NodesContainer;
     dragState: {
@@ -44,6 +60,7 @@ declare global {
     itemIdBeingPlayed: string;
     searchState: SearchState;
     colorScheme: ColorScheme;
+    loginState: LoginState;
   };
 }
 

@@ -12,27 +12,37 @@ import firebaseApi from "../api/firebase";
 import * as ids from "./testId";
 import { actions } from "../domain";
 import { rootNodes } from "../domain/store";
+import LoginPage from "./login/LoginPage";
+import { subscribeToAuthChanges } from "../api/firebase.login";
 
 type Props = ReturnType<typeof mapState>;
 
 const App = (props: Props) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [ref, setRef] = React.useState<HTMLDivElement | undefined>(undefined);
+  const { userState } = props;
 
   useEffect(() => {
-    firebaseApi.load().then((board) => {
-      if (board) {
-        actions.setItems({
-          ...rootNodes,
-          ...board,
-        });
-      }
-
-      setIsLoading(false);
-    });
+    subscribeToAuthChanges();
   }, []);
 
-  if (isLoading)
+  useEffect(() => {
+    if (userState.state === "userLoggedIn")
+      firebaseApi.load(userState.userId).then((board) => {
+        if (board) {
+          actions.setItems({
+            ...rootNodes,
+            ...board,
+          });
+        }
+        setIsLoading(false);
+      });
+    else if (userState.state === "anonymous") {
+      setIsLoading(false);
+    }
+  }, [userState]);
+
+  if (isLoading || userState.state === "loading")
     return (
       <div className="overlay flex-center">
         <div className="lds-ripple">
@@ -42,39 +52,52 @@ const App = (props: Props) => {
         Loading app...
       </div>
     );
-  return (
-    <div
-      className={cn({
-        "page-container": true,
-        "light-colors": props.scheme === "light",
-        "dark-colors": props.scheme === "dark",
-      })}
-    >
-      <aside
-        data-testid={ids.sidebar.sidebarContainer}
+  else if (userState.state === "anonymous")
+    return (
+      <div
         className={cn({
-          "navigation-sidebar": true,
-          closed: !props.isSidebarVisible,
+          "page-container": true,
+          "light-colors": props.scheme === "light",
+          "dark-colors": props.scheme === "dark",
         })}
       >
-        <Sidebar />
-      </aside>
-      <div className="body-header">
-        <Header />
+        <LoginPage />
       </div>
+    );
+  else
+    return (
       <div
-        className="page-body"
-        onMouseEnter={() => actions.setCardDragAvatarType("big")}
-        onScroll={(e) => actions.onSubtracksScroll(e, props.itemFocused)}
+        className={cn({
+          "page-container": true,
+          "light-colors": props.scheme === "light",
+          "dark-colors": props.scheme === "dark",
+        })}
       >
-        <div ref={(s) => s && setRef(s)}></div>
+        <aside
+          data-testid={ids.sidebar.sidebarContainer}
+          className={cn({
+            "navigation-sidebar": true,
+            closed: !props.isSidebarVisible,
+          })}
+        >
+          <Sidebar />
+        </aside>
+        <div className="body-header">
+          <Header />
+        </div>
+        <div
+          className="page-body"
+          onMouseEnter={() => actions.setCardDragAvatarType("big")}
+          onScroll={(e) => actions.onSubtracksScroll(e, props.itemFocused)}
+        >
+          <div ref={(s) => s && setRef(s)}></div>
 
-        <Gallery />
+          <Gallery />
+        </div>
+        <Player galleryPlayer={ref} />
+        <DndAvatar />
       </div>
-      <Player galleryPlayer={ref} />
-      <DndAvatar />
-    </div>
-  );
+    );
 };
 
 const mapState = (state: MyState) => ({
@@ -82,6 +105,7 @@ const mapState = (state: MyState) => ({
   items: state.items,
   scheme: state.colorScheme,
   itemFocused: state.items[state.nodeFocusedId],
+  userState: state.loginState,
 });
 
 export default connect(mapState)(App);

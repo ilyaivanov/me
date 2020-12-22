@@ -1,1 +1,3 @@
-export const createId = () => Math.random() + "";
+import { nanoid } from "nanoid";
+
+export const createId = () => nanoid(8);

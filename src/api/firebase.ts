@@ -17,24 +17,21 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-export const save = (items: NodesContainer) =>
+export const save = (items: NodesContainer, userId: string) =>
   firebase
     .firestore()
     .collection("boards")
-    .doc("ilyaivanov")
+    .doc(userId)
     .set(items)
-    .then(() => {
-      console.log("state on the backend updated");
-    })
     .catch((e) => {
       console.error("Error while saving board", e, items);
     });
 
-export const load = (): Promise<NodesContainer> =>
+export const load = (userId: string): Promise<NodesContainer> =>
   firebase
     .firestore()
     .collection("boards")
-    .doc("ilyaivanov")
+    .doc(userId)
     .get()
     .then((res) => res.data() as NodesContainer);
 

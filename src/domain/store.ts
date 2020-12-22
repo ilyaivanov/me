@@ -48,9 +48,15 @@ export const initialState: MyState = {
   itemIdBeingPlayed: "",
   searchState: { stateType: "done", term: "" },
   colorScheme: "dark",
+  loginState: {
+    state: "loading",
+  },
 };
 
 const actionHandlers = {
+  setUserState: (loginState: LoginState) => ({
+    loginState,
+  }),
   focusNode: (nodeFocusedId: string): Partial<MyState> => ({
     nodeFocusedId,
   }),
@@ -64,7 +70,7 @@ const actionHandlers = {
     colorScheme,
   }),
   setItems: (items: NodesContainer): Partial<MyState> => ({
-    items
+    items,
   }),
   replaceChildren: (parentId: string, newChildren: Item[]) => (
     state: MyState

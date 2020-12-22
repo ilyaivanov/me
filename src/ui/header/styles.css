@@ -55,6 +55,7 @@
 .user-image img {
   height: 44px;
   width: 44px;
+  margin-left: 1em;
   margin-right: 6px;
   display: block;
   border-radius: 25px;
@@ -62,17 +63,18 @@
 
 .fill-icon {
   padding: 0.3em;
-  margin-right: 1em;
   cursor: pointer;
   width: 30px;
   height: 30px;
 }
 
 .logo {
-  margin: 1em;
-  height: 40px;
   filter: invert(31%) sepia(0%) saturate(313%) hue-rotate(158deg)
     brightness(96%) contrast(78%);
+}
+.header-logo {
+  margin: 1em;
+  height: 40px;
 }
 
 .dark-colors .logo {
