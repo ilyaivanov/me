@@ -1,7 +1,7 @@
 declare global {
   export interface Item {
     id: string;
-    itemType: "folder" | "video";
+    itemType: "folder" | "video" | "channel";
     title: string;
     children: string[];
 
@@ -14,6 +14,9 @@ declare global {
     youtubePlaylistNextPageId?: string;
     searchTerm?: string;
     isLoadingYoutubePlaylist?: boolean;
+
+    channelTitle?: string;
+    channelId?: string;
   }
   export type NodesContainer = {
     [key: string]: Item;

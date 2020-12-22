@@ -151,6 +151,7 @@ class Card extends React.Component<Props> {
       if (allSubvideos.length > 0) {
         image = allSubvideos[0].image;
       }
+      if (!image) image = item.image;
     } else {
       image = item.image;
     }
@@ -215,6 +216,14 @@ class Card extends React.Component<Props> {
 
           <div data-testid={ids.cardTitle} className="text-container">
             {item.title}
+            <div className="card-type">
+              {item.youtubePlaylistId ? "playlist" : item.itemType}
+            </div>
+            {this.props.item.channelTitle && (
+              <div className="card_channel-title">
+                {this.props.item.channelTitle}
+              </div>
+            )}
           </div>
         </div>
         <div
@@ -229,7 +238,7 @@ class Card extends React.Component<Props> {
             this.renderSubtracksLoadingIndicator()}
         </div>
 
-        {item.itemType === "folder" && (
+        {item.itemType !== "video" && (
           <Chevron
             data-testid={ids.expandCard}
             onClick={() => {
@@ -245,7 +254,7 @@ class Card extends React.Component<Props> {
             })}
           />
         )}
-        {item.itemType === "folder" && (
+        {item.itemType !== "video" && (
           <Arrow
             onClick={() => actions.focusNode(this.props.item.id)}
             className={"icon card-arrow-icon"}

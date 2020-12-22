@@ -56,3 +56,9 @@ export const findParentId = (items: NodesContainer, childId: string) =>
   Object.keys(items).find(
     (parentKey) => items[parentKey].children.indexOf(childId) > -1
   ) as string;
+
+export const isAChildOf = (
+  items: NodesContainer,
+  parentId: string,
+  childId: string
+) => traverseAllNodes(items, parentId, (node) => node.id).indexOf(childId) >= 0;

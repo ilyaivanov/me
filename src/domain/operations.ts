@@ -2,7 +2,10 @@ import {
   fetchPlaylistVideos,
   findYoutubeVideos,
   findSimilarYoutubeVideos,
+  getChannelPlaylists,
+  getChannelUploadsPlaylistId,
 } from "../api/youtubeRequest";
+import { createId } from "./createId";
 import { actions, store } from "./store";
 
 export const onSubtracksScroll = (
@@ -31,6 +34,23 @@ export const onSubtracksScroll = (
 
           actions.appendChildren(item.id, response.items);
         });
+      } else if (
+        item.itemType === "channel" &&
+        item.videoId &&
+        item.youtubePlaylistNextPageId
+      ) {
+        actions.changeItem(item.id, {
+          isLoadingYoutubePlaylist: true,
+        });
+        findChannelPlaylists(item.videoId, item.youtubePlaylistNextPageId).then(
+          (response) => {
+            actions.changeItem(item.id, {
+              isLoadingYoutubePlaylist: false,
+              youtubePlaylistNextPageId: response.nextPageToken,
+            });
+            actions.appendChildren(item.id, response.items);
+          }
+        );
       } else if (item.videoId) {
         actions.changeItem(item.id, {
           isLoadingYoutubePlaylist: true,
@@ -105,6 +125,35 @@ export const findSimilarVideos = (itemId: string) => {
 
 export const loadYoutubePlaylist = (item: Item) => {
   if (
+    item.itemType === "channel" &&
+    !item.isLoadingYoutubePlaylist &&
+    item.children.length === 0
+  ) {
+    actions.changeItem(item.id, {
+      isLoadingYoutubePlaylist: true,
+    });
+    Promise.all([
+      findChannelPlaylists(item.videoId as string),
+      getChannelUploadsPlaylistId(item.videoId as string),
+    ]).then(([response, allUploadsPlaylistId]) => {
+      actions.changeItem(item.id, {
+        isLoadingYoutubePlaylist: false,
+        youtubePlaylistNextPageId: response.nextPageToken,
+      });
+      const uploadsPlaylist: Item = {
+        id: createId(),
+        title: item.title + " - All",
+        children: [],
+        youtubePlaylistId: allUploadsPlaylistId,
+        videoId: allUploadsPlaylistId,
+        image: item.image,
+        itemType: "folder",
+      };
+      console.log(uploadsPlaylist);
+      const allPlaylits = [uploadsPlaylist].concat(response.items);
+      actions.replaceChildren(item.id, allPlaylits);
+    });
+  } else if (
     item.youtubePlaylistId &&
     !item.isLoadingYoutubePlaylist &&
     item.children.length === 0
@@ -135,15 +184,7 @@ const loadPlaylistVideos = (
 ): Promise<GetVideosResponse> => {
   return fetchPlaylistVideos(playlistId, pageToken).then((response) => ({
     nextPageToken: response.nextPageToken,
-    items: response.items.map((item: any) => ({
-      id: item.id,
-      itemType: item.itemType === "playlist" ? "folder" : item.itemType,
-      image: item.image,
-      title: item.name,
-      videoId: item.itemId,
-      youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
-      children: [],
-    })),
+    items: response.items.map(mapItem),
   }));
 };
 
@@ -153,15 +194,7 @@ const searchVideos = (
 ): Promise<GetVideosResponse> => {
   return findYoutubeVideos(term, pageToken).then((response) => ({
     nextPageToken: response.nextPageToken,
-    items: response.items.map((item: any) => ({
-      id: item.id,
-      itemType: item.itemType === "playlist" ? "folder" : item.itemType,
-      image: item.image,
-      title: item.name,
-      videoId: item.itemId,
-      youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
-      children: [],
-    })),
+    items: response.items.map(mapItem),
   }));
 };
 
@@ -171,14 +204,28 @@ const findSimilar = (
 ): Promise<GetVideosResponse> => {
   return findSimilarYoutubeVideos(videoId, pageToken).then((response) => ({
     nextPageToken: response.nextPageToken,
-    items: response.items.map((item: any) => ({
-      id: item.id,
-      itemType: item.itemType === "playlist" ? "folder" : item.itemType,
-      image: item.image,
-      title: item.name,
-      videoId: item.itemId,
-      youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
-      children: [],
-    })),
+    items: response.items.map(mapItem),
   }));
 };
+
+const findChannelPlaylists = (
+  channelId: string,
+  pageToken?: string
+): Promise<GetVideosResponse> => {
+  return getChannelPlaylists(channelId, pageToken).then((response) => ({
+    nextPageToken: response.nextPageToken,
+    items: response.items.map(mapItem),
+  }));
+};
+
+const mapItem = (item: any): Item => ({
+  id: item.id,
+  itemType: item.itemType === "playlist" ? "folder" : item.itemType,
+  image: item.image,
+  title: item.name,
+  videoId: item.itemId,
+  channelId: item.channelId,
+  channelTitle: item.channelTitle,
+  youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
+  children: [],
+});
