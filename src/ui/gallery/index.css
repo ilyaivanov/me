@@ -1,5 +1,8 @@
-.gallery-container {
+.cards-transition-container {
   flex: 1;
+}
+.gallery-container {
+  height: 100%;
   position: relative;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -7,7 +10,6 @@
   grid-gap: 20px;
   padding: 20px;
 }
-
 .card {
   cursor: pointer;
   font-weight: lighter;

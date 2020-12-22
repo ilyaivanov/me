@@ -120,7 +120,7 @@ class CardsTransitionAnimation extends React.Component<Props, State> {
   });
 
   render() {
-    return <div ref={this.ref}>{this.state.childrenToRender}</div>;
+    return <div className="cards-transition-container" ref={this.ref}>{this.state.childrenToRender}</div>;
   }
 }
 
