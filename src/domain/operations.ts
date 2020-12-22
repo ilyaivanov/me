@@ -218,14 +218,20 @@ const findChannelPlaylists = (
   }));
 };
 
-const mapItem = (item: any): Item => ({
-  id: item.id,
-  itemType: item.itemType === "playlist" ? "folder" : item.itemType,
-  image: item.image,
-  title: item.name,
-  videoId: item.itemId,
-  channelId: item.channelId,
-  channelTitle: item.channelTitle,
-  youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
-  children: [],
-});
+const mapItem = (item: any): Item => {
+  let resItem = {
+    id: item.id,
+    itemType: item.itemType === "playlist" ? "folder" : item.itemType,
+    title: item.name,
+    videoId: item.itemId,
+    channelId: item.channelId,
+    channelTitle: item.channelTitle,
+    youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
+    children: [],
+  };
+  //skip images for videos, to save space on Firebase
+  if (item.itemType !== "video")
+    // @ts-expect-error
+    resItem.image = item.image;
+  return resItem;
+};

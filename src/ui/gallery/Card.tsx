@@ -41,7 +41,7 @@ class Card extends React.Component<Props> {
               {this.props.folderFirstItems.slice(1, 5).map((item) => (
                 <img
                   key={item.id}
-                  src={item.image}
+                  src={selectors.getVideoImage(item.videoId)}
                   alt="preview"
                   draggable={false}
                 />
@@ -49,7 +49,11 @@ class Card extends React.Component<Props> {
             </div>
           </>
         ) : (
-          <img src={this.props.item.image} alt="" draggable={false} />
+          <img
+            src={this.props.item.image || selectors.getVideoImage(this.props.item.videoId)}
+            alt=""
+            draggable={false}
+          />
         )}
       </div>
       <div className="overlay flex-center">
@@ -153,7 +157,7 @@ class Card extends React.Component<Props> {
       }
       if (!image) image = item.image;
     } else {
-      image = item.image;
+      image = selectors.getVideoImage(item.videoId);
     }
     return (
       <div
