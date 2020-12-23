@@ -74,6 +74,7 @@ export const isAChildOf = (
   childId: string
 ) => traverseAllNodes(items, parentId, (node) => node.id).indexOf(childId) >= 0;
 
-export const getVideoImage = (item: Item) =>
-  item.image ||
-  (item.videoId && `https://i.ytimg.com/vi/${item.videoId}/mqdefault.jpg`);
+export const getVideoImage = (item?: Item) =>
+  item &&
+  (item.image ||
+    (item.videoId && `https://i.ytimg.com/vi/${item.videoId}/mqdefault.jpg`));

@@ -33,4 +33,4 @@ const saveStateDebounced = debounce((items: NodesContainer, userId: string) => {
   });
   console.log(`Saving ${ids.length} of items`);
   firebaseApi.save(copy, userId);
-}, 500);
+}, 2000);

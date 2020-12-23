@@ -28,7 +28,7 @@ class Card extends React.Component<Props> {
           <>
             <div className="left">
               <img
-                src={selectors.getVideoImage(this.props.folderFirstItems[0])}
+                src={this.props.item.image || selectors.getVideoImage(this.props.folderFirstItems[0])}
                 alt="preview"
                 draggable={false}
               />
