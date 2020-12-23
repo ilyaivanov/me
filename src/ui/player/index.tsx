@@ -18,7 +18,7 @@ import { formatVideoTime } from "./utils";
 import { PlayerState, YoutubePlayerInstance } from "./types";
 import ReactDOM from "react-dom";
 import YoutubePlayer from "./youtubePlayer";
-import { actions } from "../../domain";
+import { actions, selectors } from "../../domain";
 
 interface OuterProps {
   galleryPlayer?: HTMLDivElement;
@@ -154,7 +154,7 @@ class Player extends React.Component<Props> {
         <div className="player__trackInfo__container">
           {itemBeingPlayed && (
             <>
-              <img src={itemBeingPlayed.image} alt="" />
+              <img src={selectors.getVideoImage(itemBeingPlayed)} alt="" />
               <TrackInfoViz
                 text={itemBeingPlayed.title}
                 channelTitle={this.props.channelTitle}
