@@ -176,7 +176,6 @@ class Card extends React.Component<Props> {
         )}
         {item.itemType === "folder" && (
           <Arrow
-            title={"Fooo"}
             onClick={() => actions.focusNode(item.id)}
             className={"icon subtrack-arrow-icon"}
           />
