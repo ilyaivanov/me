@@ -14,6 +14,7 @@ import { actions } from "../domain";
 import { rootNodes } from "../domain/store";
 import LoginPage from "./login/LoginPage";
 import { subscribeToAuthChanges } from "../api/firebase.login";
+import { getDefaultStateForUser } from "../domain/prefefinedSets/getDefaultState";
 
 type Props = ReturnType<typeof mapState>;
 
@@ -27,17 +28,20 @@ const App = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    if (userState.state === "userLoggedIn")
+    if (userState.state === "userLoggedIn") {
       firebaseApi.load(userState.userId).then((board) => {
+        console.log("board", board);
         if (board) {
           actions.setItems({
             ...rootNodes,
             ...board,
           });
+        }else {
+          actions.setItems(getDefaultStateForUser(userState.email));
         }
         setIsLoading(false);
       });
-    else if (userState.state === "anonymous") {
+    } else if (userState.state === "anonymous") {
       setIsLoading(false);
     }
   }, [userState]);

@@ -47,6 +47,17 @@ export const getPreviewItemsForFolder = (
     (item) => item.itemType === "video"
   );
 
+export const getFirstVideoImage = (items: NodesContainer, folderId: string) => {
+  const allChildVideos = traverseAllNodes(
+    items,
+    folderId,
+    (item) => item
+  ).filter((item) => item.itemType === "video");
+
+  if (allChildVideos.length > 0) return getVideoImage(allChildVideos[0]);
+  return undefined;
+};
+
 export const hasAnySubfolders = (items: NodesContainer, itemId: string) =>
   items[itemId].children
     .map((id) => items[id].itemType !== "video")
@@ -63,5 +74,6 @@ export const isAChildOf = (
   childId: string
 ) => traverseAllNodes(items, parentId, (node) => node.id).indexOf(childId) >= 0;
 
-export const getVideoImage = (videoId?: string) =>
-  videoId && `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+export const getVideoImage = (item: Item) =>
+  item.image ||
+  (item.videoId && `https://i.ytimg.com/vi/${item.videoId}/mqdefault.jpg`);

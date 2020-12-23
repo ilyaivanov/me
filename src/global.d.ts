@@ -37,6 +37,7 @@ declare global {
     userName: string | null;
     picture: string | null;
     userId: string;
+    email: string;
   };
 
   type Anonymous = {

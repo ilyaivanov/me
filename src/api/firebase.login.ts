@@ -13,6 +13,7 @@ export const subscribeToAuthChanges = () => {
         userId: user.uid,
         userName: user.displayName,
         picture: user.photoURL,
+        email: user.email || "",
       });
     else {
       actions.setUserState({

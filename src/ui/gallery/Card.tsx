@@ -28,11 +28,7 @@ class Card extends React.Component<Props> {
           <>
             <div className="left">
               <img
-                src={
-                  this.props.item.youtubePlaylistId
-                    ? this.props.item.image
-                    : this.props.folderFirstItems[0].image
-                }
+                src={selectors.getVideoImage(this.props.folderFirstItems[0])}
                 alt="preview"
                 draggable={false}
               />
@@ -41,7 +37,7 @@ class Card extends React.Component<Props> {
               {this.props.folderFirstItems.slice(1, 5).map((item) => (
                 <img
                   key={item.id}
-                  src={selectors.getVideoImage(item.videoId)}
+                  src={selectors.getVideoImage(item)}
                   alt="preview"
                   draggable={false}
                 />
@@ -50,7 +46,7 @@ class Card extends React.Component<Props> {
           </>
         ) : (
           <img
-            src={this.props.item.image || selectors.getVideoImage(this.props.item.videoId)}
+            src={selectors.getVideoImage(this.props.item)}
             alt=""
             draggable={false}
           />
@@ -148,16 +144,10 @@ class Card extends React.Component<Props> {
     let image;
     let videoCount;
     if (item.itemType === "folder") {
-      const allSubvideos = selectors
-        .traverseAllNodes(this.props.items, item.id, (item) => item)
-        .filter((item) => item.itemType === "video");
-      videoCount = allSubvideos.length;
-      if (allSubvideos.length > 0) {
-        image = allSubvideos[0].image;
-      }
+      image = selectors.getFirstVideoImage(this.props.items, item.id);
       if (!image) image = item.image;
     } else {
-      image = selectors.getVideoImage(item.videoId);
+      image = selectors.getVideoImage(item);
     }
     return (
       <div
