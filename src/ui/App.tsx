@@ -29,16 +29,23 @@ const App = (props: Props) => {
 
   useEffect(() => {
     if (userState.state === "userLoggedIn") {
-      firebaseApi.load(userState.userId).then((board) => {
+      Promise.all([
+        firebaseApi.load(userState.userId),
+        firebaseApi.loadUserSettings(userState.userId),
+      ]).then(([board, userSettings]) => {
         console.log("board", board);
         if (board) {
           actions.setItems({
             ...rootNodes,
             ...board,
           });
-        }else {
+        } else {
           actions.setItems(getDefaultStateForUser(userState.email));
         }
+
+        if (userSettings) {
+          actions.focusNode(userSettings.nodeFocused);
+        } else actions.focusNode("HOME");
         setIsLoading(false);
       });
     } else if (userState.state === "anonymous") {

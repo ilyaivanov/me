@@ -27,6 +27,27 @@ export const save = (items: NodesContainer, userId: string) =>
       console.error("Error while saving board", e, items);
     });
 
+export const saveUserSettings = (
+  userSettings: UserSettings,
+  userId: string
+) => {
+  firebase
+    .firestore()
+    .collection("users")
+    .doc(userId)
+    .set({
+      id: userId,
+      ...userSettings,
+    })
+    .catch((e) => {
+      console.error("Error while saving user settings");
+    });
+};
+
+export type UserSettings = {
+  nodeFocused: string;
+};
+
 export const load = (userId: string): Promise<NodesContainer> =>
   firebase
     .firestore()
@@ -35,11 +56,21 @@ export const load = (userId: string): Promise<NodesContainer> =>
     .get()
     .then((res) => res.data() as NodesContainer);
 
+export const loadUserSettings = (userId: string): Promise<UserSettings> =>
+  firebase
+    .firestore()
+    .collection("users")
+    .doc(userId)
+    .get()
+    .then((res) => res.data() as UserSettings);
+
 export const auth = () => {};
 
 const api = {
   save,
+  saveUserSettings,
   load,
+  loadUserSettings,
   auth,
 };
 export default api;
