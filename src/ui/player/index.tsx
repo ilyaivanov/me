@@ -31,6 +31,7 @@ class Player extends React.Component<Props> {
   state = {
     duration: 0,
     currentTime: 0,
+    buffer: 0,
     volume: 50,
     isMuted: false,
     isVideoShown: true,
@@ -51,6 +52,7 @@ class Player extends React.Component<Props> {
       this.setState({
         currentTime: this.player.getCurrentTime(),
         duration: this.player.getDuration(),
+        buffer: this.player.getVideoLoadedFraction(),
       });
     }
   };
@@ -142,6 +144,10 @@ class Player extends React.Component<Props> {
           }}
         >
           <div className="player__track">
+            <div
+              className="player__track__buffer"
+              style={{ width: `${this.state.buffer * 100}%` }}
+            />
             <div
               className="player__track__progress"
               style={{ width: `${trackWidth}%` }}

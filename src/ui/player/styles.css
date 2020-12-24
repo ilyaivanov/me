@@ -19,6 +19,7 @@
 }
 
 .player__track {
+  position: relative;
   height: 2px;
   flex: 1;
   background-color: var(--player-track-color);
@@ -35,9 +36,19 @@
 }
 
 .player__track__progress {
-  position: relative;
-  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   background-color: var(--player-track-progress-color);
+}
+
+.player__track__buffer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: var(--player-track-buffer-color);
 }
 
 .player__track__bulp {
