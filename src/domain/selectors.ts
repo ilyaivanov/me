@@ -68,6 +68,11 @@ export const findParentId = (items: NodesContainer, childId: string) =>
     (parentKey) => items[parentKey].children.indexOf(childId) > -1
   ) as string;
 
+export const getParentTitle = (
+  items: NodesContainer,
+  item: Item | undefined
+): string => (item ? items[findParentId(items, item.id)].title : "");
+
 export const isAChildOf = (
   items: NodesContainer,
   parentId: string,
@@ -78,3 +83,23 @@ export const getVideoImage = (item?: Item) =>
   item &&
   (item.image ||
     (item.videoId && `https://i.ytimg.com/vi/${item.videoId}/mqdefault.jpg`));
+
+export const getNodePath = (items: NodesContainer, nodeId: string): Item[] => {
+  const path: Item[] = [];
+  let parentId = nodeId;
+  while (parentId) {
+    path.push(items[parentId]);
+    parentId = findParentId(items, parentId);
+  }
+  path.reverse();
+  return path;
+};
+
+export const isOnThePlayPath = (
+  items: NodesContainer,
+  itemId: string | undefined
+) => {
+  if (!itemId) return false;
+  const path = getNodePath(items, itemId);
+  return path.map((i) => i.id).indexOf(itemId) >= 0;
+};

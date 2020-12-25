@@ -79,13 +79,7 @@ class Breadcrumps extends React.Component<Props> {
   };
   render() {
     const { items, focusedNodeId } = this.props;
-    const path: Item[] = [];
-    let parentId = focusedNodeId;
-    while (parentId) {
-      path.push(items[parentId]);
-      parentId = selectors.findParentId(items, parentId);
-    }
-    path.reverse();
+    const path = selectors.getNodePath(items, focusedNodeId);
     return (
       <div
         className="breadcrumps"

@@ -106,7 +106,12 @@ class Sidebar extends React.Component<SidebarProps> {
             })}
           />
         </div>
-        <div className="circle" />
+        <div
+          className={cn({
+            circle: true,
+            playing: selectors.isOnThePlayPath(this.props.items, item.id),
+          })}
+        />
         {this.renderText(item)}
         <div className="row-buttons">
           <Edit
@@ -181,6 +186,7 @@ const mapState = (state: MyState) => ({
   items: state.items,
   nodeFocusedId: state.nodeFocusedId,
   dragState: state.dragState,
+  itemIdBeingPlayed: state.itemIdBeingPlayed,
 });
 
 export default connect(mapState)(Sidebar);
