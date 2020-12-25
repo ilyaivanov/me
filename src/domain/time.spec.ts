@@ -1,4 +1,4 @@
-import {formatTime, formatTimeOmitHour} from './utils';
+import {formatTime, formatTimeOmitHour} from './time';
 
 describe('Having a time in milliseconds', function () {
   it('formatting should return time on 00:00:00 format', function () {

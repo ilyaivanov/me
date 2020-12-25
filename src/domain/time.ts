@@ -21,3 +21,7 @@ function pad(n: any, max: number): string {
   const str = n.toString();
   return str.length < max ? pad("0" + str, max) : str;
 }
+
+export const getProgressInPercent = (duration: number, currentTime: number) => {
+  return ((currentTime / duration) * 100).toFixed(2) + "%";
+};

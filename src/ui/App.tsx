@@ -30,28 +30,16 @@ const App = (props: Props) => {
 
   useEffect(() => {
     if (userState.state === "userLoggedIn") {
-      loadPersistedState(userState.userId).then(({ items, userSettings }) => {
-        if (items) {
+      loadPersistedState(userState.userId, userState.email).then(
+        ({ items, nodeFocused }) => {
           actions.setItems({
             ...rootNodes,
             ...items,
           });
-        } else {
-          actions.setItems(getDefaultStateForUser(userState.email));
+          actions.focusNode(nodeFocused);
+          setIsLoading(false);
         }
-
-        if (userSettings) {
-          if (items[userSettings.nodeFocused])
-            actions.focusNode(userSettings.nodeFocused);
-          else {
-            console.log(
-              `Node focused ${userSettings.nodeFocused} was removed, focusing on HOME instead`
-            );
-            actions.focusNode("HOME");
-          }
-        } else actions.focusNode("HOME");
-        setIsLoading(false);
-      });
+      );
     } else if (userState.state === "anonymous") {
       setIsLoading(false);
     }

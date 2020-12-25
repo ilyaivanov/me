@@ -1,4 +1,5 @@
 import firebaseApi, { UserSettings } from "../api/firebase";
+import { getDefaultStateForUser } from "./prefefinedSets/getDefaultState";
 import { traverseAllNodes } from "./selectors";
 import { store } from "./store";
 
@@ -33,16 +34,28 @@ export const registerSyncEvents = () => {
   }
 };
 
-export const loadPersistedState = (userId: string): Promise<PersistedState> => {
+export const loadPersistedState = (
+  userId: string,
+  userEmail: string
+): Promise<LoadedState> => {
   const localState = localStorage.getItem("slapstuk-state:v1");
   if (localState && USE_LOCALSTORAGE) {
     console.log("Loading state from local state");
     return Promise.resolve(JSON.parse(localState));
   } else
-    return firebaseApi.loadUserSettings(userId).then((userSettings) => ({
-      items: JSON.parse(userSettings.itemsSerialized),
-      userSettings,
-    }));
+    return firebaseApi.loadUserSettings(userId).then((userSettings) => {
+      if (userSettings) {
+        const items = JSON.parse(userSettings.itemsSerialized);
+        const nodeFocused = items[userSettings.nodeFocused]
+          ? userSettings.nodeFocused
+          : "HOME";
+        return { items, nodeFocused };
+      } else
+        return {
+          items: getDefaultStateForUser(userEmail),
+          nodeFocused: "HOME",
+        };
+    });
 };
 
 const derivePersistedState = (state: MyState): PersistedState => ({
@@ -72,4 +85,9 @@ const removeNonHomeItems = (items: NodesContainer): NodesContainer => {
 type PersistedState = {
   userSettings: UserSettings;
   items: NodesContainer;
+};
+
+type LoadedState = {
+  items: NodesContainer;
+  nodeFocused: string;
 };

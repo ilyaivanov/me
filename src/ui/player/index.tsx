@@ -14,7 +14,7 @@ import {
   Expand,
 } from "../icons";
 import { cn } from "../";
-import { formatVideoTime } from "./utils";
+import { formatVideoTime } from "../../domain/time";
 import { PlayerState, YoutubePlayerInstance } from "./types";
 import ReactDOM from "react-dom";
 import YoutubePlayer from "./youtubePlayer";
@@ -27,7 +27,8 @@ interface OuterProps {
 type Props = ReturnType<typeof mapState> & OuterProps;
 
 class Player extends React.Component<Props> {
-  interval: NodeJS.Timeout | undefined;
+  updatePlayerInterval: NodeJS.Timeout | undefined;
+  updateItemInterval: NodeJS.Timeout | undefined;
   state = {
     duration: 0,
     currentTime: 0,
@@ -40,19 +41,30 @@ class Player extends React.Component<Props> {
   player: YoutubePlayerInstance | undefined;
 
   componentDidMount() {
-    this.interval = setInterval(this.checkVideoTime, 200);
+    this.updatePlayerInterval = setInterval(this.updateVideoTime, 200);
+    this.updateItemInterval = setInterval(this.updateItem, 2000);
   }
 
   componentWillUnmount() {
-    if (this.interval) clearInterval(this.interval);
+    if (this.updatePlayerInterval) clearInterval(this.updatePlayerInterval);
+    if (this.updateItemInterval) clearInterval(this.updateItemInterval);
   }
 
-  checkVideoTime = () => {
+  updateVideoTime = () => {
     if (this.player) {
       this.setState({
         currentTime: this.player.getCurrentTime(),
         duration: this.player.getDuration(),
         buffer: this.player.getVideoLoadedFraction(),
+      });
+    }
+  };
+
+  updateItem = () => {
+    if (this.props.itemBeingPlayed && this.player) {
+      actions.changeItem(this.props.itemBeingPlayed.id, {
+        duration: this.player.getDuration(),
+        currentTime: this.player.getCurrentTime(),
       });
     }
   };

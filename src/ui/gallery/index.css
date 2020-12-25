@@ -40,6 +40,10 @@
 }
 
 .play-card-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-20px, -20px, 0);
   opacity: 0;
   width: 40px;
   height: 40px;
@@ -51,7 +55,7 @@
   height: 32px;
   width: 32px;
   top: 0;
-  right: 35px;
+  right: 5px;
   transition: transform 200ms;
   transform: rotateZ(90deg);
 }
@@ -65,6 +69,7 @@
   width: 26px;
   top: 5px;
   right: 5px;
+  padding: 2px;
 }
 
 .text-container {
@@ -105,12 +110,47 @@
 
 .card_channel-title {
   position: absolute;
-  top: -12px;
-  right: 4px;
-  padding: 6px;
-  border-radius: 4px;
+  bottom: 20px;
+  max-width: 250px;
+  left: 0;
+  padding: 5px 4px;
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
   font-size: 12px;
-  background-color: var(--page-color);
+  font-weight: 500;
+  background-color: var(--player-track-progress-color-faded);
+  transition: background-color 200ms;
+  color: white;
+}
+
+.card_channel-title:hover {
+  background-color: var(--player-track-progress-color);
+}
+
+.card_video-duration {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  padding: 2px 4px;
+  border-radius: 1px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+}
+
+.card-video-progress-container {
+  position: absolute;
+  height: 3px;
+  background-color: var(--player-track-color);
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.card-video-progress {
+  height: 4px;
+  background-color: var(--player-track-progress-color);
 }
 
 .folder-preview-container {

@@ -17,6 +17,9 @@ declare global {
 
     channelTitle?: string;
     channelId?: string;
+
+    duration?: number;
+    currentTime?: number;
   }
   export type NodesContainer = {
     [key: string]: Item;

@@ -3,7 +3,7 @@ import { Play, Pause, Chevron, Arrow, Search } from "../icons";
 import { connect } from "react-redux";
 import { cn } from "../";
 import { gallery as ids } from "../testId";
-import { actions, selectors } from "../../domain";
+import { actions, selectors, time } from "../../domain";
 
 interface OuterProps {
   item: Item;
@@ -28,7 +28,10 @@ class Card extends React.Component<Props> {
           <>
             <div className="left">
               <img
-                src={this.props.item.image || selectors.getVideoImage(this.props.folderFirstItems[0])}
+                src={
+                  this.props.item.image ||
+                  selectors.getVideoImage(this.props.folderFirstItems[0])
+                }
                 alt="preview"
                 draggable={false}
               />
@@ -51,8 +54,30 @@ class Card extends React.Component<Props> {
             draggable={false}
           />
         )}
-      </div>
-      <div className="overlay flex-center">
+        {this.props.item.channelTitle && (
+          <div className="card_channel-title">
+            {this.props.item.channelTitle}
+          </div>
+        )}
+
+        {this.props.item.duration && this.props.item.currentTime && (
+          <>
+            <div className="card_video-duration">
+              {time.formatTime(this.props.item.duration)}
+            </div>
+            <div className="card-video-progress-container">
+              <div
+                className="card-video-progress"
+                style={{
+                  width: time.getProgressInPercent(
+                    this.props.item.duration,
+                    this.props.item.currentTime
+                  ),
+                }}
+              />
+            </div>
+          </>
+        )}
         {this.props.isPlaying ? (
           <Pause className="icon play-card-icon" />
         ) : (
@@ -204,6 +229,9 @@ class Card extends React.Component<Props> {
           onMouseDown={this.onMouseDown}
           onMouseLeave={this.onMouseLeave}
           onMouseEnter={this.onMouseEnter}
+          onDoubleClick={() =>
+            item.itemType !== "video" && actions.focusNode(this.props.item.id)
+          }
         >
           {this.renderItemPreview()}
 
@@ -212,11 +240,6 @@ class Card extends React.Component<Props> {
             <div className="card-type">
               {item.youtubePlaylistId ? "playlist" : item.itemType}
             </div>
-            {this.props.item.channelTitle && (
-              <div className="card_channel-title">
-                {this.props.item.channelTitle}
-              </div>
-            )}
           </div>
         </div>
         <div
@@ -245,12 +268,6 @@ class Card extends React.Component<Props> {
               "icon expand-icon": true,
               rotated: this.props.item.isOpenInGallery,
             })}
-          />
-        )}
-        {item.itemType !== "video" && (
-          <Arrow
-            onClick={() => actions.focusNode(this.props.item.id)}
-            className={"icon card-arrow-icon"}
           />
         )}
         {item.itemType === "video" && (
