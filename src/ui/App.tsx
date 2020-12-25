@@ -13,7 +13,6 @@ import { actions } from "../domain";
 import { rootNodes } from "../domain/store";
 import LoginPage from "./login/LoginPage";
 import { subscribeToAuthChanges } from "../api/firebase.login";
-import { getDefaultStateForUser } from "../domain/prefefinedSets/getDefaultState";
 import { loadPersistedState, registerSyncEvents } from "../domain/syncState";
 
 type Props = ReturnType<typeof mapState>;

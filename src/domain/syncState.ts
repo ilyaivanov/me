@@ -1,4 +1,4 @@
-import firebaseApi, { UserSettings } from "../api/firebase";
+import firebaseApi, { PersistedState } from "../api/firebase";
 import { getDefaultStateForUser } from "./prefefinedSets/getDefaultState";
 import { traverseAllNodes } from "./selectors";
 import { store } from "./store";
@@ -25,45 +25,38 @@ export const registerSyncEvents = () => {
       if (userState.state === "userLoggedIn") {
         const persistedState = derivePersistedState(store.getState());
         console.log("Saving state to the Firebase API");
-        firebaseApi.saveUserSettings(
-          persistedState.userSettings,
-          userState.userId
-        );
+        firebaseApi.saveUserSettings(persistedState, userState.userId);
       }
     }, 60000);
   }
 };
 
-export const loadPersistedState = (
+export const loadPersistedState = async (
   userId: string,
   userEmail: string
 ): Promise<LoadedState> => {
   const localState = localStorage.getItem("slapstuk-state:v1");
-  if (localState && USE_LOCALSTORAGE) {
-    console.log("Loading state from local state");
-    return Promise.resolve(JSON.parse(localState));
+  const persistedState: PersistedState =
+    localState && USE_LOCALSTORAGE
+      ? JSON.parse(localState)
+      : await firebaseApi.loadUserSettings(userId);
+
+  if (persistedState) {
+    const items = JSON.parse(persistedState.itemsSerialized);
+    const nodeFocused = items[persistedState.nodeFocused]
+      ? persistedState.nodeFocused
+      : "HOME";
+    return { items, nodeFocused };
   } else
-    return firebaseApi.loadUserSettings(userId).then((userSettings) => {
-      if (userSettings) {
-        const items = JSON.parse(userSettings.itemsSerialized);
-        const nodeFocused = items[userSettings.nodeFocused]
-          ? userSettings.nodeFocused
-          : "HOME";
-        return { items, nodeFocused };
-      } else
-        return {
-          items: getDefaultStateForUser(userEmail),
-          nodeFocused: "HOME",
-        };
-    });
+    return {
+      items: getDefaultStateForUser(userEmail),
+      nodeFocused: "HOME",
+    };
 };
 
 const derivePersistedState = (state: MyState): PersistedState => ({
-  userSettings: {
-    nodeFocused: state.nodeFocusedId,
-    itemsSerialized: JSON.stringify(removeNonHomeItems(state.items)),
-  },
-  items: removeNonHomeItems(state.items),
+  nodeFocused: state.nodeFocusedId,
+  itemsSerialized: JSON.stringify(removeNonHomeItems(state.items)),
 });
 
 const removeNonHomeItems = (items: NodesContainer): NodesContainer => {
@@ -80,11 +73,6 @@ const removeNonHomeItems = (items: NodesContainer): NodesContainer => {
     copy[id] = itemCopy;
   });
   return copy;
-};
-
-type PersistedState = {
-  userSettings: UserSettings;
-  items: NodesContainer;
 };
 
 type LoadedState = {

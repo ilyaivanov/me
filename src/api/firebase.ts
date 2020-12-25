@@ -20,7 +20,7 @@ export const firebaseAuth = firebase.auth();
 export const provider = new firebase.auth.GoogleAuthProvider();
 
 export const saveUserSettings = (
-  userSettings: UserSettings,
+  userSettings: PersistedState,
   userId: string
 ) => {
   firebase
@@ -36,18 +36,18 @@ export const saveUserSettings = (
     });
 };
 
-export type UserSettings = {
+export type PersistedState = {
   nodeFocused: string;
   itemsSerialized: string;
 };
 
-export const loadUserSettings = (userId: string): Promise<UserSettings> =>
+export const loadUserSettings = (userId: string): Promise<PersistedState> =>
   firebase
     .firestore()
     .collection("users")
     .doc(userId)
     .get()
-    .then((res) => res.data() as UserSettings);
+    .then((res) => res.data() as PersistedState);
 
 export const auth = () => {};
 
