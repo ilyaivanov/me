@@ -219,19 +219,21 @@ const findChannelPlaylists = (
 };
 
 const mapItem = (item: any): Item => {
-  let resItem = {
+  let resItem: Item = {
     id: item.id,
     itemType: item.itemType === "playlist" ? "folder" : item.itemType,
     title: item.name,
     videoId: item.itemId,
-    channelId: item.channelId,
-    channelTitle: item.channelTitle,
-    youtubePlaylistId: item.itemType === "playlist" ? item.itemId : "",
     children: [],
   };
+  if (item.channelId) {
+    resItem.channelId = item.channelId;
+    resItem.channelTitle = item.channelTitle;
+  }
+  if (item.itemType === "playlist") {
+    resItem.youtubePlaylistId = item.itemId;
+  }
   //skip images for videos, to save space on Firebase
-  if (item.itemType !== "video")
-    // @ts-expect-error
-    resItem.image = item.image;
+  if (item.itemType !== "video") resItem.image = item.image;
   return resItem;
 };
