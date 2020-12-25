@@ -19,7 +19,6 @@ export const registerSyncEvents = () => {
       if (userState.state === "userLoggedIn") {
         const persistedState = derivePersistedState(store.getState());
         console.log("Saving state to the firebase API");
-        firebaseApi.save(persistedState.items, userState.userId);
         firebaseApi.saveUserSettings(
           persistedState.userSettings,
           userState.userId
@@ -34,28 +33,23 @@ export const registerSyncEvents = () => {
 };
 
 export const loadPersistedState = (userId: string): Promise<PersistedState> => {
+  const host = document.location.hostname;
   const localState = localStorage.getItem("slapstuk-state:v1");
-  if (localState) {
+  //ignore local state during development
+  if (localState && host !== "localhost") {
     console.log("Loading state from local state");
     return Promise.resolve(JSON.parse(localState));
   } else
-    return Promise.all([
-      firebaseApi.load(userId),
-      firebaseApi.loadUserSettings(userId),
-    ]).then(([items, userSettings]) => ({
-      items: logItems(items),
+    return firebaseApi.loadUserSettings(userId).then((userSettings) => ({
+      items: JSON.parse(userSettings.itemsSerialized),
       userSettings,
     }));
-};
-
-const logItems = (items: NodesContainer): NodesContainer => {
-  console.log(`Got items ${Object.keys(items).length}`);
-  return items;
 };
 
 const derivePersistedState = (state: MyState): PersistedState => ({
   userSettings: {
     nodeFocused: state.nodeFocusedId,
+    itemsSerialized: JSON.stringify(removeNonHomeItems(state.items)),
   },
   items: removeNonHomeItems(state.items),
 });

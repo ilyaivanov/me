@@ -19,16 +19,6 @@ firebase.initializeApp(firebaseConfig);
 export const firebaseAuth = firebase.auth();
 export const provider = new firebase.auth.GoogleAuthProvider();
 
-export const save = (items: NodesContainer, userId: string) =>
-  firebase
-    .firestore()
-    .collection("boards")
-    .doc(userId)
-    .set(items)
-    .catch((e) => {
-      console.error("Error while saving board", e, items);
-    });
-
 export const saveUserSettings = (
   userSettings: UserSettings,
   userId: string
@@ -48,15 +38,8 @@ export const saveUserSettings = (
 
 export type UserSettings = {
   nodeFocused: string;
+  itemsSerialized: string;
 };
-
-export const load = (userId: string): Promise<NodesContainer> =>
-  firebase
-    .firestore()
-    .collection("boards")
-    .doc(userId)
-    .get()
-    .then((res) => res.data() as NodesContainer);
 
 export const loadUserSettings = (userId: string): Promise<UserSettings> =>
   firebase
@@ -69,9 +52,7 @@ export const loadUserSettings = (userId: string): Promise<UserSettings> =>
 export const auth = () => {};
 
 const api = {
-  save,
   saveUserSettings,
-  load,
   loadUserSettings,
   auth,
 };
