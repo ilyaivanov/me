@@ -3,7 +3,6 @@ import { actions } from "../domain/store";
 
 export const subscribeToAuthChanges = () => {
   firebaseAuth.onAuthStateChanged(function (user) {
-    console.log(user);
     if (user)
       actions.setUserState({
         state: "userLoggedIn",

@@ -41,7 +41,14 @@ const App = (props: Props) => {
         }
 
         if (userSettings) {
-          actions.focusNode(userSettings.nodeFocused);
+          if (items[userSettings.nodeFocused])
+            actions.focusNode(userSettings.nodeFocused);
+          else {
+            console.log(
+              `Node focused ${userSettings.nodeFocused} was removed, focusing on HOME instead`
+            );
+            actions.focusNode("HOME");
+          }
         } else actions.focusNode("HOME");
         setIsLoading(false);
       });

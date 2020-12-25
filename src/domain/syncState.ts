@@ -2,10 +2,14 @@ import firebaseApi, { UserSettings } from "../api/firebase";
 import { traverseAllNodes } from "./selectors";
 import { store } from "./store";
 
+const host = document.location.hostname;
+//ignore local state and backend sync during development
+//helps avoid data corruption
+const USE_LOCALSTORAGE = host !== "localhost";
+const SAVE_ITEMS_TO_BACKEND = host !== "localhost";
+
 export const registerSyncEvents = () => {
-  const host = document.location.hostname;
-  //avoid syncing state during development
-  if (host !== "localhost") {
+  if (USE_LOCALSTORAGE)
     window.addEventListener("beforeunload", () => {
       console.log("saving");
       localStorage.setItem(
@@ -14,18 +18,15 @@ export const registerSyncEvents = () => {
       );
     });
 
+  if (SAVE_ITEMS_TO_BACKEND) {
     setInterval(() => {
       const userState = store.getState().loginState;
       if (userState.state === "userLoggedIn") {
         const persistedState = derivePersistedState(store.getState());
-        console.log("Saving state to the firebase API");
+        console.log("Saving state to the Firebase API");
         firebaseApi.saveUserSettings(
           persistedState.userSettings,
           userState.userId
-        );
-        localStorage.setItem(
-          "slapstuk-state:v1",
-          JSON.stringify(derivePersistedState(store.getState()))
         );
       }
     }, 60000);
@@ -33,10 +34,8 @@ export const registerSyncEvents = () => {
 };
 
 export const loadPersistedState = (userId: string): Promise<PersistedState> => {
-  const host = document.location.hostname;
   const localState = localStorage.getItem("slapstuk-state:v1");
-  //ignore local state during development
-  if (localState && host !== "localhost") {
+  if (localState && USE_LOCALSTORAGE) {
     console.log("Loading state from local state");
     return Promise.resolve(JSON.parse(localState));
   } else
