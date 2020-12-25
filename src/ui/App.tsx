@@ -8,13 +8,13 @@ import Gallery from "./gallery";
 import Player from "./player";
 import Header from "./header";
 import DndAvatar from "./dragAvatar";
-import firebaseApi from "../api/firebase";
 import * as ids from "./testId";
 import { actions } from "../domain";
 import { rootNodes } from "../domain/store";
 import LoginPage from "./login/LoginPage";
 import { subscribeToAuthChanges } from "../api/firebase.login";
 import { getDefaultStateForUser } from "../domain/prefefinedSets/getDefaultState";
+import { loadPersistedState, registerSyncEvents } from "../domain/syncState";
 
 type Props = ReturnType<typeof mapState>;
 
@@ -25,19 +25,16 @@ const App = (props: Props) => {
 
   useEffect(() => {
     subscribeToAuthChanges();
+    registerSyncEvents();
   }, []);
 
   useEffect(() => {
     if (userState.state === "userLoggedIn") {
-      Promise.all([
-        firebaseApi.load(userState.userId),
-        firebaseApi.loadUserSettings(userState.userId),
-      ]).then(([board, userSettings]) => {
-        console.log("board", board);
-        if (board) {
+      loadPersistedState(userState.userId).then(({ items, userSettings }) => {
+        if (items) {
           actions.setItems({
             ...rootNodes,
-            ...board,
+            ...items,
           });
         } else {
           actions.setItems(getDefaultStateForUser(userState.email));

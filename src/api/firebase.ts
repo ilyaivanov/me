@@ -16,6 +16,8 @@ var firebaseConfig = {
   measurementId: "G-C3RB7NB0ZD",
 };
 firebase.initializeApp(firebaseConfig);
+export const firebaseAuth = firebase.auth();
+export const provider = new firebase.auth.GoogleAuthProvider();
 
 export const save = (items: NodesContainer, userId: string) =>
   firebase

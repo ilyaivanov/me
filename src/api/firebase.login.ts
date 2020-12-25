@@ -1,11 +1,8 @@
-import firebase from "firebase";
+import { firebaseAuth, provider } from "./firebase";
 import { actions } from "../domain/store";
 
-const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
-
 export const subscribeToAuthChanges = () => {
-  auth.onAuthStateChanged(function (user) {
+  firebaseAuth.onAuthStateChanged(function (user) {
     console.log(user);
     if (user)
       actions.setUserState({
@@ -23,8 +20,8 @@ export const subscribeToAuthChanges = () => {
   });
 };
 
-export const login = () => auth.signInWithPopup(provider);
+export const login = () => firebaseAuth.signInWithPopup(provider);
 
 export const logout = () => {
-  auth.signOut();
+  firebaseAuth.signOut();
 };
