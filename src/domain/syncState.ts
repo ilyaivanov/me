@@ -29,7 +29,7 @@ export const registerSyncEvents = () => {
           JSON.stringify(derivePersistedState(store.getState()))
         );
       }
-    }, 10000);
+    }, 60000);
   }
 };
 
