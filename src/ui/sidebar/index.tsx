@@ -109,7 +109,7 @@ class Sidebar extends React.Component<SidebarProps> {
         <div
           className={cn({
             circle: true,
-            playing: selectors.isOnThePlayPath(this.props.items, item.id),
+            playing: selectors.isOnThePlayPath(this.props.items, this.props.itemIdBeingPlayed, item.id),
           })}
         />
         {this.renderText(item)}

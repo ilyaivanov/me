@@ -97,9 +97,10 @@ export const getNodePath = (items: NodesContainer, nodeId: string): Item[] => {
 
 export const isOnThePlayPath = (
   items: NodesContainer,
+  nodeBeingPlayed: string | undefined,
   itemId: string | undefined
 ) => {
-  if (!itemId) return false;
-  const path = getNodePath(items, itemId);
+  if (!itemId || !nodeBeingPlayed) return false;
+  const path = getNodePath(items, nodeBeingPlayed);
   return path.map((i) => i.id).indexOf(itemId) >= 0;
 };
