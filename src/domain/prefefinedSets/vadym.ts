@@ -13,6 +13,7 @@ export const items: NodesContainer = {
     id: "YhRPxdjosL4Yo5Sk1KuD",
     title: "Country",
     itemType: "folder",
+    isOpenFromSidebar: true,
     children: [
       "0.09053542186544061",
       "0.5910207254220338",
@@ -385,6 +386,7 @@ export const items: NodesContainer = {
     id: "cWCa5q3qZeqWai8zsw47",
     title: "Mediatation",
     itemType: "folder",
+    isOpenFromSidebar: true,
     children: [
       "0.7157630264192058",
       "0.0655494013490493",
@@ -678,6 +680,7 @@ export const items: NodesContainer = {
     id: "iNZ290v5JMZi0pqZc1KN",
     title: "Blues",
     itemType: "folder",
+    isOpenFromSidebar: true,
     children: [
       "0.778835003056984",
       "0.12719491749325817",
