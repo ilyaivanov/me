@@ -57,20 +57,12 @@ declare global {
     x: number;
     y: number;
     nodeUnderId: string;
-    nodeType: 'other' | 'video'
+    nodeType: "other" | "video";
   };
 
   export type MyState = {
     items: NodesContainer;
-    dragState: {
-      cardDraggedId: string;
-      isDragging: boolean;
-      cardUnderId: string;
-      dragArea: DragArea | undefined;
-      dragAvatarType: DragAvatarView;
-      itemDraggedRect: DOMRect | undefined;
-      itemOffsets: { x: number; y: number } | undefined;
-    };
+    dragState: MyDragState;
     contextMenuState: ContextMenuState;
     nodeFocusedId: string;
     isSidebarVisible: boolean;
@@ -79,6 +71,17 @@ declare global {
     colorScheme: ColorScheme;
     loginState: LoginState;
     isPlaying: boolean;
+  };
+
+  export type MyDragState = {
+    cardDraggedId: string;
+    isDragging: boolean;
+    cardUnderId: string;
+    dragArea: DragArea | undefined;
+    isValid: boolean;
+    dragAvatarType: DragAvatarView;
+    itemDraggedRect: DOMRect | undefined;
+    itemOffsets: { x: number; y: number } | undefined;
   };
 }
 

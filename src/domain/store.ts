@@ -5,6 +5,7 @@ import {
   applyMiddleware,
   Store,
 } from "redux";
+import { selectors } from ".";
 import { createId } from "./createId";
 import { drop, setItemOnPlaceOf } from "./dndHelpers";
 import { createActionCreators, createReducer } from "./reduxInfra";
@@ -41,6 +42,7 @@ export const initialState: MyState = {
     dragAvatarType: "big",
     itemDraggedRect: undefined,
     itemOffsets: undefined,
+    isValid: false,
   },
   nodeFocusedId: "HOME",
   isSidebarVisible: true,
@@ -56,7 +58,7 @@ export const initialState: MyState = {
     x: 0,
     y: 0,
     nodeUnderId: "",
-    nodeType: 'other'
+    nodeType: "other",
   },
 };
 
@@ -248,6 +250,11 @@ const actionHandlers = {
   ) => ({
     dragState: {
       ...state.dragState,
+      isValid: selectors.canDropAt(
+        state.items,
+        state.dragState.cardDraggedId,
+        itemId
+      ),
       cardUnderId: itemId,
       dragArea: dragArea,
     },
@@ -256,7 +263,7 @@ const actionHandlers = {
     const dragState = state.dragState;
     let items;
     const dragArea = dragState.dragArea;
-    if (dragState.cardUnderId && dragState.cardDraggedId && dragArea) {
+    if (dragState.isValid && dragState.cardUnderId && dragState.cardDraggedId && dragArea) {
       if (
         dragArea === "sidebar" ||
         dragArea === "breadcrump" ||

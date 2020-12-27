@@ -60,14 +60,18 @@ class Sidebar extends React.Component<SidebarProps> {
         key={item.id}
         className={cn({
           row: true,
-          focused: this.props.nodeFocusedId == item.id,
+          focused: this.props.nodeFocusedId === item.id,
           "row-mouse-over-during-drag":
             dragState.dragArea === "sidebar" &&
             item.id === dragState.cardUnderId,
+          danger: !dragState.isValid,
         })}
         title={item.title}
         style={{ paddingLeft: level * 20 }}
-        onClick={() => actions.focusNode(item.id)}
+        onClick={() => {
+          console.log(dragState);
+          actions.focusNode(item.id);
+        }}
         data-testid={ids.row(item.id)}
         onMouseEnter={() => {
           if (this.props.dragState.cardDraggedId) {
@@ -204,7 +208,7 @@ const mapState = (state: MyState) => ({
   nodeFocusedId: state.nodeFocusedId,
   dragState: state.dragState,
   itemIdBeingPlayed: state.itemIdBeingPlayed,
-  isPlaying: state.isPlaying
+  isPlaying: state.isPlaying,
 });
 
 export default connect(mapState)(Sidebar);

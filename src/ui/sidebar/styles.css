@@ -24,6 +24,9 @@
 .row.row-mouse-over-during-drag {
   background-color: var(--hover-accent-color);
 }
+.row.row-mouse-over-during-drag.danger {
+  background-color: var(--icon-danger-color);
+}
 
 .circle {
   width: 6px;

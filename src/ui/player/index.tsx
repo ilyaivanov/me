@@ -129,7 +129,7 @@ class Player extends React.Component<Props> {
           "youtube__player--hidden": !this.state.isVideoShown,
           "theater-player": this.state.isVideoShown && this.state.isTheatreMode,
           youtube__player:
-            this.props.itemBeingPlayed && !this.state.isTheatreMode || !this.state.isVideoShown,
+            this.props.itemBeingPlayed && (!this.state.isTheatreMode || !this.state.isVideoShown),
         })}
       >
         {itemBeingPlayed && itemBeingPlayed.videoId && (

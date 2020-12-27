@@ -79,6 +79,10 @@
 .breadcrumps__section.breadcrumps__section--dropTarget {
   background-color: var(--hover-accent-color);
 }
+.options .options__item--dropTarget.danger,
+.breadcrumps__section.breadcrumps__section--dropTarget.danger {
+  background-color: var(--icon-danger-color);
+}
 
 .options__item:first-child {
   padding-top: 0.4em;

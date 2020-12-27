@@ -34,6 +34,9 @@
   border-top: 3px solid var(--hover-accent-color);
   margin-top: -3px;
 }
+.card .subtrack-drag-destination.danger {
+  border-top: 3px solid var(--icon-danger-color);
+}
 
 .card-drag-destination {
   background-color: transparent;

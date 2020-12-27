@@ -29,8 +29,9 @@ class DndAvatar extends React.Component<Props> {
     }
   };
 
-  onMouseUp = () => {
+  onMouseUp = (e: MouseEvent) => {
     this.distance = 0;
+    e.preventDefault();
     actions.mouseUp();
   };
 

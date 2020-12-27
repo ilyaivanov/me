@@ -104,3 +104,14 @@ export const isOnThePlayPath = (
   const path = getNodePath(items, nodeBeingPlayed);
   return path.map((i) => i.id).indexOf(itemId) >= 0;
 };
+
+export const canDropAt = (
+  items: NodesContainer,
+  targetNodeId: string,
+  nodeBeingDraggedId: string
+) => {
+  return (
+    targetNodeId !== nodeBeingDraggedId &&
+    !isAChildOf(items, targetNodeId, nodeBeingDraggedId)
+  );
+};

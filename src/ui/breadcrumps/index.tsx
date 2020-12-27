@@ -18,6 +18,7 @@ class Breadcrumps extends React.Component<Props> {
             "options__item--dropTarget":
               this.props.dragState.dragArea === "breadcrump" &&
               this.props.dragState.cardUnderId === item.id,
+            danger: !this.props.dragState.isValid,
           })}
           onClick={() => actions.focusNode(item.id)}
           key={item.id}
@@ -67,6 +68,7 @@ class Breadcrumps extends React.Component<Props> {
             "breadcrumps__section--dropTarget":
               this.props.dragState.dragArea === "breadcrump_section" &&
               this.props.dragState.cardUnderId === item.id,
+            danger: !this.props.dragState.isValid,
           })}
           data-testid="breadcrump-section-text"
           onClick={() => actions.focusNode(item.id)}

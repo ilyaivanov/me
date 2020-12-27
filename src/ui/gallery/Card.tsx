@@ -183,6 +183,7 @@ class Card extends React.Component<Props> {
           "subtrack-being-dragged":
             this.props.dragState.isDragging &&
             this.props.dragState.cardDraggedId === item.id,
+          danger: !this.props.dragState.isValid,
         })}
         data-testid={ids.subtrack(item.id)}
         key={item.id}
@@ -216,7 +217,7 @@ class Card extends React.Component<Props> {
         className={cn({
           card: true,
           "card-with-context-menu":
-            this.props.contextState.nodeUnderId == this.props.item.id,
+            this.props.contextState.nodeUnderId === this.props.item.id,
           "open-card": this.props.item.isOpenInGallery,
           "card-drag-destination":
             dragState.dragArea === "gallery" &&
