@@ -6,12 +6,13 @@ import {
   Forward,
   VolumeMax,
   Pause,
-  Youtube,
   VolumeMiddle,
   VolumeLow,
   VolumeMute,
   Collapse,
   Expand,
+  HideVideo,
+  ShowVideo,
 } from "../icons";
 import { cn } from "../";
 import { formatVideoTime } from "../../domain/time";
@@ -19,6 +20,7 @@ import { PlayerState, YoutubePlayerInstance } from "./types";
 import ReactDOM from "react-dom";
 import YoutubePlayer from "./youtubePlayer";
 import { actions, selectors } from "../../domain";
+import TrackInfo from "./TrackInfo";
 
 interface OuterProps {
   galleryPlayer?: HTMLDivElement;
@@ -43,6 +45,22 @@ class Player extends React.Component<Props> {
   componentDidMount() {
     this.updatePlayerInterval = setInterval(this.updateVideoTime, 200);
     this.updateItemInterval = setInterval(this.updateItem, 2000);
+    this.syncPlayerState();
+  }
+
+  componentDidUpdate() {
+    this.syncPlayerState();
+  }
+
+  syncPlayerState() {
+    if (
+      this.player &&
+      this.props.isPlaying !==
+        (this.player.getPlayerState() === PlayerState.playing)
+    ) {
+      if (this.props.isPlaying) this.player.playVideo();
+      else this.player.pauseVideo();
+    }
   }
 
   componentWillUnmount() {
@@ -118,7 +136,11 @@ class Player extends React.Component<Props> {
           <YoutubePlayer
             videoId={itemBeingPlayed.videoId}
             onVideoEn={() => actions.playNextTrack()}
-            onPlayerReady={(player) => (this.player = player)}
+            onPlayerReady={(player) => {
+              //@ts-expect-error
+              global.player = player;
+              this.player = player;
+            }}
           />
         )}
       </div>
@@ -173,7 +195,7 @@ class Player extends React.Component<Props> {
           {itemBeingPlayed && (
             <>
               <img src={selectors.getVideoImage(itemBeingPlayed)} alt="" />
-              <TrackInfoViz
+              <TrackInfo
                 text={itemBeingPlayed.title}
                 channelTitle={this.props.channelTitle}
                 parentTitle={selectors.getParentTitle(
@@ -189,20 +211,15 @@ class Player extends React.Component<Props> {
             className="icon backward-icon"
             onClick={() => actions.playPreviousTrack()}
           />
-          {itemBeingPlayed &&
-          this.player?.getPlayerState() === PlayerState.playing ? (
+          {itemBeingPlayed && this.props.isPlaying ? (
             <Pause
               className="icon play-icon"
-              onClick={() => {
-                this.player?.pauseVideo();
-              }}
+              onClick={() => actions.setIsPlaying(false)}
             />
           ) : (
             <Play
               className="icon play-icon"
-              onClick={() => {
-                this.player?.playVideo();
-              }}
+              onClick={() => actions.setIsPlaying(true)}
             />
           )}
           <Forward
@@ -223,12 +240,18 @@ class Player extends React.Component<Props> {
             />
           )}
 
-          <Youtube
-            className="icon volume-icon"
-            onClick={() =>
-              this.setState({ isVideoShown: !this.state.isVideoShown })
-            }
-          />
+          {this.state.isVideoShown ? (
+            <HideVideo
+              className="icon volume-icon"
+              onClick={() => this.setState({ isVideoShown: false })}
+            />
+          ) : (
+            <ShowVideo
+              className="icon volume-icon"
+              onClick={() => this.setState({ isVideoShown: true })}
+            />
+          )}
+
           {this.renderVolumeIcon()}
           <input
             type="range"
@@ -246,68 +269,6 @@ class Player extends React.Component<Props> {
   }
 }
 
-interface TrackInfoVizProps {
-  text: string;
-  channelTitle: string | undefined;
-  parentTitle: string | undefined;
-}
-class TrackInfoViz extends React.PureComponent<TrackInfoVizProps> {
-  containerRef = React.createRef<HTMLDivElement>();
-  textRef = React.createRef<HTMLDivElement>();
-  state = {
-    containerWidthMinusText: 0,
-  };
-  componentDidMount() {
-    window.addEventListener("resize", this.calculateTextOffset);
-    this.calculateTextOffset();
-  }
-
-  componentDidUpdate(prevProps: TrackInfoVizProps) {
-    if (prevProps.text !== this.props.text) this.calculateTextOffset();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.calculateTextOffset);
-  }
-
-  calculateTextOffset = () => {
-    const totalWidth =
-      this.containerRef.current?.getBoundingClientRect().width || 0;
-    const textWidth = this.textRef.current?.scrollWidth || 0;
-    //20 is a width for gradient-after + gradient-before
-    const containerWidthMinusText = totalWidth - textWidth - 20;
-
-    if (containerWidthMinusText !== this.state.containerWidthMinusText)
-      this.setState({ containerWidthMinusText });
-  };
-
-  render() {
-    return (
-      <div
-        className="trackInfo_text"
-        // @ts-expect-error
-        style={{ "--my-height": `${this.state.containerWidthMinusText}px` }}
-        ref={this.containerRef}
-      >
-        <span
-          className={cn({
-            trackInfo__title: true,
-            trackInfo__title__animation: this.state.containerWidthMinusText < 0,
-          })}
-          ref={this.textRef}
-        >
-          {this.props.text}
-        </span>
-        <div className="trackInfo__playlist__title">
-          {this.props.channelTitle} - {this.props.parentTitle}
-        </div>
-        <div className="gradient-after"></div>
-        <div className="gradient-before"></div>
-      </div>
-    );
-  }
-}
-
 const mapState = (state: MyState) => {
   const item = state.itemIdBeingPlayed
     ? state.items[state.itemIdBeingPlayed]
@@ -317,6 +278,7 @@ const mapState = (state: MyState) => {
     channelTitle: item?.channelTitle,
     itemBeingPlayed: item,
     items: state.items,
+    isPlaying: state.isPlaying,
   };
 };
 

@@ -18,7 +18,12 @@
 
 .rotate-avatar {
   --rotation: 5deg;
-  transform: rotateZ(var(--rotation));
+  animation: rotate 200ms forwards;
+}
+@keyframes rotate {
+  100% {
+    transform: rotateZ(var(--rotation));
+  }
 }
 
 .card-drag-destination.card * {

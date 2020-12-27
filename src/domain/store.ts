@@ -50,11 +50,15 @@ export const initialState: MyState = {
   loginState: {
     state: "loading",
   },
+  isPlaying: false,
 };
 
 const actionHandlers = {
   setUserState: (loginState: LoginState) => ({
     loginState,
+  }),
+  setIsPlaying: (isPlaying: boolean) => ({
+    isPlaying,
   }),
   focusNode: (nodeFocusedId: string): Partial<MyState> => ({
     nodeFocusedId,
@@ -165,6 +169,7 @@ const actionHandlers = {
     }
     return {
       itemIdBeingPlayed: id,
+      isPlaying: true
     };
   },
   playNextTrack: () => (state: MyState): Partial<MyState> => {
@@ -242,7 +247,11 @@ const actionHandlers = {
     let items;
     const dragArea = dragState.dragArea;
     if (dragState.cardUnderId && dragState.cardDraggedId && dragArea) {
-      if (dragArea === "sidebar" || dragArea === "breadcrump") {
+      if (
+        dragArea === "sidebar" ||
+        dragArea === "breadcrump" ||
+        dragArea === "breadcrump_section"
+      ) {
         items = drop(
           state.items,
           dragState.cardDraggedId,

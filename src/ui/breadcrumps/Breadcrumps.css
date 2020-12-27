@@ -22,6 +22,7 @@
   padding: 0.5em 0.3em;
   transition: background-color 200ms;
   cursor: pointer;
+  color: var(--text-selected);
 }
 .breadcrumps__section:first-child {
   padding-left: 0.5em;
@@ -62,6 +63,7 @@
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   border: 1px solid var(--primary-border);
+  color: var(--text-color);
 }
 
 .options__item {
@@ -73,7 +75,8 @@
   background-color: var(--hover-color);
 }
 
-.options .options__item--dropTarget {
+.options .options__item--dropTarget,
+.breadcrumps__section.breadcrumps__section--dropTarget {
   background-color: var(--hover-accent-color);
 }
 
@@ -85,5 +88,6 @@
 }
 .options__item--selected {
   font-weight: bold;
+  color: var(--text-selected);
 }
 

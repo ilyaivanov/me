@@ -27,7 +27,7 @@ declare global {
 
   export type SearchState = { stateType: "loading" | "done"; term: string };
 
-  export type DragArea = "sidebar" | "gallery" | "breadcrump";
+  export type DragArea = "sidebar" | "gallery" | "breadcrump" | "breadcrump_section";
   export type ColorScheme = "dark" | "light";
   export type DragAvatarView = "big" | "small";
 
@@ -65,6 +65,7 @@ declare global {
     searchState: SearchState;
     colorScheme: ColorScheme;
     loginState: LoginState;
+    isPlaying: boolean;
   };
 }
 

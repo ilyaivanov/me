@@ -62,9 +62,34 @@ class Breadcrumps extends React.Component<Props> {
     return (
       <React.Fragment key={item.id}>
         <div
-          className="breadcrumps__section"
+          className={cn({
+            breadcrumps__section: true,
+            "breadcrumps__section--dropTarget":
+              this.props.dragState.dragArea === "breadcrump_section" &&
+              this.props.dragState.cardUnderId === item.id,
+          })}
           data-testid="breadcrump-section-text"
           onClick={() => actions.focusNode(item.id)}
+          onMouseEnter={() => {
+            if (this.props.dragState.cardDraggedId) {
+              actions.setCardDestination(item.id, "breadcrump_section");
+            }
+          }}
+          onMouseDown={() => {
+            actions.mouseDown(item.id, {
+              elementRect: { width: 200 } as any,
+              itemOffsets: {
+                x: 100,
+                y: 100,
+              },
+              dragAvatarType: "small",
+            });
+          }}
+          onMouseLeave={() => {
+            if (this.props.dragState.cardDraggedId) {
+              actions.setCardDestination("", undefined);
+            }
+          }}
         >
           {item.title}
         </div>

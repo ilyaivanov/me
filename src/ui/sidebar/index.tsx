@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles.css";
 import { cn } from "../";
-import { Chevron, Edit, Plus, Times } from "../icons";
+import { Chevron, Edit, Play, Plus, Times } from "../icons";
 import { actions, selectors } from "../../domain";
 import { connect } from "react-redux";
 import { sidebar as ids } from "../testId";
@@ -60,7 +60,7 @@ class Sidebar extends React.Component<SidebarProps> {
         key={item.id}
         className={cn({
           row: true,
-          focused: item.id === this.props.nodeFocusedId,
+          focused: this.props.nodeFocusedId == item.id,
           "row-mouse-over-during-drag":
             dragState.dragArea === "sidebar" &&
             item.id === dragState.cardUnderId,
@@ -106,12 +106,30 @@ class Sidebar extends React.Component<SidebarProps> {
             })}
           />
         </div>
-        <div
-          className={cn({
-            circle: true,
-            playing: selectors.isOnThePlayPath(this.props.items, this.props.itemIdBeingPlayed, item.id),
-          })}
-        />
+        {selectors.isOnThePlayPath(
+          this.props.items,
+          this.props.itemIdBeingPlayed,
+          item.id
+        ) ? (
+          <Play
+            className={cn({
+              "circle play-icon-circle": true,
+              playing: this.props.isPlaying,
+            })}
+          />
+        ) : (
+          <div
+            className={cn({
+              circle: true,
+              playing: selectors.isOnThePlayPath(
+                this.props.items,
+                this.props.itemIdBeingPlayed,
+                item.id
+              ),
+            })}
+          />
+        )}
+
         {this.renderText(item)}
         <div className="row-buttons">
           <Edit
@@ -142,7 +160,6 @@ class Sidebar extends React.Component<SidebarProps> {
         item,
         level,
       }))
-      .filter(({ item }) => item.itemType === "folder")
       .map(this.renderRow);
     return (
       <div
@@ -187,6 +204,7 @@ const mapState = (state: MyState) => ({
   nodeFocusedId: state.nodeFocusedId,
   dragState: state.dragState,
   itemIdBeingPlayed: state.itemIdBeingPlayed,
+  isPlaying: state.isPlaying
 });
 
 export default connect(mapState)(Sidebar);

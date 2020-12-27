@@ -50,7 +50,7 @@ class DndAvatar extends React.Component<Props> {
       if (this.props.dragState.dragAvatarType === "small") {
         return (
           <div
-            className="drag-avatar drag-avatar-mini text-container "
+            className="drag-avatar drag-avatar-mini text-container"
             style={{
               transformOrigin: `${itemOffsets.x}px ${itemOffsets.y}px`,
               top: this.state.event.clientY,
@@ -64,9 +64,8 @@ class DndAvatar extends React.Component<Props> {
       } else {
         return (
           <div
-            className="drag-avatar"
+            className="drag-avatar rotate-avatar"
             style={{
-              transformOrigin: `${itemOffsets.x}px ${itemOffsets.y}px`,
               top: this.state.event.clientY - itemOffsets.y,
               left: this.state.event.clientX - itemOffsets.x,
               width: this.props.dragState.itemDraggedRect?.width,
