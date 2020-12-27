@@ -21,7 +21,7 @@ class DndAvatar extends React.Component<Props> {
         this.distance += Math.sqrt(
           movementX * movementX + movementY * movementY
         );
-        if (this.distance >= 5) {
+        if (this.distance >= 7) {
           actions.startDragging();
         }
       }

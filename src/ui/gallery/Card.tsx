@@ -215,6 +215,8 @@ class Card extends React.Component<Props> {
       <div
         className={cn({
           card: true,
+          "card-with-context-menu":
+            this.props.contextState.nodeUnderId == this.props.item.id,
           "open-card": this.props.item.isOpenInGallery,
           "card-drag-destination":
             dragState.dragArea === "gallery" &&
@@ -232,6 +234,16 @@ class Card extends React.Component<Props> {
           onDoubleClick={() =>
             item.itemType !== "video" && actions.focusNode(this.props.item.id)
           }
+          onContextMenu={(e) => {
+            actions.setContextMenu({
+              type: "shown",
+              x: e.pageX,
+              y: e.pageY,
+              nodeUnderId: item.id,
+              nodeType: item.itemType === "video" ? "video" : "other",
+            });
+            e.preventDefault();
+          }}
         >
           {this.renderItemPreview()}
 
@@ -303,6 +315,7 @@ const mapState = (state: MyState, props: OuterProps) => {
     dragState: state.dragState,
     childItems: props.item.children.map((id) => state.items[id]),
     items: state.items,
+    contextState: state.contextMenuState,
   };
 };
 export default connect(mapState)(Card);

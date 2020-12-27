@@ -27,7 +27,11 @@ declare global {
 
   export type SearchState = { stateType: "loading" | "done"; term: string };
 
-  export type DragArea = "sidebar" | "gallery" | "breadcrump" | "breadcrump_section";
+  export type DragArea =
+    | "sidebar"
+    | "gallery"
+    | "breadcrump"
+    | "breadcrump_section";
   export type ColorScheme = "dark" | "light";
   export type DragAvatarView = "big" | "small";
 
@@ -48,6 +52,14 @@ declare global {
   };
   type LoginState = Anonymous | UserInfo | Loading;
 
+  type ContextMenuState = {
+    type: "shown" | "hidden";
+    x: number;
+    y: number;
+    nodeUnderId: string;
+    nodeType: 'other' | 'video'
+  };
+
   export type MyState = {
     items: NodesContainer;
     dragState: {
@@ -59,6 +71,7 @@ declare global {
       itemDraggedRect: DOMRect | undefined;
       itemOffsets: { x: number; y: number } | undefined;
     };
+    contextMenuState: ContextMenuState;
     nodeFocusedId: string;
     isSidebarVisible: boolean;
     itemIdBeingPlayed: string;

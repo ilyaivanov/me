@@ -6,6 +6,7 @@ import { cn } from ".";
 import Sidebar from "./sidebar";
 import Gallery from "./gallery";
 import Player from "./player";
+import ContextMenu from "./contextMenu/contextMenu";
 import Header from "./header";
 import DndAvatar from "./dragAvatar";
 import * as ids from "./testId";
@@ -98,6 +99,7 @@ const App = (props: Props) => {
         </div>
         <Player galleryPlayer={ref} />
         <DndAvatar />
+        <ContextMenu />
       </div>
     );
 };

@@ -51,11 +51,21 @@ export const initialState: MyState = {
     state: "loading",
   },
   isPlaying: false,
+  contextMenuState: {
+    type: "hidden",
+    x: 0,
+    y: 0,
+    nodeUnderId: "",
+    nodeType: 'other'
+  },
 };
 
 const actionHandlers = {
   setUserState: (loginState: LoginState) => ({
     loginState,
+  }),
+  setContextMenu: (contextMenuState: ContextMenuState) => ({
+    contextMenuState,
   }),
   setIsPlaying: (isPlaying: boolean) => ({
     isPlaying,
@@ -169,7 +179,7 @@ const actionHandlers = {
     }
     return {
       itemIdBeingPlayed: id,
-      isPlaying: true
+      isPlaying: true,
     };
   },
   playNextTrack: () => (state: MyState): Partial<MyState> => {

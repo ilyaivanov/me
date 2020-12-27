@@ -8,7 +8,7 @@ import Breadcrumps from "../../ui/breadcrumps";
 import CardsTransitionAnimation from "./CardsTransitionAnimation";
 type Props = ReturnType<typeof mapState>;
 
-class Gallery extends React.Component<Props> {
+class Gallery extends React.PureComponent<Props> {
   renderCard = (item: Item) => {
     return (
       <div key={item.id}>
@@ -28,6 +28,11 @@ class Gallery extends React.Component<Props> {
   );
 
   render() {
+    const focusedId = this.props.itemFocused?.id;
+    const allItems = this.props.allItems;
+    const items = focusedId
+      ? allItems[focusedId].children.map((id) => allItems[id])
+      : [];
     return (
       <>
         <Breadcrumps />
@@ -36,7 +41,7 @@ class Gallery extends React.Component<Props> {
             <div className="gallery-container" data-testid={"gallery"}>
               {this.props.searchState.stateType === "loading"
                 ? this.renderLoadingIndicator(this.props.searchState.term)
-                : this.props.items.map(this.renderCard)}
+                : items.map(this.renderCard)}
             </div>
             {this.props.itemFocused.youtubePlaylistNextPageId &&
               this.props.searchState.stateType !== "loading" && (
@@ -53,9 +58,6 @@ class Gallery extends React.Component<Props> {
 
 function mapState(state: MyState) {
   return {
-    items: state.items[state.nodeFocusedId].children.map(
-      (id) => state.items[id]
-    ),
     allItems: state.items,
     searchState: state.searchState,
     itemFocused: state.items[state.nodeFocusedId],

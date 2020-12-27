@@ -21,7 +21,7 @@ interface State {
   direction: Direction;
 }
 
-class CardsTransitionAnimation extends React.Component<Props, State> {
+class CardsTransitionAnimation extends React.PureComponent<Props, State> {
   ref = React.createRef<HTMLDivElement>();
 
   state = {
@@ -76,6 +76,7 @@ class CardsTransitionAnimation extends React.Component<Props, State> {
 
   componentDidUpdate() {
     if (this.ref.current && this.state.needToTriggerAnimation) {
+      console.log('animating')
       const shiftPoint = this.getAnimationShift(this.state.direction);
       gsap
         .to(this.ref.current, {

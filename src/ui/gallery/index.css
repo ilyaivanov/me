@@ -26,6 +26,9 @@
 .card:hover {
   box-shadow: var(--focus-shadow) 0px 6px 12px -2px;
 }
+.card.card-with-context-menu{
+  border: 1px solid var(--text-selected);
+}
 
 .icon-container {
   display: flex;
