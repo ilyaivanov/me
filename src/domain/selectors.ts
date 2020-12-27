@@ -68,10 +68,10 @@ export const findParentId = (items: NodesContainer, childId: string) =>
     (parentKey) => items[parentKey].children.indexOf(childId) > -1
   ) as string;
 
-export const getParentTitle = (
+export const getParent = (
   items: NodesContainer,
   item: Item | undefined
-): string => (item ? items[findParentId(items, item.id)].title : "");
+): Item | undefined => (item ? items[findParentId(items, item.id)] : undefined);
 
 export const isAChildOf = (
   items: NodesContainer,

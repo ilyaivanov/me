@@ -150,6 +150,10 @@
 .trackInfo__playlist__title {
   color: var(--faded-text-color);
 }
+.parent-title:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
 
 .player__rightPart__container {
   flex: 1;

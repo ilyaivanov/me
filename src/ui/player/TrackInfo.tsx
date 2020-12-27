@@ -1,10 +1,11 @@
 import React from "react";
 import { cn } from "..";
+import { actions } from "../../domain/store";
 
 interface Props {
   text: string;
   channelTitle: string | undefined;
-  parentTitle: string | undefined;
+  parent: Item | undefined;
 }
 class TrackInfo extends React.PureComponent<Props> {
   containerRef = React.createRef<HTMLDivElement>();
@@ -37,6 +38,7 @@ class TrackInfo extends React.PureComponent<Props> {
   };
 
   render() {
+    const { parent } = this.props;
     return (
       <div
         className="trackInfo_text"
@@ -54,7 +56,16 @@ class TrackInfo extends React.PureComponent<Props> {
           {this.props.text}
         </span>
         <div className="trackInfo__playlist__title">
-          {this.props.channelTitle} - {this.props.parentTitle}
+          {this.props.channelTitle && (
+            <span className="parent-title">{this.props.channelTitle}</span>
+          )}
+          {this.props.channelTitle && " - "}
+          <span
+            className="parent-title"
+            onClick={() => parent && actions.focusNode(parent.id)}
+          >
+            {parent && parent.title}
+          </span>
         </div>
         <div className="gradient-after"></div>
         <div className="gradient-before"></div>
